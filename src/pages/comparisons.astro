@@ -1,0 +1,120 @@
+---
+import ComparisonCard from "../components/ComparisonCard.astro";
+import figuresData from "../data/figures.json";
+
+const title = "Comparisons — AI Environmental Impact";
+const description =
+  "Side-by-side comparisons of AI's environmental footprint with other large uses of water and electricity.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <p class="back"><a href="/">← Home</a></p>
+      <h1>Comparisons</h1>
+      <p class="lede">
+        Each comparison sets one figure for AI or data-center infrastructure
+        next to a familiar reference point. Numbers are ranges where the
+        underlying data warrants it, with sources and a last-verified date.
+      </p>
+
+      {
+        figuresData.comparisons.map((c) => (
+          <ComparisonCard
+            id={c.id}
+            anchor={c.anchor}
+            title={c.title}
+            summary={c.summary}
+            unit_caption={c.unit_caption}
+            figures={c.figures}
+            sources={c.sources}
+            last_verified={c.last_verified}
+          />
+        ))
+      }
+
+      <p class="more">
+        More comparisons land in the next phases — driving, video gaming,
+        streaming, Bitcoin, EV charging, and the rest.
+      </p>
+    </main>
+
+    <style is:global>
+      :root {
+        --ink: #1a1a1a;
+        --ink-soft: #4a4a4a;
+        --paper: #fafaf7;
+        --rule: #e6e3dc;
+        --accent: #1f4f7a;
+        --max-width: 42rem;
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 18px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      main {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 4rem 1.25rem 5rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0 0 1rem;
+        line-height: 1.25;
+      }
+
+      .lede {
+        font-size: 1.05rem;
+        color: var(--ink-soft);
+        margin: 0 0 2rem;
+        max-width: 36rem;
+      }
+
+      .back {
+        margin: 0 0 2rem;
+        font-size: 0.9rem;
+      }
+      .back a {
+        color: var(--ink-soft);
+        text-decoration: none;
+      }
+      .back a:hover {
+        color: var(--accent);
+      }
+
+      .more {
+        margin-top: 2.5rem;
+        font-size: 0.95rem;
+        color: var(--ink-soft);
+        font-style: italic;
+      }
+
+      @media (min-width: 720px) {
+        main { padding: 5rem 1.5rem 6rem; }
+        h1 { font-size: 2.2rem; }
+      }
+    </style>
+  </body>
+</html>

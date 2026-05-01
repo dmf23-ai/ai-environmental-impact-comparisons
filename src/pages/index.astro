@@ -17,7 +17,10 @@ const description =
       <h1>{title}</h1>
       <p class="lede">{description}</p>
       <p class="status">
-        Under construction. The first comparisons — driving, gaming, golf courses — arrive in the next build.
+        Under construction. The first comparison — water use, AI data centers vs. U.S. golf courses — is live.
+      </p>
+      <p class="cta">
+        <a href="/comparisons">View comparisons →</a>
       </p>
     </main>
 
@@ -72,6 +75,20 @@ const description =
         border-top: 1px solid var(--rule);
         padding-top: 1.25rem;
         margin: 0;
+      }
+
+      .cta {
+        margin: 1rem 0 0;
+        font-size: 1rem;
+      }
+      .cta a {
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid currentColor;
+        padding-bottom: 1px;
+      }
+      .cta a:hover {
+        opacity: 0.75;
       }
 
       @media (min-width: 720px) {
