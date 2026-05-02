@@ -160,4 +160,12 @@ Each phase ends in a working, deployed state. No phase requires editing more tha
 
 **Domain name.** Worth picking before launch. Some directions to consider: `aiimpact.observed`, `byhour.org`, `whatpowersai.com`, or something less branded like `ai-environmental-comparisons.org`. I'm happy to brainstorm when we're closer.
 
-**Funding / hosting permanence.** Netlify free tier is fine indefinitely for a site of this scale. If traffic grows, we'd move to a paid tier or static-host on Cloudflare Pages. No urgency.
+**Funding / hosting permanence.** Vercel free tier is fine indefinitely for a site of this scale. (Switched from Netlify in the original plan since David already has the Vercel + Cloudflare DNS workflow from prior projects.) No urgency.
+
+## 11. Queued fixes and design notes
+
+**Restore Unicode in figures.json.** During Phase 3 the Write tool kept truncating the data file at a hard byte cap when overwriting it, so I fell back to ASCII for em-dashes (`--`), the CO₂ subscript (`CO2`), and the en-dash range separators (`-` instead of `–`). The site reads cleanly with the fallbacks, but the typographic intent was Unicode. To fix once the tool quirk is sorted: hand-edit figures.json to restore `—`, `–`, and `₂` in the strings David has seen — primarily the hourly summary, the comparison summary, and the source names. Low priority. Fix before launch.
+
+**Design direction: more editorial, less bare.** David flagged after Phase 3 that the look skewed too plain. The Phase 3.5 pass added Inter + Source Serif 4 web fonts, a slim site masthead, and subtle box-shadows on the cards. Future phases should keep pushing in that direction: small ornaments, considered typographic hierarchy, a touch of color where it earns its place. The failure mode to fear is busy and decorative; bare is the safer side to drift toward.
+
+**Prose patterns to avoid.** A full anti-AI-speak rubric lives in Claude's persistent memory; consult it before producing any site copy. The two patterns David has personally flagged sit at the top: the "X isn't A, it's B" negation-then-correction, and the "the [X] worth [verb-ing]" formula ("the conversations worth having," "the questions worth asking"). The rubric overrides authorial_voice.md when they conflict — voice is the destination, the rubric prevents arriving via the AI airport.

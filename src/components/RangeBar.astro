@@ -32,13 +32,15 @@ const rawMax = Math.max(
 );
 const maxVal = Astro.props.max ?? niceCeiling(rawMax);
 
+const fmt = (n: number) => n.toLocaleString("en-US");
+
 function formatRange(f: Figure): { label: string; low: number; high: number } {
   if (f.value !== undefined) {
-    return { label: `${f.value}`, low: f.value, high: f.value };
+    return { label: fmt(f.value), low: f.value, high: f.value };
   }
   const lo = f.value_low ?? 0;
   const hi = f.value_high ?? 0;
-  return { label: `${lo}–${hi}`, low: lo, high: hi };
+  return { label: `${fmt(lo)}–${fmt(hi)}`, low: lo, high: hi };
 }
 ---
 
@@ -72,7 +74,7 @@ function formatRange(f: Figure): { label: string; low: number; high: number } {
   }
   <div class="axis">
     <span>0</span>
-    <span>{maxVal}</span>
+    <span>{fmt(maxVal)}</span>
   </div>
 </div>
 

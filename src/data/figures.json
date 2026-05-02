@@ -1,10 +1,66 @@
 {
+  "hourly_impact": {
+    "kicker": "Per-hour CO2 comparison",
+    "title": "Driving still dwarfs every digital activity in the conversation.",
+    "summary": "An hour of gasoline driving emits 14,000-18,000 grams of CO2. An hour of ordinary AI chat emits 5-200 grams. Heavy AI workflows, high-end gaming, and HD streaming all cluster between those two -- and far closer to chat than to driving. The big numbers live at data-center scale: grid load, water draw, where new construction lands and what local utilities can carry. That's where the rest of the site looks.",
+    "figures": [
+      {
+        "label": "Gasoline driving (~30 mph passenger car)",
+        "value_low": 14000,
+        "value_high": 18000,
+        "confidence": "medium"
+      },
+      {
+        "label": "Heavy AI workflow (long docs, reasoning, agents)",
+        "value_low": 100,
+        "value_high": 500,
+        "confidence": "low-medium"
+      },
+      {
+        "label": "High-end PC gaming",
+        "value_low": 100,
+        "value_high": 300,
+        "confidence": "medium-low"
+      },
+      {
+        "label": "Ordinary AI chat (text Q&A)",
+        "value_low": 5,
+        "value_high": 200,
+        "confidence": "low-medium"
+      },
+      {
+        "label": "Video streaming (HD on a TV)",
+        "value_low": 36,
+        "value_high": 56,
+        "confidence": "medium"
+      }
+    ],
+    "sources": [
+      {
+        "name": "U.S. EPA - Greenhouse Gas Emissions from a Typical Passenger Vehicle",
+        "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle"
+      },
+      {
+        "name": "Epoch AI - How much energy does ChatGPT use?",
+        "url": "https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use"
+      },
+      {
+        "name": "Carbon Trust - Carbon impact of video streaming",
+        "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming"
+      },
+      {
+        "name": "Lawrence Berkeley National Laboratory - Taming the Energy Use of Gaming Computers",
+        "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+      }
+    ],
+    "last_verified": "2026-05-01"
+  },
   "comparisons": [
     {
       "id": "water-dc-vs-golf",
       "anchor": "water-vs-golf",
       "title": "Water: AI data centers vs. U.S. golf courses",
-      "summary": "U.S. golf courses applied roughly 531 billion gallons of water in 2024 — about six to twelve times more than all global data centers used directly for cooling that year. Include the water used to generate the electricity those data centers consumed, though, and the two end up in roughly the same range. Which framing is fair depends on what you mean by \"data center water\" — and that distinction is most of the argument.",
+      "summary": "U.S. golf courses applied roughly 531 billion gallons of water in 2024 -- about six to twelve times more than all global data centers used directly for cooling that year. Include the water used to generate the electricity those data centers consumed, though, and the two end up in roughly the same range. Which framing is fair depends on what you mean by \"data center water\" -- and that distinction is most of the argument.",
       "unit_caption": "Billion gallons per year",
       "figures": [
         {
@@ -13,13 +69,13 @@
           "confidence": "medium-high"
         },
         {
-          "label": "Global data centers — direct cooling only, 2025",
+          "label": "Global data centers - direct cooling only, 2025",
           "value_low": 45,
           "value_high": 90,
           "confidence": "medium-low"
         },
         {
-          "label": "Global data centers — including electricity-generation water, 2025",
+          "label": "Global data centers - including electricity-generation water, 2025",
           "value_low": 500,
           "value_high": 700,
           "confidence": "low-medium"
@@ -27,11 +83,11 @@
       ],
       "sources": [
         {
-          "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
+          "name": "GCSAA Golf Course Environmental Profile (Phase 4) - Water Use & Management Practices",
           "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf"
         },
         {
-          "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
+          "name": "Lawrence Berkeley National Laboratory - 2024 United States Data Center Energy Usage Report",
           "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf"
         }
       ],

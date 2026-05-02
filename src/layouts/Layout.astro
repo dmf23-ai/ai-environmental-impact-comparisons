@@ -1,0 +1,30 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  wide?: boolean;
+}
+const { title, description, wide = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {description && <meta name="description" content={description} />}
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-mast">
+      <a href="/" class="wordmark"
+        >AI Environmental Impact <span class="dot">·</span> Comparisons</a
+      >
+    </header>
+    <main class={wide ? "wide" : ""}>
+      <slot />
+    </main>
+  </body>
+</html>
