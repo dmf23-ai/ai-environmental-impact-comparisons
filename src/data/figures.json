@@ -92,6 +92,424 @@
         }
       ],
       "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-video-gaming-vs-datacenters",
+      "anchor": "electricity-gaming",
+      "title": "Electricity: Global video gaming vs. data centers",
+      "summary": "Estimates of global gaming electricity sit in a wide and contested band — somewhere between 75 and 285 terawatt-hours a year, depending on whose assumptions you accept. The high end approaches the global data-center figure; the low end is closer to a quarter of it. Almost no number on this site has weaker underlying data; it earns its place mostly because the comparison gets cited so often. Take it as a reminder that 'video games use as much electricity as Country X' is a claim resting on a long chain of rough multipliers.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "Global video gaming (estimated range)",
+          "value_low": 75,
+          "value_high": 285,
+          "confidence": "low"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
+          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-video-streaming-vs-datacenters",
+      "anchor": "electricity-streaming",
+      "title": "Electricity: Global video streaming vs. data centers",
+      "summary": "Estimates of global video streaming electricity range from roughly 100 to 300 terawatt-hours a year, depending heavily on whether end-user devices, home Wi-Fi, and last-mile networks are counted on streaming's side of the ledger or attributed elsewhere. Per hour, an HD stream emits about 36 to 56 grams of CO₂ — below an hour of gaming or driving and roughly comparable to ordinary AI chat. The annual number stays unsettled because most of the energy lives in components shared with everything else: routers, CDNs, screens. Treat any 'streaming uses as much as a small country' headline with care; the IEA has spent years correcting the high end.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "Global video streaming (estimated range)",
+          "value_low": 100,
+          "value_high": 300,
+          "confidence": "low"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "IEA — The carbon footprint of streaming video: fact-checking the headlines",
+          "url": "https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines"
+        },
+        {
+          "name": "Carbon Trust — Carbon impact of video streaming",
+          "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "co2-driving-vs-datacenters",
+      "anchor": "co2-driving-vs-datacenters",
+      "title": "CO₂: U.S. driving vs. global data centers",
+      "summary": "U.S. on-road transportation — every car, truck, and bus on American roads — emitted about 1,440 million metric tons of CO₂ in 2022. That's roughly six to seven times what every data center on the planet emitted in 2024 combined. The hourly hero on the home page already shows driving outpacing any digital activity per hour; the annual ledger says the same thing in different units. AI's footprint is large enough to argue about; the cars in just one country still dwarf it.",
+      "unit_caption": "Million metric tons CO₂ per year",
+      "figures": [
+        {
+          "label": "U.S. on-road transportation, 2022",
+          "value": 1440,
+          "confidence": "high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 220,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EPA — Inventory of U.S. Greenhouse Gas Emissions and Sinks",
+          "url": "https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "water-residential-outdoor",
+      "anchor": "water-residential-outdoor",
+      "title": "Water: U.S. residential outdoor use vs. AI data centers",
+      "summary": "American households spray roughly 3.2 trillion gallons of water on their lawns, gardens, and driveways every year — somewhere between 35 and 70 times what every data center on the planet uses directly for cooling, and roughly five times the broader figure that counts the water used to generate data-center electricity. The EPA estimates about half of that outdoor water is wasted to overwatering. Lawns are the largest irrigated crop in the United States by area; data centers are not yet close.",
+      "unit_caption": "Billion gallons per year",
+      "figures": [
+        {
+          "label": "U.S. residential outdoor water, recent",
+          "value_low": 2900,
+          "value_high": 3300,
+          "confidence": "medium"
+        },
+        {
+          "label": "Global data centers — direct cooling only, 2025",
+          "value_low": 45,
+          "value_high": 90,
+          "confidence": "medium-low"
+        },
+        {
+          "label": "Global data centers — including electricity-generation water, 2025",
+          "value_low": 500,
+          "value_high": 700,
+          "confidence": "low-medium"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EPA WaterSense — Outdoors / Statistics & Facts",
+          "url": "https://www.epa.gov/watersense/outdoors"
+        },
+        {
+          "name": "Lawrence Berkeley National Laboratory — 2024 U.S. Data Center Energy Usage Report",
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-us-households-vs-datacenters",
+      "anchor": "electricity-us-households",
+      "title": "Electricity: U.S. residential vs. global data centers",
+      "summary": "American homes used roughly 1,550 terawatt-hours of electricity in 2024 — about 38 percent of total U.S. consumption, and almost four times what every data center on the planet drew that year. The world's data-center electricity converts to roughly 40 million U.S. households' worth: about a third of American homes. Heating and cooling houses still moves more electricity than the entire global compute layer, even as the layer grows.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "U.S. residential electricity, 2024",
+          "value": 1550,
+          "confidence": "high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EIA — Use of Electricity / Electric Power Annual",
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "co2-aviation-vs-datacenters",
+      "anchor": "co2-aviation",
+      "title": "CO₂: Global commercial aviation vs. data centers",
+      "summary": "Global commercial aviation emitted about 950 million metric tons of CO₂ in 2023 — more than four times what every data center on the planet emitted the following year. Aviation is one of the better-tracked comparisons here, and one of the harder ones to abate. Even with data-center electricity projected to roughly double by 2030, aviation will likely remain comparable or larger.",
+      "unit_caption": "Million metric tons CO₂ per year",
+      "figures": [
+        {
+          "label": "Global commercial aviation, 2023",
+          "value": 950,
+          "confidence": "medium-high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 220,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "IEA — Aviation",
+          "url": "https://www.iea.org/energy-system/transport/aviation"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "co2-cement-steel-vs-datacenters",
+      "anchor": "co2-cement-steel",
+      "title": "CO₂: Global cement and steel vs. data centers",
+      "summary": "Producing the cement and steel for the world's buildings, bridges, and roads emits roughly 4,200 million metric tons of CO₂ a year — almost twenty times the global data-center fleet's emissions. Cement alone, around 1,600 Mt, is enough to dwarf data centers seven times over. The familiar industries — concrete, beams, chimneys — still set the climate scale. AI is becoming visible inside it; it has not yet rearranged it.",
+      "unit_caption": "Million metric tons CO₂ per year",
+      "figures": [
+        {
+          "label": "Global cement, 2023",
+          "value": 1600,
+          "confidence": "high"
+        },
+        {
+          "label": "Global iron and steel, recent",
+          "value": 2600,
+          "confidence": "medium-high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 220,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "IEA — Cement",
+          "url": "https://www.iea.org/energy-system/industry/cement"
+        },
+        {
+          "name": "IEA — Iron and Steel",
+          "url": "https://www.iea.org/energy-system/industry/steel"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "co2-cattle-vs-datacenters",
+      "anchor": "co2-cattle",
+      "title": "CO₂: Global cattle (beef and dairy) vs. data centers",
+      "summary": "The world's cattle — beef and dairy combined — generate about 3,800 million metric tons of CO₂-equivalent emissions a year, mostly from methane belched by ruminants and from clearing land for pasture. That is roughly seventeen times the data-center figure, and the comparison is one of the few here where 'global vs. global' lines up cleanly. Cows have a head start of about ten thousand years; on this scale they are still ahead.",
+      "unit_caption": "Million metric tons CO₂-equivalent per year",
+      "figures": [
+        {
+          "label": "Global cattle (meat + milk), recent",
+          "value": 3800,
+          "confidence": "medium-high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 220,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "UN FAO — Tackling Climate Change Through Livestock",
+          "url": "https://www.fao.org/4/i3437e/i3437e.pdf"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-ac-vs-datacenters",
+      "anchor": "electricity-ac",
+      "title": "Electricity: U.S. residential air conditioning vs. global data centers",
+      "summary": "American homes used about 254 terawatt-hours of electricity for air conditioning in 2020 — roughly 60 percent of the entire global data-center electricity figure for 2024. AC use rises sharply in summer and is, in many U.S. regions, the single biggest driver of grid stress on hot afternoons. A seasonal residential load in one country sits in the same league as the year-round, planet-wide computing fleet.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "U.S. residential air conditioning, 2020",
+          "value": 254,
+          "confidence": "high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EIA — Residential Energy Consumption Survey (RECS), 2020",
+          "url": "https://www.eia.gov/consumption/residential/"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-ev-charging-vs-datacenters",
+      "anchor": "electricity-ev-charging",
+      "title": "Electricity: Global EV charging vs. data centers",
+      "summary": "The world's electric vehicles drew about 180 terawatt-hours of electricity in 2024, up nearly 60 percent in a single year — roughly 43 percent of the global data-center figure. The IEA expects EV charging to grow past 2,000 TWh by 2035 in its main scenario. EVs and data centers are now the same kind of question for grid planners: where the new gigawatts land, and what generates them.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "Global EV charging, 2024",
+          "value": 180,
+          "confidence": "high"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "IEA — Global EV Outlook 2025: Outlook for Energy Demand",
+          "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-bitcoin-vs-datacenters",
+      "anchor": "electricity-bitcoin",
+      "title": "Electricity: Bitcoin mining vs. data centers",
+      "summary": "Estimates of Bitcoin's annual electricity use cluster between 140 and 200 terawatt-hours — somewhere in the range of 30 to 50 percent of the global data-center fleet. The Cambridge index, which surveys miners directly, sits at the low end; market-based estimators sit higher. Bitcoin is a single-purpose load, hard to abate by design: the network's security depends on burning electricity. Whatever you make of the trade-off, it is in the same scale conversation as data centers without being part of them.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "Bitcoin mining (Cambridge & market estimates)",
+          "value_low": 140,
+          "value_high": 200,
+          "confidence": "medium"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
+          "url": "https://ccaf.io/cbnsi/cbeci"
+        },
+        {
+          "name": "Digiconomist — Bitcoin Energy Consumption Index",
+          "url": "https://digiconomist.net/bitcoin-energy-consumption"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "co2-lawn-equipment-vs-datacenters",
+      "anchor": "co2-lawn-equipment",
+      "title": "Emissions: U.S. gas-powered lawn equipment vs. data centers",
+      "summary": "Gas-powered lawn and garden equipment in the United States — mowers, blowers, trimmers — emitted about 30 million metric tons of CO₂ in 2020, plus large shares of the country's smog-forming pollutants. The CO₂ figure is around 14 percent of every data center on the planet combined. The bigger story is air quality: gas mowers and blowers account for nearly one in six U.S. volatile-organic-compound emissions and more than one in ten nitrogen-oxide emissions. AI's grid load gets headlines; gas mowers do quieter, dirtier work in the same neighborhoods.",
+      "unit_caption": "Million metric tons CO₂ per year",
+      "figures": [
+        {
+          "label": "U.S. gas-powered lawn equipment, 2020",
+          "value": 30,
+          "confidence": "medium"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 220,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EPA — National Emissions from Lawn and Garden Equipment (Banks)",
+          "url": "https://www.epa.gov/sites/default/files/2015-09/documents/banks.pdf"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
+    },
+    {
+      "id": "electricity-holiday-lights-vs-datacenters",
+      "anchor": "electricity-holiday-lights",
+      "title": "Electricity: U.S. holiday lighting vs. global data centers",
+      "summary": "American holiday lighting consumes roughly 6.6 terawatt-hours of electricity each December — more than the entire annual electricity supply of El Salvador and several smaller nations. The figure dates to a 2008 Department of Energy estimate and is probably lower today as LED string lights have largely replaced incandescent bulbs. The U.S. still spends as much electricity on a month of yard ornaments as some countries spend running everything for a year. Compared with the year-round, planet-wide data-center fleet, it is a footnote — about 1.6 percent.",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "U.S. holiday lighting, 2008 (latest available)",
+          "value": 6.6,
+          "confidence": "low-medium"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        }
+      ],
+      "sources": [
+        {
+          "name": "U.S. Department of Energy / EIA — 2008 holiday lighting estimate (cited via Center for Global Development)",
+          "url": "https://www.cgdev.org/blog/us-holiday-lights-use-more-electricity-el-salvador-does-year"
+        },
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        }
+      ],
+      "last_verified": "2026-05-01"
     }
   ]
 }
