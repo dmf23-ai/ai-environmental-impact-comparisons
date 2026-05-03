@@ -1,0 +1,321 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+interface Figure {
+  label: string;
+  value?: number;
+  value_low?: number;
+  value_high?: number;
+  confidence?: string;
+  role?: string;
+}
+
+interface Infographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  unit_caption: string;
+  figures: Figure[];
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: Infographic) => i.id === "water-bracket"
+) as Infographic;
+
+if (!data) throw new Error("water-bracket missing from figures.json");
+
+// SVG viewBox geometry. The whole infographic is one self-contained <svg>
+// so a screenshot or right-click-save carries the kicker, title, bars, axis,
+// short source attribution, and the verified-date stamp with it.
+const W = 720;
+const padX = 30;
+const chartLeft = padX;
+const chartRight = W - padX;
+const chartWidth = chartRight - chartLeft;
+
+const headerH = 115;
+const barRowH = 58;
+const labelOffset = 14;
+const barTopOffset = 22;
+const barH = 18;
+
+// Tighter ceiling steps than the default — for max=700 we want 700, not 1000.
+function niceCeiling(n: number): number {
+  if (n <= 10) return Math.ceil(n);
+  const magnitude = Math.pow(10, Math.floor(Math.log10(n)));
+  const mantissa = n / magnitude;
+  let rounded;
+  if (mantissa <= 1) rounded = 1;
+  else if (mantissa <= 1.25) rounded = 1.25;
+  else if (mantissa <= 1.5) rounded = 1.5;
+  else if (mantissa <= 1.6) rounded = 1.6;
+  else if (mantissa <= 2) rounded = 2;
+  else if (mantissa <= 2.5) rounded = 2.5;
+  else if (mantissa <= 3) rounded = 3;
+  else if (mantissa <= 4) rounded = 4;
+  else if (mantissa <= 5) rounded = 5;
+  else if (mantissa <= 6) rounded = 6;
+  else if (mantissa <= 7) rounded = 7;
+  else if (mantissa <= 8) rounded = 8;
+  else rounded = 10;
+  return rounded * magnitude;
+}
+
+const figures = data.figures;
+const rawMax = Math.max(
+  ...figures.map((f) => f.value_high ?? f.value ?? 0)
+);
+const maxVal = niceCeiling(rawMax);
+
+const fmt = (n: number) => n.toLocaleString("en-US");
+function valueText(f: Figure): string {
+  if (f.value !== undefined) return fmt(f.value);
+  return `${fmt(f.value_low ?? 0)}–${fmt(f.value_high ?? 0)}`;
+}
+
+const barsHeight = figures.length * barRowH;
+const axisLineY = headerH + barsHeight + 6;
+const axisLabelY = headerH + barsHeight + 22;
+const footerRuleY = axisLabelY + 28;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+// Short source attribution baked into the SVG. Full clickable list lives in
+// the SourceLine HTML below.
+const sourceShort = "Sources: GCSAA Golf Course Environmental Profile; Lawrence Berkeley National Laboratory.";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+
+const FONT_SANS = "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <pattern
+        id="rangeStripeWater"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(45)"
+      >
+        <rect width="8" height="8" fill="#1f4f7a" />
+        <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,0.20)" stroke-width="3" />
+      </pattern>
+    </defs>
+
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text
+      x={padX}
+      y={36}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill="#8a8682"
+      letter-spacing="1.6"
+      font-weight="500"
+    >
+      {data.kicker.toUpperCase()}
+    </text>
+    <text
+      x={padX}
+      y={72}
+      font-family={FONT_SERIF}
+      font-size="26"
+      fill="#1a1a1a"
+      font-weight="600"
+    >
+      {data.title}
+    </text>
+    <text
+      x={padX}
+      y={103}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill="#4a4a4a"
+      letter-spacing="0.9"
+      font-weight="500"
+    >
+      {data.unit_caption.toUpperCase()}
+    </text>
+
+    {/* Bars */}
+    {figures.map((f, i) => {
+      const top = headerH + i * barRowH;
+      const labelY = top + labelOffset;
+      const barY = top + barTopOffset;
+      const isPoint = f.value !== undefined;
+      const lo = f.value !== undefined ? f.value : (f.value_low ?? 0);
+      const hi = f.value !== undefined ? f.value : (f.value_high ?? 0);
+      const xLo = chartLeft + (lo / maxVal) * chartWidth;
+      const xHi = chartLeft + (hi / maxVal) * chartWidth;
+      const isReference = f.role === "reference";
+      return (
+        <g>
+          <text
+            x={chartLeft}
+            y={labelY}
+            font-family={FONT_SANS}
+            font-size="14"
+            fill="#1a1a1a"
+          >
+            {f.label}
+          </text>
+          <text
+            x={chartRight}
+            y={labelY}
+            font-family={FONT_SANS}
+            font-size="14"
+            fill="#1a1a1a"
+            font-weight="500"
+            text-anchor="end"
+          >
+            {valueText(f)}
+          </text>
+          <rect
+            x={chartLeft}
+            y={barY}
+            width={chartWidth}
+            height={barH}
+            fill="rgba(0,0,0,0.05)"
+            rx="3"
+          />
+          {isReference ? (
+            <rect
+              x={chartLeft}
+              y={barY}
+              width={xHi - chartLeft}
+              height={barH}
+              fill="#1f4f7a"
+              opacity="0.32"
+              rx="3"
+            />
+          ) : isPoint ? (
+            <rect
+              x={chartLeft}
+              y={barY}
+              width={xHi - chartLeft}
+              height={barH}
+              fill="#1f4f7a"
+              rx="3"
+            />
+          ) : (
+            <rect
+              x={xLo}
+              y={barY}
+              width={xHi - xLo}
+              height={barH}
+              fill="url(#rangeStripeWater)"
+              rx="3"
+            />
+          )}
+        </g>
+      );
+    })}
+
+    {/* Axis */}
+    <line
+      x1={chartLeft}
+      y1={axisLineY}
+      x2={chartRight}
+      y2={axisLineY}
+      stroke="#e6e3dc"
+      stroke-width="1"
+    />
+    <text
+      x={chartLeft}
+      y={axisLabelY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill="#4a4a4a"
+    >
+      0
+    </text>
+    <text
+      x={chartRight}
+      y={axisLabelY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill="#4a4a4a"
+      text-anchor="end"
+    >
+      {fmt(maxVal)}
+    </text>
+
+    {/* Footer */}
+    <line
+      x1={padX}
+      y1={footerRuleY}
+      x2={W - padX}
+      y2={footerRuleY}
+      stroke="#e6e3dc"
+      stroke-width="1"
+    />
+    <text
+      x={padX}
+      y={sourceLineY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill="#4a4a4a"
+    >
+      {sourceShort}
+    </text>
+    <text
+      x={padX}
+      y={verifiedLineY}
+      font-family={FONT_SANS}
+      font-size="11"
+      fill="#8a8682"
+    >
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>

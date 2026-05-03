@@ -579,6 +579,44 @@
         }
       ],
       "last_verified": "2026-05-02"
+    },
+    {
+      "id": "water-bracket",
+      "anchor": "water-bracket",
+      "kicker": "Water, by where you draw the line",
+      "title": "Are AI data centers thirstier than golf courses?",
+      "unit_caption": "Billion gallons per year",
+      "figures": [
+        {
+          "label": "U.S. golf courses, 2024",
+          "value": 531,
+          "confidence": "medium-high"
+        },
+        {
+          "label": "Global data centers — direct cooling only, 2025",
+          "value_low": 45,
+          "value_high": 90,
+          "confidence": "medium-low"
+        },
+        {
+          "label": "Global data centers — same year, including water for electricity",
+          "value_low": 500,
+          "value_high": 700,
+          "confidence": "low-medium"
+        }
+      ],
+      "summary": "U.S. golf courses use about 531 billion gallons of water a year. The water that flows through a data center's cooling loops is much smaller — somewhere around 45 to 90 billion gallons globally. Add the water used to generate the electricity those data centers run on, and the figure jumps into the 500 to 700 billion range. Both numbers are about the same data centers; the difference is just where you draw the boundary.",
+      "sources": [
+        {
+          "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
+          "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf"
+        },
+        {
+          "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf"
+        }
+      ],
+      "last_verified": "2026-05-02"
     }
   ]
 }
