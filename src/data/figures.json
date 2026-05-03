@@ -60,38 +60,58 @@
       "id": "water-dc-vs-golf",
       "anchor": "water-vs-golf",
       "title": "Water: AI data centers vs. U.S. golf courses",
-      "summary": "U.S. golf courses applied roughly 531 billion gallons of water in 2024 -- about six to twelve times more than all global data centers used directly for cooling that year. Include the water used to generate the electricity those data centers consumed, though, and the two end up in roughly the same range. Which framing is fair depends on what you mean by \"data center water\" -- and that distinction is most of the argument.",
+      "summary": "U.S. golf courses applied roughly 531 billion gallons of water in 2024. The global figure is harder to pin down — no clean primary source gives a total — but extrapolating from U.S. per-course averages and the R&A's count of about 38,860 courses worldwide puts it somewhere in the 800 to 1,500 billion gallon range. Every data center on the planet uses 45–90 billion gallons directly for cooling, and 500–700 billion when you also count the water used to generate their electricity. The U.S. data center share is about 17 billion direct and 211 billion indirect (LBNL, 2023). Which framing is fair depends on which boundary you draw — and the boundary is most of the argument.",
       "unit_caption": "Billion gallons per year",
       "figures": [
+        {
+          "label": "Global golf courses (site estimate)",
+          "value_low": 800,
+          "value_high": 1500,
+          "confidence": "low"
+        },
         {
           "label": "U.S. golf courses, 2024",
           "value": 531,
           "confidence": "medium-high"
         },
         {
-          "label": "Global data centers - direct cooling only, 2025",
+          "label": "Global data centers — including electricity-generation water, 2025",
+          "value_low": 500,
+          "value_high": 700,
+          "confidence": "low-medium"
+        },
+        {
+          "label": "U.S. data centers — including electricity-generation water, 2023",
+          "value": 211,
+          "confidence": "high"
+        },
+        {
+          "label": "Global data centers — direct cooling only, 2025",
           "value_low": 45,
           "value_high": 90,
           "confidence": "medium-low"
         },
         {
-          "label": "Global data centers - including electricity-generation water, 2025",
-          "value_low": 500,
-          "value_high": 700,
-          "confidence": "low-medium"
+          "label": "U.S. data centers — direct cooling only, 2023",
+          "value": 17,
+          "confidence": "high"
         }
       ],
       "sources": [
         {
-          "name": "GCSAA Golf Course Environmental Profile (Phase 4) - Water Use & Management Practices",
+          "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
           "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf"
         },
         {
-          "name": "Lawrence Berkeley National Laboratory - 2024 United States Data Center Energy Usage Report",
-          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf"
+          "name": "R&A — Global Golf Participation Report 2024",
+          "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf"
+        },
+        {
+          "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf"
         }
       ],
-      "last_verified": "2026-05-01"
+      "last_verified": "2026-05-02"
     },
     {
       "id": "electricity-video-gaming-vs-datacenters",
@@ -588,9 +608,26 @@
       "unit_caption": "Billion gallons per year",
       "figures": [
         {
+          "label": "Global golf courses (site estimate)",
+          "value_low": 800,
+          "value_high": 1500,
+          "confidence": "low"
+        },
+        {
           "label": "U.S. golf courses, 2024",
           "value": 531,
           "confidence": "medium-high"
+        },
+        {
+          "label": "Global data centers — including electricity-generation water, 2025",
+          "value_low": 500,
+          "value_high": 700,
+          "confidence": "low-medium"
+        },
+        {
+          "label": "U.S. data centers — including electricity-generation water, 2023",
+          "value": 211,
+          "confidence": "high"
         },
         {
           "label": "Global data centers — direct cooling only, 2025",
@@ -599,21 +636,24 @@
           "confidence": "medium-low"
         },
         {
-          "label": "Global data centers — same year, including water for electricity",
-          "value_low": 500,
-          "value_high": 700,
-          "confidence": "low-medium"
+          "label": "U.S. data centers — direct cooling only, 2023",
+          "value": 17,
+          "confidence": "high"
         }
       ],
-      "summary": "U.S. golf courses use about 531 billion gallons of water a year. The water that flows through a data center's cooling loops is much smaller — somewhere around 45 to 90 billion gallons globally. Add the water used to generate the electricity those data centers run on, and the figure jumps into the 500 to 700 billion range. Both numbers are about the same data centers; the difference is just where you draw the boundary.",
+      "summary": "U.S. golf courses use about 531 billion gallons of water a year. Globally — extrapolating per-course averages to the R&A's count of roughly 38,860 courses — golf probably uses 800 to 1,500 billion. The water that flows through data center cooling loops is much smaller: 45–90 billion globally, about 17 billion in the U.S. Add the water used to generate the electricity those data centers run on, and the global figure jumps to 500–700 billion (211 billion in the U.S.). Which framing makes AI look thirsty depends on which boundary you draw — and the boundary is most of the argument.",
       "sources": [
         {
           "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
           "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf"
         },
         {
+          "name": "R&A — Global Golf Participation Report 2024",
+          "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf"
+        },
+        {
           "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
-          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf"
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf"
         }
       ],
       "last_verified": "2026-05-02"
