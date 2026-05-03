@@ -22,60 +22,76 @@ A static website that puts AI's water and energy footprint next to other large u
 
 Completed:
 
-- **Phase 1.** Astro scaffold, GitHub repo, Vercel deploy, edit→commit→push→redeploy loop confirmed.
-- **Phase 2.** First comparison card (water: AI data centers vs. U.S. golf courses). Built `figures.json`, `RangeBar`, `ComparisonCard`, `SourceLine` components, and the `/comparisons` page.
-- **Phase 3.** `Layout.astro` and `global.css` with locked design tokens. Hourly impact hero on the home page using two stacked range-bar charts (full scale + zoomed). Comma-formatted bar values.
-- **Phase 3.5.** Web fonts (Inter + Source Serif 4 via Fontsource), slim site masthead with wordmark, subtle box-shadow on cards, alignment fix for the lede width, scrollbar-gutter for stable page centering, prose rewrites to remove AI tells.
-- **Phase 4.** All 14 comparison cards in `figures.json`, in this order: golf, video gaming, video streaming, driving, residential lawn water, U.S. household electricity, aviation, cement+steel, cattle, residential AC, EV charging, Bitcoin, lawn equipment, holiday lighting. Each card has a vetted figure with a real-source URL, a confidence level, and a unit caption. Unicode (em-dashes, en-dashes, ₂ subscripts) preserved throughout the new entries. Cards rendering correctly on Vercel.
-- **Plan update during Phase 4.** Section 3 `/methods` entry now specifies per-display structure (one section per card and per home-page infographic). Section 11 carries the spec for the small "How this was calculated" link UI on each ComparisonCard / HourlyImpactHero — deferred to Phase 6. Schema note: each card's existing `anchor` field can double as its `/methods` anchor; no new field needed.
+- **Phases 1–4.** Astro scaffold, GitHub + Vercel deploy, design tokens locked, web fonts, masthead, hourly hero on the home page, all 14 comparison cards live on `/comparisons`.
+- **Phase 5 (in progress).** Two of ~8–10 infographics live on the home page below the hourly hero:
+  - `InfographicAnnualTwh.astro` — "How big is AI, really?" Six bars: U.S. residential (muted reference) + global data centers + global gaming + Bitcoin + EV charging + AI workloads within data centers. Annual TWh, with the AI slice (30–80 TWh, low-medium confidence) marked as the chart's softest figure.
+  - `InfographicWaterBracket.astro` — "Are AI data centers thirstier than golf courses?" Six bars: global golf (site estimate) + U.S. golf + global DC indirect + U.S. DC indirect + global DC direct + U.S. DC direct.
+  
+  The water bracket's six-bar expansion also reshaped the matching `water-dc-vs-golf` comparison card — same six bars, updated summary, R&A added to sources, Phase 2's ASCII fallbacks in that entry got cleaned up to Unicode em-dashes incidentally.
 
-Next: **Phase 5 — infographics.** Per the plan (Section 5), eight to ten core static-SVG visuals, each standalone-shareable, each with a baked-in source line. Pace: one or two per session. Suggested starting visuals: "How big is AI, really?" annual TWh bar, the water bracket, and the household-equivalents staircase. The hourly hero on the home page is already a working prototype of the visual style; the rest should match its restraint.
+Next: **Phase 5 continued — visual #3.** Strong candidates: **the trajectory chart** (IEA's data-center electricity projection 2024 → 2030 with a shaded uncertainty band — would be the first time-axis chart on the site) or **the household-equivalents staircase** (translating big TWh numbers into "X million U.S. households' worth"). Pace: one or two visuals per session. Plan section 5 has the full list of 8–10 candidates.
 
 ## Read these in order
 
-1. `website_plan.md` — the full project plan: editorial frame, audience, structure, comparison set, infographics, honesty layer, update mechanism, tech stack rationale, phased build, and a "Queued fixes and design notes" section at the bottom (Section 11) with current open issues.
+1. `website_plan.md` — full plan: editorial frame, audience, structure, comparison set, infographics, honesty layer, update mechanism, tech stack rationale, phased build, and "Queued fixes and design notes" (Section 11).
 2. `authorial_voice.md` — David's voice description. Use as a guideline. The anti-AI-speak rubric in Claude's persistent memory takes precedence when they conflict.
-3. `user_profile.md` — David's collaboration preferences: compact responses, beginner coder, small verifiable milestones, focus on one thing at a time, distinguish facts from hypotheses.
+3. `user_profile.md` — collaboration preferences: compact responses, beginner coder, small verifiable milestones, focus on one thing at a time, distinguish facts from hypotheses.
 4. `phase1_setup.md` — original Phase 1 walkthrough; mostly historical now.
 
-The Anti-AI-speak rubric memory file (in Claude's persistent memory, not in this folder) governs all prose produced for this project — site copy, chat replies, code comments, documents. Apply it before publishing anything.
+The Anti-AI-speak rubric memory file (in Claude's persistent memory, not this folder) governs all prose for this project — site copy, chat replies, code comments. Apply it before publishing anything.
+
+## Design decisions during Phase 5
+
+- **Infographic data lives in `figures.json` under a sibling key `infographics`,** parallel to `comparisons`. Same shape (figures, sources, summary, last_verified, anchor) plus presentation metadata (kicker, title, unit_caption). When an infographic shares numbers with a comparison (water bracket and water-dc-vs-golf), the figures are duplicated rather than referenced. Single source of truth would be cleaner; refactor if a third overlap appears.
+- **Each infographic is one self-contained `<svg>`** with kicker, title, bars, axis, short source attribution, and last-verified stamp baked inside. This honors the plan's "right-click-save produces something useful" promise (Section 5). Surrounding HTML carries only the prose summary and the clickable `SourceLine`.
+- **Components named `Infographic*.astro`,** dropped onto the home page in priority order below the hourly hero. A `/figures` gallery page is deferred until ~3+ infographics exist.
+- **Reference bars** (e.g., U.S. residential in annual-twh) use accent color at 0.32 opacity to read as scaffolding rather than competition. Triggered by a `role: "reference"` field on the figure entry.
+- **`niceCeiling` is duplicated per component.** `RangeBar.astro` has the original coarse version (rounds to 1, 2, 2.5, 5, 10); `InfographicWaterBracket.astro` and `InfographicAnnualTwh.astro` add granular steps (including 1.25, 1.5, 1.6, 6, 7, 8). Duplication is acceptable until a third caller needs different behavior, then refactor to `src/lib/niceCeiling.ts`.
 
 ## Open questions for David
 
-- Domain name: not picked. Some directions brainstormed in `website_plan.md` Section 10.
-- Restoring Unicode in the *original* Phase 2 entries (golf-courses card, hourly hero summary): the new Phase 4 cards have Unicode throughout, but the older entries in `figures.json` still use ASCII fallbacks (`--`, `CO2`, `-` for ranges). Low-priority Unicode-restoration pass before launch.
+- **Domain name** — still not picked. Some directions in `website_plan.md` Section 10.
+- **Global golf source.** The water bracket and water comparison both currently use a derived "site estimate" range (800–1,500 Bgal) for global golf because the most-circulated figure (912 Bgal/year) traces back to a confused UN claim about drinking water needs for 4.7 billion people. R&A and USGA publish regional but not global totals. Decision: ship the derived range with explicit "site estimate" framing now, replace if/when a primary source surfaces. Keep ear out during future research.
+- **Right-edge touching on infographic bars.** When the highest bar's value equals the chart's `niceCeiling` ceiling (e.g., global golf 1,500 hits 1,500 ceiling), the bar runs flush against the axis right edge. Currently accepted as visually dramatic; could be tuned by adjusting `niceCeiling` rules.
+- **U.S./global pair affordance.** The water bracket's six-bar layout pairs U.S. and global figures by label parallelism alone. If the eye doesn't catch the pairing on use, may need a small visual cue (country-code chip, grouped row backgrounds, inline grouping).
+- **`niceCeiling` consolidation.** Two versions live in two files. Worth extracting to `src/lib/niceCeiling.ts` if a third caller wants its own granularity.
 
-Closed during Phase 4:
-
-- The home-page lede negation ("what AI's environmental impact actually is — and what it isn't —") stays. David's call: just one Tier 1 instance, not the most typical AI phrasing.
+Closed during Phase 5:
+- Schema for infographics (decided: sibling array in figures.json, same shape).
+- Where infographics render (decided: home page in priority order, `/figures` gallery deferred).
+- Standalone-shareable interpretation (decided: literal — source attribution baked into the SVG itself).
 
 ## Working notes
 
-- **The figures.json byte-cap quirk is real and recurred in Phase 4.** A large Edit (adding ten cards in one pass) truncated the file at exactly 4,000 bytes on the bash sandbox view, while the Read tool still saw the full content — meaning the canonical Windows-side file may also have been truncated. The reliable workaround is rewriting the entire file via a Python heredoc through bash (`python3 << 'PYEOF' ... json.dump(...) ... PYEOF`). Small surgical Edits (one card or smaller) work fine. For any bulk change to figures.json, default to the heredoc path.
+- **The figures.json byte-cap quirk affects more files than just figures.json.** During Phase 5 it bit on Edit operations on `figures.json` (around 24KB), `index.astro` (under 1KB), AND on a small Edit to this very `handoff.md` during the wrap-up. Pattern: the Edit tool reports success, the Read tool sees the full content, but the on-disk file is truncated. The live site is unaffected when the truncation happens between commits, because Vercel builds from committed state. The reliable workarounds: bash Python heredoc for `figures.json` (`python3 << 'PYEOF' ... json.dump(...) ... PYEOF`); `git checkout HEAD -- <file>` to restore from the last good commit; or `cat > <file> << 'EOF' ... EOF` for plain-text files. **Updated heuristic: default to heredoc / restore-from-git / Write-tool for any structural file rewrite, regardless of size.** Edit tool is no longer trusted for any meaningful change on this project — verify with bash `wc -c` and `tail` after every Edit.
+- **Line endings on `.md` files.** `authorial_voice.md` and `user_profile.md` periodically flip between LF and CRLF in the sandbox without intentional changes. If `git status` shows them modified at the end of a session that didn't touch them, revert with `git checkout <file>`.
+- **`website_plan.md` git-state weirdness.** During the Phase 5 wrap-up it appeared as both staged-deleted AND untracked while HEAD and disk were byte-identical. Resolution was `git restore --staged website_plan.md`. Likely a sandbox-side `git rm` ran inadvertently. If it happens again, check HEAD vs disk before doing anything destructive.
 - Sandbox `npm install` for Astro times out at 45 seconds, so full builds aren't reliably verifiable in the sandbox. David's local machine handles them fine.
 - `git config user.name` and `user.email` are already set on David's machine (handled in Phase 1).
-- Line endings: `authorial_voice.md` flipped LF↔CRLF in one session; if the sandbox normalizes line endings on a file you didn't intend to touch, revert with `git checkout <file>`.
+- **Never run git from the sandbox bash, not even read-only commands.** Even `git status` from the sandbox creates a `.git/index.lock` file, and the sandbox can't delete it afterward (no write permission to `.git`). The stale lock then blocks David's local git from doing anything that writes the index, with `fatal: Unable to create '.git/index.lock': File exists`. If this happens, David clears it with `Remove-Item .git\index.lock` in PowerShell. All git operations should run in David's local terminal.
 
 ## File map
 
 ```
 src/
-  data/figures.json              ← single source of truth for all comparison data
-  layouts/Layout.astro           ← page wrapper: masthead + main slot
+  data/figures.json                ← single source of truth for comparisons + infographics
+  layouts/Layout.astro             ← page wrapper: masthead + main slot
   components/
-    ComparisonCard.astro         ← one card per comparison
-    HourlyImpactHero.astro       ← home page hero (two stacked RangeBar charts)
-    RangeBar.astro               ← horizontal bars, supports point + range values
-    SourceLine.astro             ← sources + last-verified footer
+    ComparisonCard.astro           ← one card per comparison
+    HourlyImpactHero.astro         ← home-page hourly CO2 hero (two stacked RangeBars)
+    InfographicAnnualTwh.astro     ← "How big is AI, really?" (Phase 5 visual #1)
+    InfographicWaterBracket.astro  ← "Are AI data centers thirstier than golf courses?" (Phase 5 visual #2)
+    RangeBar.astro                 ← horizontal bars, point + range values; used by ComparisonCard, HourlyImpactHero
+    SourceLine.astro               ← clickable sources + last-verified footer
   pages/
-    index.astro                  ← home: hero + thesis + cta
-    comparisons.astro            ← lists all ComparisonCards from figures.json
-  styles/global.css              ← design tokens, base styles, masthead, common chrome
+    index.astro                    ← home: hero + thesis + cta + infographics
+    comparisons.astro              ← lists all ComparisonCards from figures.json
+  styles/global.css                ← design tokens, base styles, masthead, common chrome
 
-website_plan.md                  ← the plan
-phase1_setup.md                  ← original setup walkthrough
-authorial_voice.md               ← voice description
-user_profile.md                  ← David's collaboration preferences
-README.md                        ← repo readme
-handoff.md                       ← this file
+website_plan.md                    ← the plan
+phase1_setup.md                    ← original setup walkthrough
+authorial_voice.md                 ← voice description
+user_profile.md                    ← David's collaboration preferences
+README.md                          ← repo readme
+handoff.md                         ← this file
 ```
