@@ -511,5 +511,74 @@
       ],
       "last_verified": "2026-05-01"
     }
+  ],
+  "infographics": [
+    {
+      "id": "annual-twh",
+      "anchor": "annual-twh",
+      "kicker": "Annual electricity, in context",
+      "title": "How big is AI, really?",
+      "unit_caption": "Terawatt-hours per year",
+      "figures": [
+        {
+          "label": "U.S. residential electricity, 2024",
+          "value": 1550,
+          "confidence": "high",
+          "role": "reference"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "value": 415,
+          "confidence": "medium-high"
+        },
+        {
+          "label": "Global video gaming (estimated range)",
+          "value_low": 75,
+          "value_high": 285,
+          "confidence": "low"
+        },
+        {
+          "label": "Bitcoin mining, 2024 (range)",
+          "value_low": 140,
+          "value_high": 200,
+          "confidence": "medium"
+        },
+        {
+          "label": "Global EV charging, 2024",
+          "value": 180,
+          "confidence": "high"
+        },
+        {
+          "label": "AI workloads within data centers, 2024 (range)",
+          "value_low": 30,
+          "value_high": 80,
+          "confidence": "low-medium"
+        }
+      ],
+      "summary": "AI gets the loudest headlines. The data-center footprint it sits inside is already larger than Bitcoin or EV charging, and the whole compute layer, taken together, still draws about a quarter of what U.S. homes spend keeping the lights and appliances on for a year. The AI slice itself is one of the chart's softer numbers — there is no consensus yet on what counts as 'AI' inside a hyperscale facility — but even its high end leaves room above for everything else data centers do.",
+      "sources": [
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        },
+        {
+          "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
+          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+        },
+        {
+          "name": "IEA — Global EV Outlook 2025: Outlook for Energy Demand",
+          "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand"
+        },
+        {
+          "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
+          "url": "https://ccaf.io/cbnsi/cbeci"
+        },
+        {
+          "name": "EIA — Use of Electricity / Electric Power Annual",
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+        }
+      ],
+      "last_verified": "2026-05-02"
+    }
   ]
 }
