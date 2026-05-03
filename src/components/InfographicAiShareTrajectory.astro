@@ -1,0 +1,357 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+interface YearValue {
+  year: number;
+  value: number;
+  confidence?: string;
+}
+
+interface ProjectionLine {
+  central: YearValue[];
+  band_low: YearValue[];
+  band_high: YearValue[];
+  central_label?: string;
+  band_low_label?: string;
+  band_high_label?: string;
+}
+
+interface TrajectoryInfographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  unit_caption: string;
+  x_min: number;
+  x_max: number;
+  y_max: number;
+  boundary_year: number;
+  historicals: YearValue[];
+  projection: ProjectionLine;
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: any) => i.id === "ai-share-trajectory"
+) as TrajectoryInfographic;
+
+if (!data) throw new Error("ai-share-trajectory missing from figures.json");
+
+// Geometry mirrors InfographicDcTrajectory so the two charts read as a pair
+// when stacked. Different y-scale and x-window, otherwise identical chrome.
+const W = 720;
+const padX = 30;
+
+const headerH = 115;
+
+const plotLeft = 60;
+const plotRight = W - padX - 50; // gutter for right-edge endpoint labels
+const plotTop = headerH + 20;
+const plotBottom = plotTop + 220;
+const plotWidth = plotRight - plotLeft;
+const plotHeight = plotBottom - plotTop;
+
+const xAxisLabelY = plotBottom + 22;
+const footerRuleY = xAxisLabelY + 28;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+const FONT_SANS = "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+
+const ACCENT = "#1f4f7a";
+const INK = "#1a1a1a";
+const MID = "#4a4a4a";
+const DIM = "#8a8682";
+const RULE = "#e6e3dc";
+
+const fmt = (n: number) => n.toLocaleString("en-US");
+
+const xFor = (year: number) =>
+  plotLeft + ((year - data.x_min) / (data.x_max - data.x_min)) * plotWidth;
+const yFor = (val: number) =>
+  plotBottom - (val / data.y_max) * plotHeight;
+
+// Y-axis ticks for the AI-share scale.
+const yTicks = [0, 100, 200, 300, 400, 500].filter((t) => t <= data.y_max);
+
+// X-axis ticks across the 2024-2030 window.
+const xTicks = [2024, 2026, 2028, 2030];
+
+const cStart = data.projection.central[0];
+const cEnd = data.projection.central[data.projection.central.length - 1];
+
+const lowEnd = data.projection.band_low[data.projection.band_low.length - 1];
+const highEnd = data.projection.band_high[data.projection.band_high.length - 1];
+
+// Band starts as a vertical segment at 2024 (50 to 80 TWh) since even the
+// historical anchor carries a small confidence range, then fans out to 2030.
+const bLowStart = data.projection.band_low[0];
+const bHighStart = data.projection.band_high[0];
+const bandPath =
+  `M ${xFor(bLowStart.year)} ${yFor(bLowStart.value)} ` +
+  `L ${xFor(lowEnd.year)} ${yFor(lowEnd.value)} ` +
+  `L ${xFor(highEnd.year)} ${yFor(highEnd.value)} ` +
+  `L ${xFor(bHighStart.year)} ${yFor(bHighStart.value)} Z`;
+
+const sourceShort = "Sources: IEA Energy and AI; IEA Key Questions on Energy and AI (2026).";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text
+      x={padX}
+      y={36}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={DIM}
+      letter-spacing="1.6"
+      font-weight="500"
+    >
+      {data.kicker.toUpperCase()}
+    </text>
+    <text
+      x={padX}
+      y={72}
+      font-family={FONT_SERIF}
+      font-size="26"
+      fill={INK}
+      font-weight="600"
+    >
+      {data.title}
+    </text>
+    <text
+      x={padX}
+      y={103}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+      letter-spacing="0.9"
+      font-weight="500"
+    >
+      {data.unit_caption.toUpperCase()}
+    </text>
+
+    {/* Y-axis horizontal gridlines and tick labels */}
+    {yTicks.map((t) => (
+      <g>
+        <line
+          x1={plotLeft}
+          y1={yFor(t)}
+          x2={plotRight}
+          y2={yFor(t)}
+          stroke={RULE}
+          stroke-width="1"
+        />
+        <text
+          x={plotLeft - 8}
+          y={yFor(t) + 4}
+          font-family={FONT_SANS}
+          font-size="11"
+          fill={MID}
+          text-anchor="end"
+        >
+          {fmt(t)}
+        </text>
+      </g>
+    ))}
+
+    {/* Uncertainty band (drawn before the central line) */}
+    <path d={bandPath} fill={ACCENT} fill-opacity="0.16" />
+
+    {/* Central projection line — dashed */}
+    <line
+      x1={xFor(cStart.year)}
+      y1={yFor(cStart.value)}
+      x2={xFor(cEnd.year)}
+      y2={yFor(cEnd.value)}
+      stroke={ACCENT}
+      stroke-width="2"
+      stroke-dasharray="5 4"
+    />
+
+    {/* Single historical anchor — a labeled dot rather than a line. */}
+    {data.historicals.map((p) => (
+      <g>
+        <circle
+          cx={xFor(p.year)}
+          cy={yFor(p.value)}
+          r="4.5"
+          fill={ACCENT}
+          stroke="#ffffff"
+          stroke-width="1.5"
+        />
+        <text
+          x={xFor(p.year) + 10}
+          y={yFor(p.value) - 8}
+          font-family={FONT_SANS}
+          font-size="11"
+          fill={INK}
+          font-weight="600"
+        >
+          {fmt(p.value)} TWh
+        </text>
+        <text
+          x={xFor(p.year) + 10}
+          y={yFor(p.value) + 6}
+          font-family={FONT_SANS}
+          font-size="10.5"
+          fill={DIM}
+        >
+          {p.year} estimate
+        </text>
+      </g>
+    ))}
+
+    {/* Endpoint marker for the projection's central case */}
+    <circle
+      cx={xFor(cEnd.year)}
+      cy={yFor(cEnd.value)}
+      r="3.5"
+      fill="#ffffff"
+      stroke={ACCENT}
+      stroke-width="2"
+    />
+
+    {/* Endpoint value labels — central, low, high — at the right edge */}
+    <text
+      x={xFor(cEnd.year) + 8}
+      y={yFor(cEnd.value) + 4}
+      font-family={FONT_SANS}
+      font-size="11"
+      fill={INK}
+      font-weight="600"
+    >
+      {fmt(cEnd.value)}
+    </text>
+    <text
+      x={xFor(highEnd.year) + 8}
+      y={yFor(highEnd.value) + 4}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={MID}
+    >
+      {fmt(highEnd.value)}
+    </text>
+    <text
+      x={xFor(lowEnd.year) + 8}
+      y={yFor(lowEnd.value) + 4}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={MID}
+    >
+      {fmt(lowEnd.value)}
+    </text>
+
+    {/* X-axis baseline */}
+    <line
+      x1={plotLeft}
+      y1={plotBottom}
+      x2={plotRight}
+      y2={plotBottom}
+      stroke={MID}
+      stroke-width="1"
+    />
+
+    {/* X-axis tick labels */}
+    {xTicks.map((t) => (
+      <g>
+        <line
+          x1={xFor(t)}
+          y1={plotBottom}
+          x2={xFor(t)}
+          y2={plotBottom + 5}
+          stroke={MID}
+          stroke-width="1"
+        />
+        <text
+          x={xFor(t)}
+          y={xAxisLabelY}
+          font-family={FONT_SANS}
+          font-size="11"
+          fill={MID}
+          text-anchor="middle"
+        >
+          {t}
+        </text>
+      </g>
+    ))}
+
+    {/* Footer */}
+    <line
+      x1={padX}
+      y1={footerRuleY}
+      x2={W - padX}
+      y2={footerRuleY}
+      stroke={RULE}
+      stroke-width="1"
+    />
+    <text
+      x={padX}
+      y={sourceLineY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+    >
+      {sourceShort}
+    </text>
+    <text
+      x={padX}
+      y={verifiedLineY}
+      font-family={FONT_SANS}
+      font-size="11"
+      fill={DIM}
+    >
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>

@@ -1,0 +1,392 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+interface YearValue {
+  year: number;
+  value: number;
+  confidence?: string;
+}
+
+interface ProjectionLine {
+  central: YearValue[];
+  band_low: YearValue[];
+  band_high: YearValue[];
+  central_label?: string;
+  band_low_label?: string;
+  band_high_label?: string;
+}
+
+interface TrajectoryInfographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  unit_caption: string;
+  x_min: number;
+  x_max: number;
+  y_max: number;
+  boundary_year: number;
+  historicals: YearValue[];
+  projection: ProjectionLine;
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: any) => i.id === "dc-trajectory"
+) as TrajectoryInfographic;
+
+if (!data) throw new Error("dc-trajectory missing from figures.json");
+
+// SVG geometry. As with the other infographics, the whole thing is one
+// self-contained <svg> so right-click-save carries the kicker, title, plot,
+// axes, source attribution, and verified-date stamp with it.
+const W = 720;
+const padX = 30;
+
+// Header rows match the bar-chart infographics for visual continuity.
+const headerH = 115;
+
+// Plot area. More left padding to leave room for y-axis tick labels.
+const plotLeft = 60;
+const plotRight = W - padX - 50; // gutter for right-edge endpoint labels
+const plotTop = headerH + 20;
+const plotBottom = plotTop + 220;
+const plotWidth = plotRight - plotLeft;
+const plotHeight = plotBottom - plotTop;
+
+// Axis label positions (year labels along the bottom, then the footer).
+const xAxisLabelY = plotBottom + 22;
+const footerRuleY = xAxisLabelY + 28;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+const FONT_SANS = "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+
+const ACCENT = "#1f4f7a";
+const INK = "#1a1a1a";
+const MID = "#4a4a4a";
+const DIM = "#8a8682";
+const RULE = "#e6e3dc";
+
+const fmt = (n: number) => n.toLocaleString("en-US");
+
+// Coordinate mappers.
+const xFor = (year: number) =>
+  plotLeft + ((year - data.x_min) / (data.x_max - data.x_min)) * plotWidth;
+const yFor = (val: number) =>
+  plotBottom - (val / data.y_max) * plotHeight;
+
+// Y-axis ticks: 0, 500, 1000, 1500 for this chart.
+const yTicks = [0, 500, 1000, 1500].filter((t) => t <= data.y_max);
+
+// X-axis ticks: a chosen subset, including the boundary year and endpoints.
+const xTicks = [2017, 2020, 2024, 2025, 2030];
+
+// Historical polyline points string.
+const histPoints = data.historicals
+  .map((p) => `${xFor(p.year)},${yFor(p.value)}`)
+  .join(" ");
+
+// Projection central line: dashed segment from boundary to year_end midpoint.
+const cStart = data.projection.central[0];
+const cEnd = data.projection.central[data.projection.central.length - 1];
+
+// Uncertainty band path: triangle fanning from boundary point out to the
+// 2030 low/high spread.
+const lowEnd = data.projection.band_low[data.projection.band_low.length - 1];
+const highEnd = data.projection.band_high[data.projection.band_high.length - 1];
+const bStart = data.projection.band_low[0]; // == band_high[0] at the boundary
+const bandPath =
+  `M ${xFor(bStart.year)} ${yFor(bStart.value)} ` +
+  `L ${xFor(lowEnd.year)} ${yFor(lowEnd.value)} ` +
+  `L ${xFor(highEnd.year)} ${yFor(highEnd.value)} Z`;
+
+// Short source attribution baked into the SVG itself.
+const sourceShort = "Sources: IEA Energy and AI; IEA Key Questions on Energy and AI (2026); Goldman Sachs.";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    {/* Background — explicit white so the saved SVG never inherits a transparent backdrop. */}
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text
+      x={padX}
+      y={36}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={DIM}
+      letter-spacing="1.6"
+      font-weight="500"
+    >
+      {data.kicker.toUpperCase()}
+    </text>
+    <text
+      x={padX}
+      y={72}
+      font-family={FONT_SERIF}
+      font-size="26"
+      fill={INK}
+      font-weight="600"
+    >
+      {data.title}
+    </text>
+    <text
+      x={padX}
+      y={103}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+      letter-spacing="0.9"
+      font-weight="500"
+    >
+      {data.unit_caption.toUpperCase()}
+    </text>
+
+    {/* Y-axis horizontal gridlines (faint) and tick labels */}
+    {yTicks.map((t) => (
+      <g>
+        <line
+          x1={plotLeft}
+          y1={yFor(t)}
+          x2={plotRight}
+          y2={yFor(t)}
+          stroke={RULE}
+          stroke-width="1"
+        />
+        <text
+          x={plotLeft - 8}
+          y={yFor(t) + 4}
+          font-family={FONT_SANS}
+          font-size="11"
+          fill={MID}
+          text-anchor="end"
+        >
+          {fmt(t)}
+        </text>
+      </g>
+    ))}
+
+    {/* Uncertainty band (drawn before the lines so they sit on top). */}
+    <path d={bandPath} fill={ACCENT} fill-opacity="0.16" />
+
+    {/* Central projection line — dashed to mark it as a forecast. */}
+    <line
+      x1={xFor(cStart.year)}
+      y1={yFor(cStart.value)}
+      x2={xFor(cEnd.year)}
+      y2={yFor(cEnd.value)}
+      stroke={ACCENT}
+      stroke-width="2"
+      stroke-dasharray="5 4"
+    />
+
+    {/* Historical line — solid through anchor years. */}
+    <polyline
+      points={histPoints}
+      fill="none"
+      stroke={ACCENT}
+      stroke-width="2.5"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    />
+
+    {/* Anchor points */}
+    {data.historicals.map((p) => (
+      <circle
+        cx={xFor(p.year)}
+        cy={yFor(p.value)}
+        r="3.5"
+        fill={ACCENT}
+        stroke="#ffffff"
+        stroke-width="1.5"
+      />
+    ))}
+
+    {/* Endpoint marker for the projection's central case. */}
+    <circle
+      cx={xFor(cEnd.year)}
+      cy={yFor(cEnd.value)}
+      r="3.5"
+      fill="#ffffff"
+      stroke={ACCENT}
+      stroke-width="2"
+    />
+
+    {/* Boundary hairline at the year where history ends and projection begins. */}
+    <line
+      x1={xFor(data.boundary_year)}
+      y1={plotTop}
+      x2={xFor(data.boundary_year)}
+      y2={plotBottom}
+      stroke={DIM}
+      stroke-width="1"
+      stroke-dasharray="2 3"
+      opacity="0.55"
+    />
+
+    {/* In-plot labels for the boundary — ACTUAL sits on the left, PROJECTED on the right. */}
+    <text
+      x={xFor(data.boundary_year) - 6}
+      y={plotTop + 14}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={DIM}
+      text-anchor="end"
+      letter-spacing="0.4"
+    >
+      ACTUAL
+    </text>
+    <text
+      x={xFor(data.boundary_year) + 6}
+      y={plotTop + 14}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={DIM}
+      text-anchor="start"
+      letter-spacing="0.4"
+    >
+      PROJECTED
+    </text>
+
+    {/* Endpoint value labels — central, low, high — at the right edge. */}
+    <text
+      x={xFor(cEnd.year) + 8}
+      y={yFor(cEnd.value) + 4}
+      font-family={FONT_SANS}
+      font-size="11"
+      fill={INK}
+      font-weight="600"
+    >
+      {fmt(cEnd.value)}
+    </text>
+    <text
+      x={xFor(highEnd.year) + 8}
+      y={yFor(highEnd.value) + 4}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={MID}
+    >
+      {fmt(highEnd.value)}
+    </text>
+    <text
+      x={xFor(lowEnd.year) + 8}
+      y={yFor(lowEnd.value) + 4}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={MID}
+    >
+      {fmt(lowEnd.value)}
+    </text>
+
+    {/* X-axis baseline */}
+    <line
+      x1={plotLeft}
+      y1={plotBottom}
+      x2={plotRight}
+      y2={plotBottom}
+      stroke={MID}
+      stroke-width="1"
+    />
+
+    {/* X-axis tick labels */}
+    {xTicks.map((t) => (
+      <g>
+        <line
+          x1={xFor(t)}
+          y1={plotBottom}
+          x2={xFor(t)}
+          y2={plotBottom + 5}
+          stroke={MID}
+          stroke-width="1"
+        />
+        <text
+          x={xFor(t)}
+          y={xAxisLabelY}
+          font-family={FONT_SANS}
+          font-size="11"
+          fill={MID}
+          text-anchor="middle"
+        >
+          {t}
+        </text>
+      </g>
+    ))}
+
+    {/* Footer — separator, short source line, verified stamp */}
+    <line
+      x1={padX}
+      y1={footerRuleY}
+      x2={W - padX}
+      y2={footerRuleY}
+      stroke={RULE}
+      stroke-width="1"
+    />
+    <text
+      x={padX}
+      y={sourceLineY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+    >
+      {sourceShort}
+    </text>
+    <text
+      x={padX}
+      y={verifiedLineY}
+      font-family={FONT_SANS}
+      font-size="11"
+      fill={DIM}
+    >
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>
