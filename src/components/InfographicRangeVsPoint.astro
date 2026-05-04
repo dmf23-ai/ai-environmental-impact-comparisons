@@ -1,0 +1,228 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+import { niceCeiling } from "../lib/niceCeiling";
+
+interface DemoFigure {
+  label: string;
+  central: number;
+  low: number;
+  high: number;
+  confidence: string;
+}
+
+interface Infographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  unit_caption: string;
+  demo_figure: DemoFigure;
+  caption: string;
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: any) => i.id === "range-vs-point-primer"
+) as Infographic;
+
+if (!data) throw new Error("range-vs-point-primer missing from figures.json");
+
+// SVG geometry — matches the other infographics for visual continuity.
+const W = 720;
+const padX = 30;
+const chartLeft = padX;
+const chartRight = W - padX;
+const chartWidth = chartRight - chartLeft;
+
+const fig = data.demo_figure;
+const maxVal = niceCeiling(fig.high);
+
+// Plot x-positions
+const xCentral = chartLeft + (fig.central / maxVal) * chartWidth;
+const xLow = chartLeft + (fig.low / maxVal) * chartWidth;
+const xHigh = chartLeft + (fig.high / maxVal) * chartWidth;
+
+// Vertical layout
+const headerH = 115;
+const scale1HeaderY = headerH + 22;
+const scale1PlotY = scale1HeaderY + 28;
+const scale2HeaderY = scale1PlotY + 50;
+const scale2PlotY = scale2HeaderY + 28;
+const axisLineY = scale2PlotY + 32;
+const axisLabelY = axisLineY + 16;
+const captionY = axisLabelY + 32;
+const footerRuleY = captionY + 22;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+const dotR = 7;
+const barH = 18;
+
+const valueText1 = `${fig.label} · ${fig.central} TWh`;
+const valueText2 = `${fig.label} · ${fig.low}–${fig.high} TWh`;
+
+const sourceShort =
+  "Sources: IEA Energy and AI; IEA April 2026 update. EPA tailpipe figure (400 g CO₂/mile) cited as a published point estimate.";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+
+const FONT_SANS =
+  "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF =
+  "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+
+const ACCENT = "#1f4f7a";
+const INK = "#1a1a1a";
+const MID = "#4a4a4a";
+const DIM = "#8a8682";
+const RULE = "#e6e3dc";
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <pattern
+        id="rangeStripePrimer"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(45)"
+      >
+        <rect width="8" height="8" fill={ACCENT} />
+        <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,0.20)" stroke-width="3" />
+      </pattern>
+    </defs>
+
+    {/* Card background — explicit white so the saved SVG never inherits a transparent background. */}
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text x={padX} y={36} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
+      {data.kicker.toUpperCase()}
+    </text>
+    <text x={padX} y={72} font-family={FONT_SERIF} font-size="26" fill={INK} font-weight="600">
+      {data.title}
+    </text>
+    <text x={padX} y={103} font-family={FONT_SANS} font-size="12" fill={MID} letter-spacing="0.9" font-weight="500">
+      {data.unit_caption.toUpperCase()}
+    </text>
+
+    {/* Faint vertical guide tying the two framings together at the central value. */}
+    <line
+      x1={xCentral}
+      y1={scale1PlotY - 12}
+      x2={xCentral}
+      y2={scale2PlotY + 12}
+      stroke={DIM}
+      stroke-width="1"
+      stroke-dasharray="2 4"
+      opacity="0.4"
+    />
+
+    {/* Scale 1 — single point */}
+    <text x={chartLeft} y={scale1HeaderY} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+      AS A SINGLE NUMBER
+    </text>
+    <text x={chartRight} y={scale1HeaderY} font-family={FONT_SANS} font-size="13" fill={INK} font-weight="500" text-anchor="end">
+      {valueText1}
+    </text>
+    {/* Subtle baseline rule for context */}
+    <line x1={chartLeft} y1={scale1PlotY} x2={chartRight} y2={scale1PlotY} stroke={RULE} stroke-width="1" />
+    {/* Single bold dot */}
+    <circle cx={xCentral} cy={scale1PlotY} r={dotR} fill={ACCENT} />
+
+    {/* Scale 2 — range */}
+    <text x={chartLeft} y={scale2HeaderY} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+      AS A RANGE
+    </text>
+    <text x={chartRight} y={scale2HeaderY} font-family={FONT_SANS} font-size="13" fill={INK} font-weight="500" text-anchor="end">
+      {valueText2}
+    </text>
+    {/* Range bar */}
+    <rect
+      x={xLow}
+      y={scale2PlotY - barH / 2}
+      width={xHigh - xLow}
+      height={barH}
+      fill="url(#rangeStripePrimer)"
+      rx="3"
+    />
+    {/* Central tick within the band */}
+    <line
+      x1={xCentral}
+      y1={scale2PlotY - barH / 2 - 2}
+      x2={xCentral}
+      y2={scale2PlotY + barH / 2 + 2}
+      stroke={INK}
+      stroke-width="1.5"
+      opacity="0.85"
+    />
+
+    {/* Shared axis */}
+    <line x1={chartLeft} y1={axisLineY} x2={chartRight} y2={axisLineY} stroke={RULE} stroke-width="1" />
+    <text x={chartLeft} y={axisLabelY} font-family={FONT_SANS} font-size="12" fill={MID}>
+      0
+    </text>
+    <text x={chartRight} y={axisLabelY} font-family={FONT_SANS} font-size="12" fill={MID} text-anchor="end">
+      {maxVal} TWh
+    </text>
+
+    {/* Caption — editorial sentence baked into the SVG so the saved image carries the rule. */}
+    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+      {data.caption}
+    </text>
+
+    {/* Footer */}
+    <line x1={padX} y1={footerRuleY} x2={W - padX} y2={footerRuleY} stroke={RULE} stroke-width="1" />
+    <text x={padX} y={sourceLineY} font-family={FONT_SANS} font-size="12" fill={MID}>
+      {sourceShort}
+    </text>
+    <text x={padX} y={verifiedLineY} font-family={FONT_SANS} font-size="11" fill={DIM}>
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>

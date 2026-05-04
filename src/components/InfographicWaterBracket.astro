@@ -1,6 +1,7 @@
 ---
 import SourceLine from "./SourceLine.astro";
 import figuresData from "../data/figures.json";
+import { niceCeiling } from "../lib/niceCeiling";
 
 interface Figure {
   label: string;
@@ -44,33 +45,11 @@ const labelOffset = 14;
 const barTopOffset = 22;
 const barH = 18;
 
-// Tighter ceiling steps than the default — for max=700 we want 700, not 1000.
-function niceCeiling(n: number): number {
-  if (n <= 10) return Math.ceil(n);
-  const magnitude = Math.pow(10, Math.floor(Math.log10(n)));
-  const mantissa = n / magnitude;
-  let rounded;
-  if (mantissa <= 1) rounded = 1;
-  else if (mantissa <= 1.25) rounded = 1.25;
-  else if (mantissa <= 1.5) rounded = 1.5;
-  else if (mantissa <= 1.6) rounded = 1.6;
-  else if (mantissa <= 2) rounded = 2;
-  else if (mantissa <= 2.5) rounded = 2.5;
-  else if (mantissa <= 3) rounded = 3;
-  else if (mantissa <= 4) rounded = 4;
-  else if (mantissa <= 5) rounded = 5;
-  else if (mantissa <= 6) rounded = 6;
-  else if (mantissa <= 7) rounded = 7;
-  else if (mantissa <= 8) rounded = 8;
-  else rounded = 10;
-  return rounded * magnitude;
-}
-
 const figures = data.figures;
 const rawMax = Math.max(
   ...figures.map((f) => f.value_high ?? f.value ?? 0)
 );
-const maxVal = niceCeiling(rawMax);
+const maxVal = niceCeiling(rawMax, { granular: true });
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 function valueText(f: Figure): string {

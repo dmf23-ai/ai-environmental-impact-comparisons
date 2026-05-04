@@ -730,7 +730,7 @@
         "band_low_label": "IEA Headwinds scenario",
         "band_high_label": "Goldman Sachs (April 2026)"
       },
-      "summary": "The flat era ran from about 2017 to 2022 — efficiency gains roughly canceled growth, and global data centers held around 200 to 290 TWh per year. Then the line bent. By 2024 it was 460 TWh; in 2025 it was 485, a 17 percent jump in a single year. The IEA's base case puts 2030 at 950 TWh, with its lower scenario at 830 and Goldman Sachs' April 2026 update reaching 1,350 at the upper edge. The shaded band is the honest spread; the central line is the IEA base case. Most of the new load is hyperscale build-out, and most of that is AI-adjacent.",
+      "summary": "The flat era ran from about 2017 to 2022 — efficiency gains roughly canceled growth, and global data centers held around 200 to 290 TWh per year. Then the line bent. By 2024 it was 460 TWh; in 2025 it was 485, a 17 percent jump in a single year. The IEA's base case puts 2030 at 950 TWh, with its lower scenario at 830 and Goldman Sachs' April 2026 update reaching 1,350 at the upper edge. The shaded band shows that spread; the central line is the IEA base case. Most of the new load is hyperscale build-out, and most of that is AI-adjacent.",
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
@@ -782,7 +782,7 @@
         "band_low": [
           {
             "year": 2024,
-            "value": 50
+            "value": 30
           },
           {
             "year": 2030,
@@ -803,7 +803,7 @@
         "band_low_label": "IEA lower bound (200 TWh by 2030)",
         "band_high_label": "IEA upper bound (400 TWh by 2030)"
       },
-      "summary": "AI's slice of the data-center total is the wobbliest number on either chart. The IEA puts it at roughly 15 percent of data-center electricity in 2024 — call it 65 TWh, give or take. Pre-2024 estimates exist but vary by an order of magnitude depending on how the modeler defines an 'AI workload,' which is why this chart starts where the global estimate firms up. By 2030 the IEA's range runs from 200 to 400 TWh, depending on how fast inference scales and how much efficiency the next generations of accelerators deliver. The fan is wide because nobody yet knows which assumption holds; the wider literature reaches as high as 900 TWh, which we treat as a tail rather than a central case.",
+      "summary": "AI's slice of the data-center total is the wobbliest number on either chart. The IEA's 2024 central estimate is about 65 TWh — roughly 15 percent of data-center electricity — though the wider literature brackets the same year at 30 to 80, depending on how 'AI workload' is defined. Pre-2024 numbers exist but vary by an order of magnitude on the same definitional split, which is why the chart starts where the picture firms up. By 2030 the IEA's range runs from 200 to 400 TWh, depending on how fast inference scales and how much efficiency the next generations of accelerators deliver. The fan is wide because nobody yet knows which assumption holds; the wider literature reaches as high as 900 TWh at the upper edge, which we treat as a tail rather than a central case.",
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
@@ -814,7 +814,7 @@
           "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-04"
     },
     {
       "id": "household-equivalents",
@@ -891,6 +891,37 @@
         }
       ],
       "last_verified": "2026-05-03"
+    },
+    {
+      "id": "range-vs-point-primer",
+      "anchor": "range-vs-point-primer",
+      "kicker": "How to read this site",
+      "title": "Why every figure here is a range",
+      "unit_caption": "Terawatt-hours per year, AI workloads inside global data centers",
+      "demo_figure": {
+        "label": "AI in 2024",
+        "central": 65,
+        "low": 30,
+        "high": 80,
+        "confidence": "low-medium"
+      },
+      "caption": "Each figure is a range unless the source itself publishes a single defensible number.",
+      "summary": "Most numbers on this page are ranges. The reason is the simplest one — the underlying sources don't agree on a point. AI's electricity use in 2024 is the canonical case: depending on whose definition of 'AI workload' you accept, the global figure lands somewhere between 30 and 80 terawatt-hours, with most central estimates clustered near 65. A point estimate plucked from inside that range would be tidier to quote and false to cite. Where a primary source does publish a single defensible figure — EPA's 400 grams of CO₂ per mile, for instance — we use it. Everywhere else, the band is the answer.",
+      "sources": [
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        },
+        {
+          "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+        },
+        {
+          "name": "U.S. EPA — Greenhouse Gas Emissions from a Typical Passenger Vehicle",
+          "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle"
+        }
+      ],
+      "last_verified": "2026-05-04"
     }
   ]
 }

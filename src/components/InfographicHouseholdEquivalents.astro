@@ -1,6 +1,7 @@
 ---
 import SourceLine from "./SourceLine.astro";
 import figuresData from "../data/figures.json";
+import { niceCeiling } from "../lib/niceCeiling";
 
 interface Figure {
   label: string;
@@ -48,25 +49,6 @@ const barH = 18;
 // Extra vertical breathing room around the ACTUAL/PROJECTED hairline so the
 // labels don't crowd the adjacent bar labels.
 const boundaryGap = 26;
-
-// Round the chart's right edge to a tidy ceiling so the axis label is clean.
-function niceCeiling(n: number): number {
-  if (n <= 10) return Math.ceil(n);
-  const magnitude = Math.pow(10, Math.floor(Math.log10(n)));
-  const mantissa = n / magnitude;
-  let rounded;
-  if (mantissa <= 1) rounded = 1;
-  else if (mantissa <= 1.25) rounded = 1.25;
-  else if (mantissa <= 1.5) rounded = 1.5;
-  else if (mantissa <= 1.6) rounded = 1.6;
-  else if (mantissa <= 2) rounded = 2;
-  else if (mantissa <= 2.5) rounded = 2.5;
-  else if (mantissa <= 3) rounded = 3;
-  else if (mantissa <= 4) rounded = 4;
-  else if (mantissa <= 5) rounded = 5;
-  else rounded = 10;
-  return rounded * magnitude;
-}
 
 // TWh -> millions of households at the data file's per-household constant.
 const TWH_TO_MWH = 1_000_000;
