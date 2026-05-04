@@ -23,13 +23,22 @@ A static website that puts AI's water and energy footprint next to other large u
 Completed:
 
 - **Phases 1–4.** Astro scaffold, GitHub + Vercel deploy, design tokens locked, web fonts, masthead, hourly hero on the home page, all 14 comparison cards live on `/comparisons`.
-- **Phase 5 (in progress).** Four of ~8–10 infographics live on the home page below the hourly hero, in this order:
-  - `InfographicAnnualTwh.astro` — "How big is AI, really?" Six-bar snapshot. **NOTE:** 2024 figure (415 TWh) is stale per IEA April 2026 update (revised to 460). Needs reconciliation.
+- **Phase 5 (in progress).** Five of ~8–10 infographics live on the home page below the hourly hero, in this order:
+  - `InfographicAnnualTwh.astro` — "How big is AI, really?" Six-bar snapshot.
   - `InfographicWaterBracket.astro` — "Are AI data centers thirstier than golf courses?" Six-bar snapshot.
   - `InfographicDcTrajectory.astro` — "Data-center electricity, 2017 to 2030." First time-axis chart on the site. Historical line through irregular IEA-published anchor years (2017, 2018, 2022, 2024, 2025); projection band 2025→2030 from 830 TWh (IEA Headwinds) to 1,350 (Goldman April 2026), central dashed line at 950 (IEA Base). ACTUAL/PROJECTED labels split across the boundary hairline.
   - `InfographicAiShareTrajectory.astro` — "AI's slice of data-center electricity." Sister chart, x-axis 2024→2030. Single 2024 anchor at 65 TWh, projection band fanning to 200–400 TWh by 2030. The chart's pre-2024 emptiness is editorially explained in the prose, not visually represented.
+  - `InfographicHouseholdEquivalents.astro` — "Data-center electricity, in household-years." Translates TWh into millions of U.S. households at 11.9 MWh/HH/yr. Six bars in display order: U.S. residential reference (130M, faint scaffolding at the top), AI 2024 (2.5–6.7M), Bitcoin 2024 (12–17M), global gaming (6.3–24M), global data centers 2024 (39M), global data centers 2030 IEA scenarios (70–113M, IEA base tick at 80M). First use of a horizontal ACTUAL/PROJECTED hairline on a bar chart — the trajectory charts use a vertical one at the boundary year; this one runs between the DC 2024 and DC 2030 rows.
 
-Next: **Either the IEA April 2026 update sweep** (reconcile the annual-twh 415→460 figure, audit the other comparison cards for figures that may have drifted, refresh `last_verified` dates) **or visual #5.** Strong visual #5 candidates from Plan section 5: household-equivalents staircase (translating big TWh into "X million U.S. households' worth"), or the "what a watt actually is" scale primer (microwave → house → town → country). Pace: one or two visuals per session.
+IEA April 2026 audit completed 2026-05-03 — all figures reconciled (electricity 415→460 TWh in 8 places, CO₂ 220→180 Mt in 5 places), prose recomputes applied (ratios, percentages, "X times" phrasings), `last_verified` bumped on 13 sections (12 comparison cards + annual-twh infographic). The site is consistent with the IEA April 2026 "Key Questions on Energy and AI" update across all displays.
+
+Next: **visual #6, choice still open.** Three candidates from website_plan.md Section 5:
+
+- *Range-vs-point-estimate primer.* Didactic graphic showing why each figure on the site has a range — single dot vs. confidence band — with a one-line caption. Strong fit with the honesty layer; teaches readers how to read every other chart on the site.
+- *Training vs. inference over time.* Two-panel chart framing the "but training is huge" conversation: GPT-3-era training was a vivid one-shot emission; modern systems' lifetime emissions are dominated by inference. Useful as the public AI debate shifts toward inference.
+- *Watt-scale primer* (microwave → house → town → country). Queued in prior handoff but flagged as better suited to /methods or earlier-page placement than as another home-page bar.
+
+Phase 5 was sized for two or three sessions in the original plan; we're at the upper end. After visual #6, consider wrapping Phase 5 and pivoting to Phase 6 (/methods, /myths, /places, /changelog), even if some plan-listed visuals get deferred or relocated.
 
 ## Read these in order
 
@@ -42,40 +51,50 @@ The Anti-AI-speak rubric memory file (in Claude's persistent memory, not this fo
 
 ## Design decisions during Phase 5
 
-- **Infographic data lives in `figures.json` under a sibling key `infographics`,** parallel to `comparisons`. Bar-chart infographics use the same shape as comparisons (figures, sources, summary, last_verified, anchor) plus presentation metadata (kicker, title, unit_caption). When an infographic shares numbers with a comparison (water bracket and water-dc-vs-golf), the figures are duplicated rather than referenced. Single source of truth would be cleaner; refactor if a third overlap appears.
+- **Bar-chart infographic data** lives in `figures.json` under a sibling key `infographics`, parallel to `comparisons`. Same shape as comparisons (figures, sources, summary, last_verified, anchor) plus presentation metadata (kicker, title, unit_caption). When an infographic shares numbers with a comparison (water bracket and water-dc-vs-golf), the figures are duplicated rather than referenced. Single source of truth would be cleaner; refactor if a third overlap appears.
 - **Trajectory infographics use a different schema shape** alongside the bar-chart shape: `historicals` (array of year/value anchor points), `projection` (with `central`, `band_low`, `band_high` arrays of year/value pairs), and metadata `x_min`, `x_max`, `y_max`, `boundary_year`. Bar-chart components ignore these fields; trajectory components ignore `figures`. JSON-side schema is loose; TypeScript interfaces are inlined per component.
+- **Unit-conversion infographics use a third schema shape.** Figures carry `twh` / `twh_low` / `twh_high` (and optional `twh_central`) instead of raw `value` fields, plus a top-level `mwh_per_household` constant and a `boundary_after_index` integer pointing at the row above which the ACTUAL/PROJECTED hairline draws. The component derives household equivalents from the TWh values at render time, so the data file stays anchored in the underlying physical quantity. Currently used only by `InfographicHouseholdEquivalents.astro`.
 - **Each infographic is one self-contained `<svg>`** with kicker, title, plot, axis, short source attribution, and last-verified stamp baked inside. Honors the plan's "right-click-save produces something useful" promise (Section 5). Surrounding HTML carries only the prose summary and the clickable `SourceLine`.
-- **Components named `Infographic*.astro`,** dropped onto the home page in priority order below the hourly hero. A `/figures` gallery page is deferred until ~5+ infographics exist; the trajectory pair fits on the home page cleanly.
-- **Reference bars** (e.g., U.S. residential in annual-twh) use accent color at 0.32 opacity to read as scaffolding. Triggered by a `role: "reference"` field on the figure entry.
-- **`niceCeiling` is duplicated per bar-chart component.** `RangeBar.astro` has the original coarse version; `InfographicWaterBracket.astro` and `InfographicAnnualTwh.astro` add granular steps. Trajectory components don't use it (fixed `y_max` per chart). Refactor to `src/lib/niceCeiling.ts` if a third caller appears with different needs.
+- **Components named `Infographic*.astro`,** dropped onto the home page in priority order below the hourly hero. A `/figures` gallery page is deferred until ~5+ infographics exist; we are now at five and the home page still reads cleanly. Reassess gallery placement at visual #7 or whenever the home-page scroll starts to feel bloated.
+- **Reference bars** (e.g., U.S. residential in annual-twh and household-equivalents) use accent color at 0.32 opacity to read as scaffolding. Triggered by a `role: "reference"` field on the figure entry.
+- **Projected bars** in unit-conversion charts use the same striped range pattern as ordinary range bars, distinguished editorially by the ACTUAL/PROJECTED hairline rather than by a unique fill. A central tick marks the IEA-base case within the range when `twh_central` is provided.
+- **Horizontal ACTUAL/PROJECTED hairline** — new pattern this session. Trajectory charts use a vertical hairline at the boundary year; the household-equivalents bar chart uses a horizontal one between the DC 2024 and DC 2030 rows, with ACTUAL above and PROJECTED below, center-aligned in the chart. A 26-pixel boundary gap is inserted only for rows after the boundary so the labels don't crowd adjacent bar labels.
+- **`niceCeiling` is now duplicated across three bar-chart components** (`InfographicAnnualTwh`, `InfographicWaterBracket`, `InfographicHouseholdEquivalents`) plus the original coarse version in `RangeBar.astro`. The handoff's prior "refactor at three callers" trigger has been crossed; the next agent should consolidate to `src/lib/niceCeiling.ts` if any further bar-chart visual needs it, or as queued maintenance.
 - **Trajectory geometry is duplicated across the two trajectory components** (same plotLeft/Right/Top/Bottom, same colors, same coordinate mappers, same right-side gutter for endpoint labels). Acceptable per the same logic — refactor to a shared module if a third trajectory chart appears.
 - **AI-share trajectory starts at 2024,** not 2022. Two years of empty plot before the single anchor read as broken rather than meaningful. The summary explains the cutoff in prose.
-- **Honest uncertainty band on the DC trajectory runs IEA Headwinds (830) to Goldman April 2026 (1,350) by 2030,** wider than IEA scenarios alone. Both sources cited in the SVG footer.
+- **Honest uncertainty band on the DC trajectory runs IEA Headwinds (830) to Goldman April 2026 (1,350) by 2030,** wider than IEA scenarios alone. Both sources cited in the SVG footer. The household-equivalents 2030 bar reuses this same range.
+- **Chart-side number formatting** in the household-equivalents component uses integers above 10 ("39", "70–113", "130") and one decimal below ("2.5–6.7"). Mixed precision in a range like "6.3–24" is fine; the low end keeps the decimal it deserves. The rule keeps the chart consistent with the summary prose, which anchors on "39 million American homes" rather than "38.7 million."
 
 ## Open questions for David
 
+- **Visual #6 choice.** Three candidates listed under "Where we are." Worth a short discussion at the top of the next session.
+- **`niceCeiling` consolidation.** Refactor trigger crossed (three bar-chart components plus `RangeBar.astro`). Worth queuing into the next session or the one after, depending on visual #6 scope.
 - **Domain name** — still not picked. Some directions in `website_plan.md` Section 10.
 - **Global golf source.** The water bracket and water comparison currently use a derived "site estimate" range (800–1,500 Bgal) for global golf. Decision: ship with explicit "site estimate" framing now, replace if/when a primary source surfaces.
 - **Right-edge touching on infographic bars.** When the highest bar's value equals the chart's `niceCeiling`, the bar runs flush against the axis right edge.
 - **U.S./global pair affordance.** The water bracket pairs U.S. and global figures by label parallelism alone. May need a small visual cue if the eye doesn't catch the pairing.
-- **`niceCeiling` consolidation.** Two versions live in two files.
 - **Trajectory band fill opacity (0.16).** May be too pale at typical viewing distance — visible but doesn't carry much weight. Bump to 0.22 if the live charts read under-emphasized.
 - **Historical line jumpiness from irregular anchor years** (2017, 2018, 2022, 2024, 2025) on the DC trajectory. The honest visual choice creates non-uniform slopes between anchors. If it reads as broken rather than precise, options: smooth interpolation with an "interpolated" note in methodology, or accept the jumpiness as source-truth fidelity.
-- **IEA April 2026 update reconciliation.** The April 2025 Energy and AI report has been partially superseded by the April 2026 "Key Questions on Energy and AI" update. The trajectory charts use the fresh numbers; the annual-twh chart still cites 415 TWh for 2024. A small sweep across all infographics and comparison cards to audit `last_verified` and citation freshness is overdue.
 
 Closed during Phase 5:
+
+- IEA April 2026 audit (electricity 415→460 TWh, CO₂ 220→180 Mt, prose recomputes, `last_verified` bumped on 13 sections — committed 2026-05-03). The 220 Mt figure was a calc-based approximation rather than a direct IEA cite; the April 2026 update consistently quotes 180 Mt.
+- Household-equivalents infographic shipped 2026-05-04 — visual #5 of Phase 5. Adds the unit-conversion schema shape, the horizontal ACTUAL/PROJECTED hairline pattern, and the `fmtHH` integer-above-10 formatting rule.
+- Multi-touch figures.json updates via Python script written to outputs and run from bash (extends the heredoc workaround in working notes). Cleaner than chained Edits and dodges the byte-cap quirk.
 - Schema for bar-chart infographics (sibling array in figures.json, same shape as comparisons).
-- Where infographics render (home page in priority order, `/figures` gallery deferred).
+- Schema for unit-conversion infographics (`mwh_per_household`, `boundary_after_index`, `twh`/`twh_low`/`twh_high`/`twh_central`).
+- Where infographics render (home page in priority order, `/figures` gallery deferred — reassess at visual #7).
 - Standalone-shareable interpretation (literal — source attribution baked into the SVG).
 - Trajectory schema shape (`historicals` + `projection` fields alongside `figures`).
 - Trajectory geometry (shared mental model, duplicated code per component).
 - AI-share x_min (2024, not 2022).
 - Trajectory uncertainty band sourcing (IEA Headwinds to Goldman April 2026).
 - Time-axis chart visual language (historical solid line, dashed projection line, shaded triangular band fanning from boundary, ACTUAL/PROJECTED split labels at the boundary hairline).
+- Bar-chart ACTUAL/PROJECTED visual language (horizontal hairline between bar rows, center-aligned ACTUAL/PROJECTED labels, 26-pixel boundary gap).
 
 ## Working notes
 
-- **The figures.json byte-cap quirk affects more files than just figures.json.** During Phase 5 it bit again on `index.astro` (under 1.5KB target). Pattern reconfirmed and refined: the Edit tool (and even the Write tool) reports success, the Read tool sees full content, but the on-disk file is truncated. **Ground truth is the bash mount, not the Read tool — the Read tool can show stale content from earlier successful writes.** The reliable workarounds: bash Python heredoc for `figures.json` (`python3 << 'PYEOF' ... json.dump(...) ... PYEOF`); `cat > <file> << 'EOF' ... EOF` for plain-text files; `git checkout HEAD -- <file>` to restore. **Verify every Edit and every Write with bash `wc -c` and `tail`.** The live site is unaffected when truncation happens between commits since Vercel builds from committed state.
+- **The figures.json byte-cap quirk affects more files than just figures.json — and now confirmed to bite small surgical Edits to ~10K component files, not just multi-card additions.** During visual #5 work, a single small Edit to a `fmtHH` function in a 10.8K Astro component reported success but truncated the file's closing CSS block on disk. Pattern reconfirmed: the Edit tool (and even the Write tool) reports success, the Read tool sees full content, but the on-disk file is truncated. **Ground truth is the bash mount, not the Read tool — the Read tool can show stale content from earlier successful writes.** The reliable workarounds: bash Python heredoc for `figures.json` (`python3 << 'PYEOF' ... json.dump(...) ... PYEOF`); `cat > <file> << 'EOF' ... EOF` or Write-to-outputs-then-bash-cp for plain-text files; `git checkout HEAD -- <file>` to restore. **Verify every Edit and every Write with bash `wc -c` and `tail`.** The live site is unaffected when truncation happens between commits since Vercel builds from committed state.
 - **Line endings on `.md` files.** `authorial_voice.md` and `user_profile.md` periodically flip between LF and CRLF in the sandbox without intentional changes. If `git status` shows them modified at the end of a session that didn't touch them, revert with `git checkout <file>`.
 - **`website_plan.md` git-state weirdness.** During the Phase 5 wrap-up it appeared as both staged-deleted AND untracked while HEAD and disk were byte-identical. Resolution was `git restore --staged website_plan.md`. If it happens again, check HEAD vs disk before doing anything destructive.
 - Sandbox `npm install` for Astro times out at 45 seconds, so full builds aren't reliably verifiable in the sandbox. David's local machine handles them fine.
@@ -96,10 +115,11 @@ src/
     InfographicWaterBracket.astro          ← "Are AI data centers thirstier than golf courses?" (#2)
     InfographicDcTrajectory.astro          ← "Data-center electricity, 2017 to 2030" (#3, time-axis)
     InfographicAiShareTrajectory.astro     ← "AI's slice of data-center electricity" (#4, time-axis)
+    InfographicHouseholdEquivalents.astro  ← "Data-center electricity, in household-years" (#5, unit-conversion bar chart)
     RangeBar.astro                         ← horizontal bars; used by ComparisonCard, HourlyImpactHero
     SourceLine.astro                       ← clickable sources + last-verified footer
   pages/
-    index.astro                            ← home: hero + thesis + cta + 4 infographics
+    index.astro                            ← home: hero + thesis + cta + 5 infographics
     comparisons.astro                      ← lists all ComparisonCards from figures.json
   styles/global.css                        ← design tokens, base styles, masthead, common chrome
 
