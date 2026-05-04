@@ -815,6 +815,82 @@
         }
       ],
       "last_verified": "2026-05-03"
+    },
+    {
+      "id": "household-equivalents",
+      "anchor": "household-equivalents",
+      "kicker": "Translated into utility bills",
+      "title": "Data-center electricity, in household-years",
+      "unit_caption": "Millions of U.S. households",
+      "mwh_per_household": 11.9,
+      "boundary_after_index": 4,
+      "figures": [
+        {
+          "label": "All U.S. households, 2024",
+          "twh": 1550,
+          "confidence": "high",
+          "role": "reference"
+        },
+        {
+          "label": "AI workloads within data centers, 2024 (range)",
+          "twh_low": 30,
+          "twh_high": 80,
+          "confidence": "low-medium"
+        },
+        {
+          "label": "Bitcoin mining, 2024 (range)",
+          "twh_low": 140,
+          "twh_high": 200,
+          "confidence": "medium"
+        },
+        {
+          "label": "Global video gaming (estimated range)",
+          "twh_low": 75,
+          "twh_high": 285,
+          "confidence": "low"
+        },
+        {
+          "label": "Global data centers, 2024",
+          "twh": 460,
+          "confidence": "medium-high"
+        },
+        {
+          "label": "Global data centers, 2030 (IEA scenarios)",
+          "twh_low": 830,
+          "twh_high": 1350,
+          "twh_central": 950,
+          "confidence": "medium",
+          "role": "projected"
+        }
+      ],
+      "summary": "A U.S. household burns about 11.9 megawatt-hours of electricity a year. That makes every terawatt-hour of grid load roughly 84,000 households' worth. The world's data centers in 2024 ran on 460 TWh — about 39 million American homes. By 2030 the IEA range puts the global figure between 830 and 1,350 TWh: 70 to 113 million households. The yardstick has limits. Data centers run flat all year; residences are peaky, summer-and-evening loads. And 11.9 MWh is a U.S. average applied to global numbers — a translation that measures scale better than it describes geography. When half a trillion kilowatt-hours starts to lose meaning, utility bills are a useful place to land.",
+      "sources": [
+        {
+          "name": "IEA — Energy and AI: Energy Demand from AI",
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+        },
+        {
+          "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+        },
+        {
+          "name": "Goldman Sachs — AI to drive 165% increase in data center power demand by 2030",
+          "url": "https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030"
+        },
+        {
+          "name": "EIA — Use of Electricity / Electric Power Annual",
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+        },
+        {
+          "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
+          "url": "https://ccaf.io/cbnsi/cbeci"
+        },
+        {
+          "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
+          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+        }
+      ],
+      "last_verified": "2026-05-03"
     }
   ]
 }

@@ -1,0 +1,433 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+interface Figure {
+  label: string;
+  twh?: number;
+  twh_low?: number;
+  twh_high?: number;
+  twh_central?: number;
+  confidence?: string;
+  role?: string; // "reference" | "projected"
+}
+
+interface Infographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  unit_caption: string;
+  mwh_per_household: number;
+  boundary_after_index: number;
+  figures: Figure[];
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: any) => i.id === "household-equivalents"
+) as Infographic;
+
+if (!data) throw new Error("household-equivalents missing from figures.json");
+
+// SVG geometry — matches the bar-chart infographics for visual continuity.
+const W = 720;
+const padX = 30;
+const chartLeft = padX;
+const chartRight = W - padX;
+const chartWidth = chartRight - chartLeft;
+
+const headerH = 115;
+const barRowH = 58;
+const labelOffset = 14;
+const barTopOffset = 22;
+const barH = 18;
+
+// Extra vertical breathing room around the ACTUAL/PROJECTED hairline so the
+// labels don't crowd the adjacent bar labels.
+const boundaryGap = 26;
+
+// Round the chart's right edge to a tidy ceiling so the axis label is clean.
+function niceCeiling(n: number): number {
+  if (n <= 10) return Math.ceil(n);
+  const magnitude = Math.pow(10, Math.floor(Math.log10(n)));
+  const mantissa = n / magnitude;
+  let rounded;
+  if (mantissa <= 1) rounded = 1;
+  else if (mantissa <= 1.25) rounded = 1.25;
+  else if (mantissa <= 1.5) rounded = 1.5;
+  else if (mantissa <= 1.6) rounded = 1.6;
+  else if (mantissa <= 2) rounded = 2;
+  else if (mantissa <= 2.5) rounded = 2.5;
+  else if (mantissa <= 3) rounded = 3;
+  else if (mantissa <= 4) rounded = 4;
+  else if (mantissa <= 5) rounded = 5;
+  else rounded = 10;
+  return rounded * magnitude;
+}
+
+// TWh -> millions of households at the data file's per-household constant.
+const TWH_TO_MWH = 1_000_000;
+const mwhPerHH = data.mwh_per_household;
+function twhToHouseholdsM(twh: number): number {
+  return (twh * TWH_TO_MWH) / mwhPerHH / 1_000_000;
+}
+
+interface Computed {
+  label: string;
+  hh_low: number;
+  hh_high: number;
+  hh_central?: number;
+  isPoint: boolean;
+  role?: string;
+}
+
+const figures: Computed[] = data.figures.map((f) => {
+  if (f.twh !== undefined) {
+    const hh = twhToHouseholdsM(f.twh);
+    return {
+      label: f.label,
+      hh_low: hh,
+      hh_high: hh,
+      isPoint: true,
+      role: f.role,
+    };
+  } else {
+    return {
+      label: f.label,
+      hh_low: twhToHouseholdsM(f.twh_low ?? 0),
+      hh_high: twhToHouseholdsM(f.twh_high ?? 0),
+      hh_central:
+        f.twh_central !== undefined
+          ? twhToHouseholdsM(f.twh_central)
+          : undefined,
+      isPoint: false,
+      role: f.role,
+    };
+  }
+});
+
+const rawMax = Math.max(...figures.map((f) => f.hh_high));
+const maxVal = niceCeiling(rawMax);
+
+// Format millions: integer above 10 ("39", "70–113", "130"), one decimal below
+// ("2.5–6.7"). Mixed precision in a range like "6.3–24" is fine — the low end
+// keeps the decimal it deserves; the high end doesn't need one.
+function fmtHH(n: number): string {
+  if (n >= 10) return Math.round(n).toString();
+  return n.toFixed(1);
+}
+function valueText(c: Computed): string {
+  if (c.isPoint) return fmtHH(c.hh_high);
+  return `${fmtHH(c.hh_low)}–${fmtHH(c.hh_high)}`;
+}
+
+// Layout — boundary gap inserted only for rows after boundary_after_index, so
+// the visual divide reinforces the hairline without disturbing earlier rows.
+function rowTop(i: number): number {
+  const base = headerH + i * barRowH;
+  return i > data.boundary_after_index ? base + boundaryGap : base;
+}
+
+const lastIdx = figures.length - 1;
+const lastTop = rowTop(lastIdx);
+const lastBottom = lastTop + barRowH;
+const axisLineY = lastBottom + 6;
+const axisLabelY = lastBottom + 22;
+const footerRuleY = axisLabelY + 28;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+// Hairline sits in the middle of the boundary gap.
+const boundaryY =
+  headerH + (data.boundary_after_index + 1) * barRowH + boundaryGap / 2;
+
+const sourceShort =
+  "Sources: IEA, Goldman Sachs, EIA, Cambridge CCAF, LBNL. 11.9 MWh per U.S. household per year (EIA).";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+
+const FONT_SANS =
+  "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF =
+  "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+
+const ACCENT = "#1f4f7a";
+const INK = "#1a1a1a";
+const MID = "#4a4a4a";
+const DIM = "#8a8682";
+const RULE = "#e6e3dc";
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <pattern
+        id="rangeStripeHH"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(45)"
+      >
+        <rect width="8" height="8" fill={ACCENT} />
+        <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,0.20)" stroke-width="3" />
+      </pattern>
+    </defs>
+
+    {/* Card background — explicit white so the saved SVG never inherits a transparent background. */}
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text
+      x={padX}
+      y={36}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={DIM}
+      letter-spacing="1.6"
+      font-weight="500"
+    >
+      {data.kicker.toUpperCase()}
+    </text>
+    <text
+      x={padX}
+      y={72}
+      font-family={FONT_SERIF}
+      font-size="26"
+      fill={INK}
+      font-weight="600"
+    >
+      {data.title}
+    </text>
+    <text
+      x={padX}
+      y={103}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+      letter-spacing="0.9"
+      font-weight="500"
+    >
+      {data.unit_caption.toUpperCase()}
+    </text>
+
+    {/* Bars */}
+    {figures.map((f, i) => {
+      const top = rowTop(i);
+      const labelY = top + labelOffset;
+      const barY = top + barTopOffset;
+      const xLo = chartLeft + (f.hh_low / maxVal) * chartWidth;
+      const xHi = chartLeft + (f.hh_high / maxVal) * chartWidth;
+      const isReference = f.role === "reference";
+      return (
+        <g>
+          <text
+            x={chartLeft}
+            y={labelY}
+            font-family={FONT_SANS}
+            font-size="14"
+            fill={INK}
+          >
+            {f.label}
+          </text>
+          <text
+            x={chartRight}
+            y={labelY}
+            font-family={FONT_SANS}
+            font-size="14"
+            fill={INK}
+            font-weight="500"
+            text-anchor="end"
+          >
+            {valueText(f)}
+          </text>
+          {/* track */}
+          <rect
+            x={chartLeft}
+            y={barY}
+            width={chartWidth}
+            height={barH}
+            fill="rgba(0,0,0,0.05)"
+            rx="3"
+          />
+          {/* fill */}
+          {isReference ? (
+            <rect
+              x={chartLeft}
+              y={barY}
+              width={xHi - chartLeft}
+              height={barH}
+              fill={ACCENT}
+              opacity="0.32"
+              rx="3"
+            />
+          ) : f.isPoint ? (
+            <rect
+              x={chartLeft}
+              y={barY}
+              width={xHi - chartLeft}
+              height={barH}
+              fill={ACCENT}
+              rx="3"
+            />
+          ) : (
+            <rect
+              x={xLo}
+              y={barY}
+              width={xHi - xLo}
+              height={barH}
+              fill="url(#rangeStripeHH)"
+              rx="3"
+            />
+          )}
+          {/* central tick within range bars (e.g., IEA base case for the 2030 range) */}
+          {f.hh_central !== undefined && (
+            <line
+              x1={chartLeft + (f.hh_central / maxVal) * chartWidth}
+              y1={barY - 2}
+              x2={chartLeft + (f.hh_central / maxVal) * chartWidth}
+              y2={barY + barH + 2}
+              stroke={INK}
+              stroke-width="1.5"
+              opacity="0.85"
+            />
+          )}
+        </g>
+      );
+    })}
+
+    {/* ACTUAL / PROJECTED hairline */}
+    <line
+      x1={chartLeft}
+      y1={boundaryY}
+      x2={chartRight}
+      y2={boundaryY}
+      stroke={DIM}
+      stroke-width="1"
+      stroke-dasharray="2 3"
+      opacity="0.55"
+    />
+    <text
+      x={chartLeft + chartWidth / 2}
+      y={boundaryY - 6}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={DIM}
+      text-anchor="middle"
+      letter-spacing="0.4"
+    >
+      ACTUAL
+    </text>
+    <text
+      x={chartLeft + chartWidth / 2}
+      y={boundaryY + 14}
+      font-family={FONT_SANS}
+      font-size="10.5"
+      fill={DIM}
+      text-anchor="middle"
+      letter-spacing="0.4"
+    >
+      PROJECTED
+    </text>
+
+    {/* Axis */}
+    <line
+      x1={chartLeft}
+      y1={axisLineY}
+      x2={chartRight}
+      y2={axisLineY}
+      stroke={RULE}
+      stroke-width="1"
+    />
+    <text
+      x={chartLeft}
+      y={axisLabelY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+    >
+      0
+    </text>
+    <text
+      x={chartRight}
+      y={axisLabelY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+      text-anchor="end"
+    >
+      {fmtHH(maxVal)}
+    </text>
+
+    {/* Footer — separator, short source line, verified stamp */}
+    <line
+      x1={padX}
+      y1={footerRuleY}
+      x2={W - padX}
+      y2={footerRuleY}
+      stroke={RULE}
+      stroke-width="1"
+    />
+    <text
+      x={padX}
+      y={sourceLineY}
+      font-family={FONT_SANS}
+      font-size="12"
+      fill={MID}
+    >
+      {sourceShort}
+    </text>
+    <text
+      x={padX}
+      y={verifiedLineY}
+      font-family={FONT_SANS}
+      font-size="11"
+      fill={DIM}
+    >
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>
