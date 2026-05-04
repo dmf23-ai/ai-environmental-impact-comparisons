@@ -37,7 +37,7 @@ Next: **wrap Phase 5 or push to visual #7?** Phase 5 was sized for two or three 
 
 ## Read these in order
 
-1. `website_plan.md` — full plan: editorial frame, audience, structure, comparison set, infographics, honesty layer, update mechanism, tech stack rationale, phased build, and "Queued fixes and design notes" (Section 11).
+1. `website_plan.md` — full plan: editorial frame, audience, structure, comparison set, infographics, what keeps the figures defensible, update mechanism, tech stack rationale, phased build, and "Queued fixes and design notes" (Section 11).
 2. `authorial_voice.md` — David's voice description. Use as a guideline. The anti-AI-speak rubric in Claude's persistent memory takes precedence when they conflict.
 3. `user_profile.md` — collaboration preferences: compact responses, beginner coder, small verifiable milestones, focus on one thing at a time, distinguish facts from hypotheses.
 4. `phase1_setup.md` — original Phase 1 walkthrough; mostly historical now.
@@ -70,7 +70,6 @@ The Anti-AI-speak rubric memory file (in Claude's persistent memory, not this fo
 - **Right-edge touching on infographic bars.** When the highest bar's value equals the chart's `niceCeiling`, the bar runs flush against the axis right edge.
 - **U.S./global pair affordance.** The water bracket pairs U.S. and global figures by label parallelism alone. May need a small visual cue if the eye doesn't catch the pairing.
 - **Trajectory band fill opacity (0.16).** May be too pale at typical viewing distance — visible but doesn't carry much weight. Bump to 0.22 if the live charts read under-emphasized.
-- **Rename `## 6. The honesty layer` in `website_plan.md`** to match the rubric strike — candidate names: "The trust layer," "What keeps the figures trustworthy," or simply "Three trust pillars." Small surgical edit; one section title plus any references in other docs.
 - **Historical line jumpiness from irregular anchor years** (2017, 2018, 2022, 2024, 2025) on the DC trajectory. The source-faithful choice creates non-uniform slopes between anchors. If it reads as broken rather than precise, options: smooth interpolation with an "interpolated" note in methodology, or accept the jumpiness as source-truth fidelity.
 
 Closed during Phase 5:
@@ -79,6 +78,7 @@ Closed during Phase 5:
 - AI 2024 range reconciled to 30–80 TWh across all three displays (trajectory, household-equivalents, primer). The trajectory's `band_low[2024].value` was widened from 50 to 30; summary rewritten to acknowledge the wider literature at 2024 explicitly. `last_verified` bumped 2026-05-04.
 - `niceCeiling` consolidated to `src/lib/niceCeiling.ts` with a parameterized `granular` opt-in. Three callers (annual-twh, household-equivalents, range-vs-point) use the default; WaterBracket passes `{ granular: true }` to access the additional 6/7/8 mantissa steps it needs to keep its right-edge breathing room. RangeBar's coarser version stays inline — different shape, different purpose, not part of this refactor.
 - The word "honest" struck from site copy in two places (DC trajectory summary and primer summary). Anti-AI-speak rubric extended with Tier 2 #14 ("honest / honestly" as a virtue claim) so the pattern won't recur. Tier 3 items renumbered 14–18 → 15–19.
+- Section 6 of `website_plan.md` renamed `The honesty layer` → `How the figures stay defensible` 2026-05-04. Body opener tightened from "Three things keep the site trustworthy" → "Three mechanisms hold the figures up." Doc-summary sentence and handoff.md reading-order summary updated to match. The new title describes the procedural property rather than naming a virtue (rubric Tier 2 #14). Two adjacent virtue-claim patterns in `website_plan.md` Section 1 prose ("honest ranges," "calibrate, not to comfort or alarm") noticed but left untouched — flagged for David's call since they're planning-doc prose rather than site copy.
 - IEA April 2026 audit (electricity 415→460 TWh, CO₂ 220→180 Mt, prose recomputes, `last_verified` bumped on 13 sections — committed 2026-05-03). The 220 Mt figure was a calc-based approximation rather than a direct IEA cite; the April 2026 update consistently quotes 180 Mt.
 - Household-equivalents infographic shipped 2026-05-04 — visual #5 of Phase 5. Adds the unit-conversion schema shape, the horizontal ACTUAL/PROJECTED hairline pattern, and the `fmtHH` integer-above-10 formatting rule.
 - Multi-touch figures.json updates via Python script written to outputs and run from bash (extends the heredoc workaround in working notes). Cleaner than chained Edits and dodges the byte-cap quirk.

@@ -1,6 +1,6 @@
 # AI Environmental Impact Comparisons — Website Plan
 
-*Drafted May 1, 2026. This is a planning document, not a spec. It captures the editorial frame, the structure, the comparison set, the infographics, the honesty layer, the update mechanism, the tech stack, and a phased build.*
+*Drafted May 1, 2026. This is a planning document, not a spec. It captures the editorial frame, the structure, the comparison set, the infographics, what keeps the figures defensible, the update mechanism, the tech stack, and a phased build.*
 
 ## 1. Editorial frame (the north star)
 
@@ -69,9 +69,9 @@ Eight to ten core visuals, each designed to be standalone-shareable (right-click
 
 Style: clean, restrained, blue-and-warm-accent palette, generous whitespace, type-driven rather than chart-junk-driven. Closer to *Our World in Data* or the *FT* graphics desk than to corporate dashboards. Every chart has a source line and a "last verified" date.
 
-## 6. The honesty layer
+## 6. How the figures stay defensible
 
-Three things keep the site trustworthy.
+Three mechanisms hold the figures up.
 
 **Ranges, not points.** Every headline number is a range with a stated confidence level (medium-high, medium-low, etc.), as the PDF already does. Single numbers appear only where the underlying source publishes one (EPA's 400 g CO2/mile is a single figure; Epoch's 0.3 Wh/query is presented with caveats).
 
@@ -173,3 +173,4 @@ Each phase ends in a working, deployed state. No phase requires editing more tha
 **Methodology page and per-display links.** The /methods page is structured per-display: one section per comparison card, one per home-page infographic, one for the hourly hero. Each section walks through figure derivation, assumptions, sources, and remaining uncertainty. Implementation: ComparisonCard.astro and HourlyImpactHero.astro each gain a small "How this was calculated" link in the card/figure footer that anchor-jumps to the matching section on /methods. Schema implication: each card's existing `anchor` field can double as its methodology anchor on /methods (e.g. `/methods#water-vs-golf`); no new figures.json field needed unless an /methods anchor needs to differ from the /comparisons anchor. Build order when this gets implemented: write the per-display methodology sections first (so the anchors exist), add the link UI to ComparisonCard and HourlyImpactHero, then ship. This work belongs in Phase 6 alongside /myths, /places, and /changelog.
 
 **figures.json byte-cap quirk, reconfirmed.** Hit again during Phase 4 when adding ten cards in one Edit: the file got truncated at exactly 4,000 bytes on the bash sandbox mount even though the Read tool saw the full content. The handoff's heredoc workaround (rewrite the file via a Python heredoc through bash) restored it cleanly. Lesson: small surgical Edits to figures.json are fine; large multi-card additions should go through the bash heredoc path. Worth investigating whether this is a quota on the agent's Edit tool, a sandbox sync limit, or something else — but for now the workaround is reliable.
+the workaround is reliable.
