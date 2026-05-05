@@ -23,7 +23,7 @@ A static website that puts AI's water and energy footprint next to other large u
 Completed:
 
 - **Phases 1–4.** Astro scaffold, GitHub + Vercel deploy, design tokens locked, web fonts, masthead, hourly hero on the home page, all 14 comparison cards live on `/comparisons`.
-- **Phase 5 (in progress).** Six of ~8–10 infographics live on the home page below the hourly hero, in this order:
+- **Phase 5.** Wrapped at six visuals 2026-05-04 (decision in this session: pivot to Phase 6 over a seventh visual). Six of the originally planned ~8–10 infographics live on the home page below the hourly hero, in this order:
   - `InfographicRangeVsPoint.astro` — "Why every figure here is a range." Pedagogical primer placed between the hourly hero and the rest of the stack. Two horizontal scales share a single x-axis: a single dot at 65 TWh on top, a striped range bar 30–80 TWh with a faint central tick at 65 below, tied by a faint dashed vertical guide at the central value. Editorial caption ("Each figure is a range unless the source itself publishes a single defensible number.") baked into the SVG so the saved image carries the rule. First use of the baked-in-SVG editorial caption pattern.
   - `InfographicAnnualTwh.astro` — "How big is AI, really?" Six-bar snapshot.
   - `InfographicWaterBracket.astro` — "Are AI data centers thirstier than golf courses?" Six-bar snapshot.
@@ -33,7 +33,9 @@ Completed:
 
 IEA April 2026 audit completed 2026-05-03 — all figures reconciled (electricity 415→460 TWh in 8 places, CO₂ 220→180 Mt in 5 places), prose recomputes applied (ratios, percentages, "X times" phrasings), `last_verified` bumped on 13 sections (12 comparison cards + annual-twh infographic). The site is consistent with the IEA April 2026 "Key Questions on Energy and AI" update across all displays.
 
-Next: **wrap Phase 5 or push to visual #7?** Phase 5 was sized for two or three sessions in the original plan; we are well past the upper end. With six visuals shipped, the open call is whether to add visual #7 — training vs. inference over time — or to close Phase 5 at six and pivot to Phase 6 (/methods, /myths, /places, /changelog). Visual #8 (watt-scale primer) was already relocated to /methods in a prior handoff. Worth a short discussion at the top of the next session.
+**Phase 6 in progress.** /methods page skeleton landed 2026-05-04 with the hourly-hero (per-hour CO₂) section. The "How this was calculated →" link affordance is wired through `SourceLine.astro` via a new optional `methodsAnchor` prop; `HourlyImpactHero.astro` is the first consumer. Visual #7 (training vs. inference over time) stays parked — landing it after /methods exists means the visual ships with its methodology section live on day one. Visual #8 (watt-scale primer) is also a /methods candidate per the original plan.
+
+Next: **replicate the methodology pattern to the six infographics**, then to the fourteen comparison cards. Each component passes its own `methodsAnchor`; each gets a section in methods.astro. Sensible cadence: all six infographics in one session (they share the schema), then comparison cards in one or two sessions.
 
 ## Read these in order
 
@@ -70,7 +72,15 @@ The Anti-AI-speak rubric memory file (in Claude's persistent memory, not this fo
 - **Right-edge touching on infographic bars.** When the highest bar's value equals the chart's `niceCeiling`, the bar runs flush against the axis right edge.
 - **U.S./global pair affordance.** The water bracket pairs U.S. and global figures by label parallelism alone. May need a small visual cue if the eye doesn't catch the pairing.
 - **Trajectory band fill opacity (0.16).** May be too pale at typical viewing distance — visible but doesn't carry much weight. Bump to 0.22 if the live charts read under-emphasized.
+- **Two virtue-claim patterns in `website_plan.md` Section 1 prose** — "honest ranges" and "calibrate, not to comfort or alarm" (both on line 9) — flagged during the Section 6 rename pass but not scrubbed. Planning-doc prose rather than site copy; decide whether to scrub next pass.
 - **Historical line jumpiness from irregular anchor years** (2017, 2018, 2022, 2024, 2025) on the DC trajectory. The source-faithful choice creates non-uniform slopes between anchors. If it reads as broken rather than precise, options: smooth interpolation with an "interpolated" note in methodology, or accept the jumpiness as source-truth fidelity.
+
+Closed during Phase 6:
+
+- /methods page skeleton landed 2026-05-04 — first section ships with the hourly-hero (per-hour CO₂ comparison). Section schema established: small uppercase locator + h2 title + intro paragraph + Derivation subsection + Assumptions subsection + Uncertainty subsection + SourceLine. Reusable for all subsequent per-display sections.
+- "How this was calculated →" link affordance pattern landed via `SourceLine.astro` 2026-05-04 — accepts an optional `methodsAnchor` prop and conditionally renders an `<a>` pointing at `/methods#<methodsAnchor>` below the verified date. Consumers opt in by passing the prop. `HourlyImpactHero.astro` is the first consumer; `ComparisonCard.astro` and the six infographic components plug in next.
+- Anchor convention for /methods: comparison cards reuse their existing `anchor` field (so `/methods#water-vs-golf` matches `/comparisons#water-vs-golf`). Hourly hero is `hourly-hero`. Infographics use their figures.json `infographics` key in lowercase-hyphen form (e.g. `range-vs-point-primer`, `dc-trajectory`).
+- Methodology prose register established on the hourly-hero section: walks through specific arithmetic (e.g. `400 g/mile × 30 mph = 12,000 g/hr`, plus 15–30% upstream → 14–18 kg/hr) for each of the five figures, with assumptions and per-figure confidence levels called out separately. Drawn from the original PDF report's sections A1–A3 and Methods block. If David wants this more conceptual or more concrete, easier to revise the one section before the pattern propagates to the other six infographics.
 
 Closed during Phase 5:
 
@@ -78,7 +88,7 @@ Closed during Phase 5:
 - AI 2024 range reconciled to 30–80 TWh across all three displays (trajectory, household-equivalents, primer). The trajectory's `band_low[2024].value` was widened from 50 to 30; summary rewritten to acknowledge the wider literature at 2024 explicitly. `last_verified` bumped 2026-05-04.
 - `niceCeiling` consolidated to `src/lib/niceCeiling.ts` with a parameterized `granular` opt-in. Three callers (annual-twh, household-equivalents, range-vs-point) use the default; WaterBracket passes `{ granular: true }` to access the additional 6/7/8 mantissa steps it needs to keep its right-edge breathing room. RangeBar's coarser version stays inline — different shape, different purpose, not part of this refactor.
 - The word "honest" struck from site copy in two places (DC trajectory summary and primer summary). Anti-AI-speak rubric extended with Tier 2 #14 ("honest / honestly" as a virtue claim) so the pattern won't recur. Tier 3 items renumbered 14–18 → 15–19.
-- Section 6 of `website_plan.md` renamed `The honesty layer` → `How the figures stay defensible` 2026-05-04. Body opener tightened from "Three things keep the site trustworthy" → "Three mechanisms hold the figures up." Doc-summary sentence and handoff.md reading-order summary updated to match. The new title describes the procedural property rather than naming a virtue (rubric Tier 2 #14). Two adjacent virtue-claim patterns in `website_plan.md` Section 1 prose ("honest ranges," "calibrate, not to comfort or alarm") noticed but left untouched — flagged for David's call since they're planning-doc prose rather than site copy.
+- Section 6 of `website_plan.md` renamed `The honesty layer` → `How the figures stay defensible` 2026-05-04. Body opener tightened from "Three things keep the site trustworthy" → "Three mechanisms hold the figures up." Doc-summary sentence and handoff.md reading-order summary updated to match. The new title describes the procedural property rather than naming a virtue (rubric Tier 2 #14).
 - IEA April 2026 audit (electricity 415→460 TWh, CO₂ 220→180 Mt, prose recomputes, `last_verified` bumped on 13 sections — committed 2026-05-03). The 220 Mt figure was a calc-based approximation rather than a direct IEA cite; the April 2026 update consistently quotes 180 Mt.
 - Household-equivalents infographic shipped 2026-05-04 — visual #5 of Phase 5. Adds the unit-conversion schema shape, the horizontal ACTUAL/PROJECTED hairline pattern, and the `fmtHH` integer-above-10 formatting rule.
 - Multi-touch figures.json updates via Python script written to outputs and run from bash (extends the heredoc workaround in working notes). Cleaner than chained Edits and dodges the byte-cap quirk.
@@ -97,6 +107,7 @@ Closed during Phase 5:
 
 - **The byte-cap quirk hit a 1.5K `index.astro` on a two-line surgical Edit this session — confirms it is not file-size-dependent.** A simple Edit adding the primer's `<InfographicRangeVsPoint />` line reported success but truncated the file at the closing `<a` tag of the cta paragraph; the `</Layout>` and entire `<style>` block were gone on disk. Restored via bash heredoc. The file was small enough that prior heuristics ('only large files at risk') do not hold.
 - **The figures.json byte-cap quirk affects more files than just figures.json — and now confirmed to bite small surgical Edits to ~10K component files, not just multi-card additions.** During visual #5 work, a single small Edit to a `fmtHH` function in a 10.8K Astro component reported success but truncated the file's closing CSS block on disk. Pattern reconfirmed: the Edit tool (and even the Write tool) reports success, the Read tool sees full content, but the on-disk file is truncated. **Ground truth is the bash mount, not the Read tool — the Read tool can show stale content from earlier successful writes.** The reliable workarounds: bash Python heredoc for `figures.json` (`python3 << 'PYEOF' ... json.dump(...) ... PYEOF`); `cat > <file> << 'EOF' ... EOF` or Write-to-outputs-then-bash-cp for plain-text files; `git checkout HEAD -- <file>` to restore. **Verify every Edit and every Write with bash `wc -c` and `tail`.** The live site is unaffected when truncation happens between commits since Vercel builds from committed state.
+- **Byte-cap quirk now confirmed on .md files.** During the Phase 6 kickoff session (2026-05-04), three sequential Edits to `handoff.md` and two surgical Edits to `website_plan.md` silently truncated their tails — closing portions of each file got eaten on disk. A 1-line surgical Edit to `HourlyImpactHero.astro` also lost the closing `</style>` block. Recovery via bash heredoc append. Pattern: more sequential Edits to one file in one turn → higher truncation risk. Workaround: any file getting more than two sequential Edits in a turn is safer to update via a single Python heredoc rewrite. Bash mount is ground truth; the Read tool can show pre-truncation cached content. The Edit tool's success report is not reliable.
 - **Line endings on `.md` files.** `authorial_voice.md` and `user_profile.md` periodically flip between LF and CRLF in the sandbox without intentional changes. If `git status` shows them modified at the end of a session that didn't touch them, revert with `git checkout <file>`.
 - **`website_plan.md` git-state weirdness.** During the Phase 5 wrap-up it appeared as both staged-deleted AND untracked while HEAD and disk were byte-identical. Resolution was `git restore --staged website_plan.md`. If it happens again, check HEAD vs disk before doing anything destructive.
 - Sandbox `npm install` for Astro times out at 45 seconds, so full builds aren't reliably verifiable in the sandbox. David's local machine handles them fine.
@@ -120,10 +131,11 @@ src/
     InfographicHouseholdEquivalents.astro  ← "Data-center electricity, in household-years" (#5, unit-conversion bar chart)
     InfographicRangeVsPoint.astro          ← "Why every figure here is a range" (#6, didactic primer)
     RangeBar.astro                         ← horizontal bars; used by ComparisonCard, HourlyImpactHero
-    SourceLine.astro                       ← clickable sources + last-verified footer
+    SourceLine.astro                       ← clickable sources + last-verified + optional methodsAnchor link
   pages/
     index.astro                            ← home: hero + thesis + cta + 6 infographics
     comparisons.astro                      ← lists all ComparisonCards from figures.json
+    methods.astro                          ← per-display methodology page (Phase 6, hourly-hero section live)
   lib/niceCeiling.ts                       ← shared niceCeiling helper, parameterized for granular mantissa steps
   styles/global.css                        ← design tokens, base styles, masthead, common chrome
 
