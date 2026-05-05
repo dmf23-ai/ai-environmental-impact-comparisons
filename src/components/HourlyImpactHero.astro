@@ -33,7 +33,11 @@ const smallFigures = allFigures.filter(
 
   <figcaption>{data.summary}</figcaption>
 
-  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+  <SourceLine
+    sources={data.sources}
+    lastVerified={data.last_verified}
+    methodsAnchor="hourly-hero"
+  />
 </figure>
 
 <style>
@@ -85,6 +89,10 @@ const smallFigures = allFigures.filter(
     }
     .hero-title {
       font-size: 1.7rem;
+    }
+  }
+</style>
+    font-size: 1.7rem;
     }
   }
 </style>

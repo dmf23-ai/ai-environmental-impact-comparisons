@@ -1,0 +1,166 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SourceLine from "../components/SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+const title = "How the figures were calculated — AI Environmental Impact";
+const description =
+  "Methodology page for the AI Environmental Impact Comparisons site. Per-display walkthroughs of how each figure was derived, what assumptions were made, and where the uncertainty lives.";
+
+const hourlyHero = figuresData.hourly_impact;
+---
+
+<Layout title={title} description={description}>
+  <p class="back"><a href="/">← Home</a></p>
+  <h1>How the figures were calculated</h1>
+  <p class="lede">
+    Every figure on this site has a section here. Each one names the display
+    the figure appears on, restates what the figure shows, walks through how
+    it was derived, names the assumptions behind the math, and says where the
+    wide error bars come from. The sources are cited at the bottom of each
+    section, so this page can be read on its own without flipping between tabs.
+  </p>
+
+  <section class="method-section" id="hourly-hero">
+    <p class="display-where">Home page hero</p>
+    <h2>Per-hour CO₂ comparison</h2>
+
+    <p>
+      The hourly hero shows five activities arranged by grams of CO₂
+      equivalent emitted in one hour: gasoline driving, heavy AI workflow,
+      high-end PC gaming, ordinary AI chat, and HD video streaming.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>Gasoline driving (14,000–18,000 g/hr).</strong> EPA's typical
+      passenger vehicle emits about 400 g CO₂ per mile and 8,887 g per gallon
+      of gasoline burned. At a roughly 30 mph average speed (mixed urban and
+      highway driving), one hour produces 12 kg of tailpipe CO₂. Adding a
+      15–30% upstream factor for fuel production, refining, and distribution
+      gives 14–18 kg of CO₂-equivalent per hour.
+    </p>
+
+    <p>
+      <strong>Heavy AI workflow (100–500 g/hr).</strong> Heavier sessions —
+      long-context queries, reasoning models, agentic workflows, document
+      uploads — can consume 0.1–0.5+ kWh per active hour at the data-center
+      level. Multiplying by a typical grid intensity around 400 g CO₂ per
+      kWh, with a data-center overhead factor of roughly 1.2–1.5×, lands the
+      range at about 100–500 g. This figure is the most uncertain of the
+      five because per-query disclosures are sparse and the workload
+      category itself is fuzzy.
+    </p>
+
+    <p>
+      <strong>High-end PC gaming (100–300 g/hr).</strong> Lawrence Berkeley's
+      gaming-computer study estimates a typical high-end setup at about
+      1,400 kWh/year including display; intensive segments can use double
+      that. A rig drawing 300–700 W for an hour consumes 0.3–0.7 kWh; at
+      typical grid intensities around 400 g CO₂ per kWh, the per-hour CO₂
+      range lands around 100–300 g.
+    </p>
+
+    <p>
+      <strong>Ordinary AI chat (5–200 g/hr).</strong> Epoch AI estimates a
+      typical GPT-4o-style text query at about 0.3 Wh. An hour of ordinary
+      back-and-forth chat might involve 20–200 turns, or 6–60 Wh of compute
+      before data-center overhead and grid emissions. The wide 5–200 g
+      range absorbs three sources of variation: turns per hour, the
+      still-uncertain per-query energy at the data-center level, and grid
+      intensity at the location of the inference.
+    </p>
+
+    <p>
+      <strong>HD video streaming (36–56 g/hr).</strong> Carbon Trust's 2020
+      European estimate for one hour of video-on-demand streaming is about
+      55–56 g CO₂-equivalent, with energy use around 188 Wh/hr and the
+      viewing device responsible for the largest share. IEA's earlier
+      central estimate for one hour of streaming video in 2019 was 36 g.
+      The site uses the IEA lower bound and the Carbon Trust upper bound
+      as a defensible 36–56 g range.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      Three assumptions sit underneath all five figures. Driving uses a 30
+      mph mixed-driving speed; faster or slower averages would shift the
+      hourly figure proportionally. Both AI categories assume typical grid
+      intensities around 400 g CO₂ per kWh; cleaner grids (Quebec,
+      Iceland) push the figure down meaningfully, and dirtier grids (West
+      Virginia, India) push it up. The streaming and gaming figures are
+      device-centric; they exclude upstream content delivery, server-side
+      video transcoding, and game-server compute, which can be substantial
+      for live-service titles.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The figures span very different confidence levels. The driving figure
+      (medium) is anchored to a single well-documented EPA conversion
+      factor with a small upstream-factor band. The streaming figure
+      (medium) is anchored to two published per-hour estimates that span a
+      narrow range. The gaming figure (medium-low) translates aggregate
+      annual estimates into a per-hour reading, with hardware tier and
+      play intensity adding spread. The two AI figures (low-medium) carry
+      the widest bands because per-query energy is still poorly disclosed
+      and the workload categories themselves are fuzzy. The relative
+      ordering — driving an order of magnitude or two above everything
+      else, the digital activities clustered close together — is robust
+      across reasonable assumption shifts.
+    </p>
+
+    <SourceLine
+      sources={hourlyHero.sources}
+      lastVerified={hourlyHero.last_verified}
+    />
+  </section>
+</Layout>
+
+<style>
+  .method-section {
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-6);
+    margin-top: var(--space-7);
+  }
+  .method-section:first-of-type {
+    border-top: none;
+    padding-top: 0;
+    margin-top: var(--space-6);
+  }
+  .display-where {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 var(--space-2);
+  }
+  .method-section h2 {
+    font-size: 1.5rem;
+    margin: 0 0 var(--space-5);
+  }
+  .method-section h3 {
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  .method-section p {
+    margin: 0 0 var(--space-4);
+  }
+  .method-section p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  @media (min-width: 720px) {
+    .method-section h2 {
+      font-size: 1.7rem;
+    }
+  }
+</style>

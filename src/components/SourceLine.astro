@@ -6,8 +6,9 @@ interface Source {
 interface Props {
   sources: Source[];
   lastVerified: string;
+  methodsAnchor?: string;
 }
-const { sources, lastVerified } = Astro.props;
+const { sources, lastVerified, methodsAnchor } = Astro.props;
 ---
 
 <footer class="source-line">
@@ -25,6 +26,13 @@ const { sources, lastVerified } = Astro.props;
     }
   </p>
   <p class="verified">Last verified: <time datetime={lastVerified}>{lastVerified}</time></p>
+  {
+    methodsAnchor && (
+      <p class="methods-link">
+        <a href={`/methods#${methodsAnchor}`}>How this was calculated →</a>
+      </p>
+    )
+  }
 </footer>
 
 <style>
@@ -36,7 +44,8 @@ const { sources, lastVerified } = Astro.props;
     color: var(--ink-soft);
   }
   .sources,
-  .verified {
+  .verified,
+  .methods-link {
     margin: 0 0 0.3rem;
     line-height: 1.5;
   }
@@ -52,5 +61,8 @@ const { sources, lastVerified } = Astro.props;
   .source-line a:hover {
     color: var(--accent);
     text-decoration-color: currentColor;
+  }
+  .methods-link {
+    margin-top: 0.55rem;
   }
 </style>
