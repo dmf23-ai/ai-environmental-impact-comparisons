@@ -8,6 +8,12 @@ const description =
   "Methodology page for the AI Environmental Impact Comparisons site. Per-display walkthroughs of how each figure was derived, what assumptions were made, and where the uncertainty lives.";
 
 const hourlyHero = figuresData.hourly_impact;
+
+const findInfographic = (id: string) =>
+  (figuresData as any).infographics.find((i: any) => i.id === id);
+const primer = findInfographic("range-vs-point-primer");
+const annual = findInfographic("annual-twh");
+const waterBracket = findInfographic("water-bracket");
 ---
 
 <Layout title={title} description={description}>
@@ -118,6 +124,314 @@ const hourlyHero = figuresData.hourly_impact;
       lastVerified={hourlyHero.last_verified}
     />
   </section>
+
+  <section class="method-section" id="range-vs-point-primer">
+    <p class="display-where">Home page primer</p>
+    <h2>Why every figure here is a range</h2>
+
+    <p>
+      The primer takes one quantity — AI workloads' electricity use
+      globally in 2024 — and shows it twice: first as a single dot, then
+      as a striped band with a tick at the dot's value. The arithmetic of
+      the two framings is identical; only the editorial choice differs.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>The single-point framing (65 TWh).</strong> Most central
+      estimates of AI's 2024 share of global data-center electricity
+      cluster around 65 TWh; the IEA's Energy and AI figure, repeated in
+      the April 2026 update, is the most prominent single value. If the
+      site quoted one number for AI's 2024 footprint, it would land here.
+    </p>
+
+    <p>
+      <strong>The range framing (30–80 TWh).</strong> Across the wider
+      literature for the same year and the same metric, the lower bound
+      sits near 30 TWh and the upper bound near 80. The spread comes from
+      definitional variation — what counts as an "AI workload" inside a
+      hyperscale facility — and from how analysts construct the number,
+      which is bottom-up from accelerator shipments and utilization
+      assumptions rather than from facility-level metering. Different
+      definitional choices and different shipments-to-utilization
+      heuristics each move the answer by tens of TWh; stacked together
+      they produce the 30–80 band.
+    </p>
+
+    <p>
+      <strong>The licensed exception.</strong> The site does use point
+      estimates where a primary source publishes one and the underlying
+      measurement is well-bounded. EPA's 400 grams of CO₂ per mile of
+      typical passenger-vehicle driving is the canonical example: a
+      single figure derived from regulatory fleet averages, used directly
+      in the hourly hero with only a small upstream-factor band layered
+      on top. Single numbers appear on the site only on those terms.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The primer assumes the reader has not yet scrolled past the
+      home-page hero, so it teaches the rule using the figure most likely
+      to come up next. The same 30–80 TWh band reappears in the annual
+      snapshot, the AI-share trajectory, and the household-equivalents
+      chart. Demonstrating the rule on a number that recurs is the
+      closest thing to a useful "key" the site has.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The demo figure is deliberately the wobbliest number on the site.
+      AI's 2024 share of data-center electricity carries a low-medium
+      confidence label everywhere it appears, for the reasons above. The
+      primer is the case that pushed the site to range-not-point in the
+      first place; its job is to make that convention visible to a reader
+      on their first scroll.
+    </p>
+
+    <SourceLine
+      sources={primer.sources}
+      lastVerified={primer.last_verified}
+    />
+  </section>
+  <section class="method-section" id="annual-twh">
+    <p class="display-where">Home page infographic</p>
+    <h2>How big is AI, really?</h2>
+
+    <p>
+      The annual-TWh chart shows six categories of global electricity use
+      stacked vertically. The U.S. residential figure sits at the top as a
+      scaffolding bar; five compute-adjacent loads (data centers, gaming,
+      Bitcoin, EV charging, and AI) sit below in display order. The bars
+      use ranges where the underlying data spreads across published
+      estimates; single bars where a primary tracking source publishes one
+      number.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. residential electricity (1,550 TWh).</strong> EIA's
+      Electric Power Annual reports U.S. residential electricity
+      consumption from utility filings — the 2024 figure rounds to 1,550
+      TWh. The bar carries a reference role on the chart, styled in faint
+      accent at low opacity so it reads as scaffolding for the comparison
+      set.
+    </p>
+
+    <p>
+      <strong>Global data centers (460 TWh).</strong> The IEA's Energy and
+      AI report is the central source; the April 2026 Key Questions update
+      raised the 2024 figure from 415 TWh in the original report to 460,
+      which the site now reflects everywhere. The IEA's methodology is
+      bottom-up — hyperscale facilities tracked at the operator level
+      where disclosures permit, enterprise data centers estimated from
+      server-shipment data, and crypto categorized separately. The figure
+      excludes Bitcoin mining, which appears as its own bar.
+    </p>
+
+    <p>
+      <strong>Global video gaming (75–285 TWh).</strong> Gaming has the
+      widest band on the chart and the weakest underlying data. Lawrence
+      Berkeley's gaming-computer study estimates U.S. gaming-computer
+      electricity at around 32 TWh; extrapolating to a global figure
+      depends on platform mix (PC vs. console vs. mobile), how peripherals
+      are counted, and whether streaming and download infrastructure roll
+      up to gaming or to data centers. The 75-TWh lower bound counts
+      gaming hardware alone; the 285-TWh upper bound includes game
+      distribution, streaming, and the ad-tech that wraps around them.
+      Both endpoints are defensible; neither is settled.
+    </p>
+
+    <p>
+      <strong>Bitcoin mining (140–200 TWh).</strong> Cambridge's CBECI
+      maintains two estimators in parallel. Their direct miner survey
+      lands at the lower end; their hashrate-based index, which models the
+      network's installed mining hardware, lands at the upper end. The
+      range here brackets that spread for 2024. Bitcoin is single-purpose
+      load — the network's security model depends on burning electricity,
+      and the protocol adjusts difficulty to match available hashrate, so
+      efficiency improvements lower energy per hash but not energy per
+      unit of security.
+    </p>
+
+    <p>
+      <strong>Global EV charging (180 TWh).</strong> IEA's Global EV
+      Outlook 2025 estimates 2024 global EV electricity consumption at
+      around 180 TWh, up nearly 60% from 2023. The figure is computed
+      from the global EV fleet times an average per-vehicle annual kWh
+      consumption, derived from country-level driving and efficiency data.
+      The high confidence comes from comparatively good data on both
+      inputs — fleet registration in major markets and per-vehicle
+      consumption from regulatory filings.
+    </p>
+
+    <p>
+      <strong>AI workloads within data centers (30–80 TWh).</strong> Same
+      range and same reasoning as the primer's section above. The IEA's
+      central estimate is around 65 TWh; the wider literature brackets the
+      same year at 30 to 80 depending on what counts as an AI workload at
+      hyperscale. The bar is plotted as a range because no single number
+      inside the band is more defensible than the others.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The chart compares figures with different definitional boundaries.
+      Data-center electricity is metered at the facility level and rolls
+      up through utility filings; gaming and Bitcoin are mostly modeled
+      bottom-up from device populations and per-device energy assumptions;
+      EV charging is modeled from fleet times average use. Putting them
+      on one axis gives the right scale picture but flattens the
+      methodological differences. The U.S. residential reference bar sits
+      at the top as scaffolding — a calibration line for how big the
+      others are relative to one country's homes — styled at low opacity
+      to keep it visually subordinate to the comparison set.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Two of the bars carry the lowest confidence labels: gaming (low)
+      and AI (low-medium). Gaming is the widest because the underlying
+      data is mostly LBNL's U.S. gaming-computer study extrapolated
+      globally with assumption-heavy multipliers. AI is low-medium for
+      the definitional reasons walked through above. Bitcoin sits at
+      medium because Cambridge's two estimators agree on order of
+      magnitude but diverge by roughly a third on the exact figure. The
+      remaining three (residential, data centers, EV charging) come from
+      primary tracking sources with comparatively narrow bands. The
+      chart's bottom-line ordering — data centers clearly above the
+      gaming/Bitcoin/EV cluster, AI clearly below it — holds across the
+      uncertainty bands.
+    </p>
+
+    <SourceLine
+      sources={annual.sources}
+      lastVerified={annual.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="water-bracket">
+    <p class="display-where">Home page infographic</p>
+    <h2>Are AI data centers thirstier than golf courses?</h2>
+
+    <p>
+      The water-bracket chart sets four data-center bars (two boundaries
+      times two scopes) against two golf bars (U.S. and global), all on
+      one axis in billions of gallons per year. The boundary question —
+      whether to count just the water flowing through cooling loops or
+      also the water consumed at the power plants generating the data
+      center's electricity — is the editorial pivot of the whole
+      infographic. Moving the line shifts the answer by an order of
+      magnitude.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. golf courses (531 Bgal).</strong> GCSAA's Golf Course
+      Environmental Profile (Phase 4) Water Use & Management Practices
+      survey reports 2024 U.S. golf-course irrigation at roughly 531
+      billion gallons. The figure is built from operator survey responses
+      scaled to the national course count. Confidence is medium-high: the
+      methodology is mature, response rates are decent, and recent updates
+      have moved the figure only modestly.
+    </p>
+
+    <p>
+      <strong>Global golf courses (800–1,500 Bgal — site estimate).</strong>
+      No primary source publishes a global golf water figure. The 800–1,500
+      range is derived in-house: U.S. per-course averages from GCSAA,
+      multiplied across the R&A's count of approximately 38,860 courses
+      globally, with bracketing assumptions about how non-U.S. courses'
+      water use compares to the U.S. baseline (cooler and wetter regions
+      lower the average; arid regions raise it). "Site estimate" on the
+      chart is literal — this is the only figure on the site computed
+      in-house. If a primary source surfaces, the band tightens or
+      shifts.
+    </p>
+
+    <p>
+      <strong>Data centers — direct cooling water.</strong> This is the
+      water flowing through cooling loops at the facilities themselves.
+      Lawrence Berkeley's 2024 U.S. Data Center Energy Usage Report
+      estimates U.S. data centers at about 17 billion gallons in 2023,
+      with high confidence — the figure rolls up from facility-level
+      disclosures and engineering estimates of cooling-load water demand.
+      Globally, the 45–90 billion gallon range extrapolates U.S. per-MW
+      water-use intensity to the global data-center electricity footprint,
+      with the band reflecting variation in cooling architecture
+      (water-cooled, air-cooled, and evaporative) and climate.
+    </p>
+
+    <p>
+      <strong>Data centers — including electricity-generation water.</strong>
+      This boundary adds the water consumed at the power plants generating
+      the data center's electricity, mostly thermoelectric plants (coal,
+      gas, nuclear) that use evaporative cooling on their condensers.
+      LBNL's U.S. 2023 figure is about 211 billion gallons, again with
+      high confidence. Globally, the 500–700 billion gallon range applies
+      the same boundary to the global data-center electricity figure,
+      weighted by regional grid mixes — coal- and nuclear-heavy grids
+      consume more water per kWh than wind- and solar-heavy grids, which
+      is why the band is wide. The boundary shift takes the global figure
+      from 45–90 to 500–700, and the U.S. figure from 17 to 211. That is
+      the order-of-magnitude jump.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      Three modeling assumptions move the bars. The global golf range
+      (800–1,500) depends on a multiplier for non-U.S. per-course water
+      use relative to the U.S. baseline; the band brackets a range of
+      climate and irrigation-practice assumptions across Europe, Asia,
+      and Latin America. The global data-center direct-cooling range
+      (45–90) extrapolates U.S. per-MW water intensity globally; the band
+      reflects variation in cooling architecture and climate. The global
+      inclusive range (500–700) further depends on regional grid mixes —
+      coal- and nuclear-heavy grids consume more water per kWh than wind-
+      and solar-heavy grids — so any shift in the global generation mix
+      shifts this number.
+    </p>
+
+    <p>
+      A separate note about reading the chart: golf irrigation and
+      data-center water differ in environmental terms. Golf irrigation is
+      mostly applied to permeable ground; some returns to local aquifers,
+      some evaporates, some runs off. Cooling-tower evaporation and
+      thermoelectric consumptive use are largely lost to atmosphere. The
+      chart shows annual volumes; environmental impact is a different
+      question.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The two single-bar U.S. figures (17 and 211 Bgal, direct and
+      inclusive) carry high confidence — LBNL's report is the canonical
+      primary source and its facility-level methodology is
+      well-documented. The U.S. golf figure (531) is medium-high;
+      survey-based but mature. The two global data-center ranges (45–90
+      direct, 500–700 inclusive) are medium-low and low-medium
+      respectively, with most of the spread in the inclusive case coming
+      from regional grid-mix variation. The global golf figure
+      (800–1,500) is the lowest-confidence number on the chart; it is
+      the only figure on the site without a primary source. The chart's
+      editorial point — that the boundary choice swings the comparison
+      by an order of magnitude — holds across the uncertainty bands.
+    </p>
+
+    <SourceLine
+      sources={waterBracket.sources}
+      lastVerified={waterBracket.last_verified}
+    />
+  </section>
+
 </Layout>
 
 <style>

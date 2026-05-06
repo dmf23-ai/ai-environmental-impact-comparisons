@@ -193,7 +193,11 @@ const RULE = "#e6e3dc";
 
   <figcaption>{data.summary}</figcaption>
 
-  <SourceLine sources={data.sources} lastVerified={data.last_verified} />
+  <SourceLine
+    sources={data.sources}
+    lastVerified={data.last_verified}
+    methodsAnchor={data.anchor}
+  />
 </figure>
 
 <style>
