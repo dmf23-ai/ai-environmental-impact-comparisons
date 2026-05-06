@@ -28,6 +28,12 @@ const aviation = findComparison("co2-aviation-vs-datacenters");
 const cementSteel = findComparison("co2-cement-steel-vs-datacenters");
 const cattle = findComparison("co2-cattle-vs-datacenters");
 const lawnEquipment = findComparison("co2-lawn-equipment-vs-datacenters");
+const waterVsGolf = findComparison("water-dc-vs-golf");
+const usHouseholds = findComparison("electricity-us-households-vs-datacenters");
+const gaming = findComparison("electricity-video-gaming-vs-datacenters");
+const streaming = findComparison("electricity-video-streaming-vs-datacenters");
+const evCharging = findComparison("electricity-ev-charging-vs-datacenters");
+const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 ---
 
 <Layout title={title} description={description}>
@@ -897,6 +903,82 @@ const lawnEquipment = findComparison("co2-lawn-equipment-vs-datacenters");
     />
   </section>
 
+  <section class="method-section" id="water-vs-golf">
+    <p class="display-where">Comparison card</p>
+    <h2>Water: AI data centers vs. U.S. golf courses</h2>
+
+    <p>
+      This card sets U.S. golf-course irrigation against the water that
+      runs through global and U.S. data centers, in billions of gallons
+      per year. Six bars: U.S. and global golf, data centers under a
+      "direct cooling" boundary, and data centers under a wider boundary
+      that adds the water used to generate their electricity.
+    </p>
+
+    <p>
+      The comparison is widely cited and rarely complete. "Data centers
+      use less water than golf courses" is true under one boundary and
+      false under another, and the boundary is most of the argument. The
+      card pairs the same data-center fleet against the same golf figure
+      twice, once narrow and once wide, so the rhetorical move is visible
+      rather than implicit. The water-bracket infographic on the home
+      page makes the same point with the same numbers; this card is the
+      prose-card form of it, sitting alongside the other comparisons
+      rather than standing alone as a teaching visual.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      All six figures are derived in
+      <a href="#water-bracket">§Are AI data centers thirstier than golf
+      courses?</a> — golf U.S. and global, data centers direct and
+      inclusive, U.S. and global pairs within each.
+    </p>
+
+    <SourceLine
+      sources={waterVsGolf.sources}
+      lastVerified={waterVsGolf.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-us-households">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: U.S. residential vs. global data centers</h2>
+
+    <p>
+      This card sets U.S. residential electricity consumption against
+      every data center on the planet, in terawatt-hours per year. Two
+      bars: U.S. homes at 1,550 TWh in 2024, global data centers at 460.
+    </p>
+
+    <p>
+      The card exists to keep residential scale visible while the
+      data-center conversation gets louder. American homes — heating,
+      cooling, lighting, refrigerators, water heaters, screens — still
+      move more electricity than every data center in the world combined,
+      by roughly three to one. The comparison frames AI's grid presence
+      less as a coming flood and more as a new, growing slice inside an
+      energy economy whose biggest consumer remains, at the U.S. scale,
+      just people running their houses.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      Both figures sit in
+      <a href="#annual-twh">§How big is AI, really?</a> — U.S.
+      residential as the reference scaffolding bar at 1,550 TWh, and
+      global data centers at 460 TWh, with the IEA April 2026
+      reconciliation (415 → 460) noted there.
+    </p>
+
+    <SourceLine
+      sources={usHouseholds.sources}
+      lastVerified={usHouseholds.last_verified}
+    />
+  </section>
+
   <section class="method-section" id="electricity-ac">
     <p class="display-where">Comparison card</p>
     <h2>Electricity: U.S. residential air conditioning vs. global data centers</h2>
@@ -1061,6 +1143,178 @@ const lawnEquipment = findComparison("co2-lawn-equipment-vs-datacenters");
     <SourceLine
       sources={holidayLights.sources}
       lastVerified={holidayLights.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-gaming">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: Global video gaming vs. data centers</h2>
+
+    <p>
+      This card sets the global video-gaming ecosystem — consoles, PCs,
+      handhelds, and the streaming infrastructure that supports them —
+      against every data center on the planet, in terawatt-hours per
+      year. Two bars: gaming somewhere between 75 and 285 TWh, global
+      data centers at 460.
+    </p>
+
+    <p>
+      The pairing is included because the claim "video games use as much
+      electricity as Country X" gets repeated often, and the card lets a
+      reader see what the underlying spread looks like. The high end of
+      the gaming range approaches the global data-center figure; the low
+      end is closer to a quarter of it. The point is less to settle the
+      comparison than to make its softness legible: gaming is the weakest
+      electricity figure on the site, and the headline "as much as a
+      country" rests on which end of a four-fold range you pick.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      Both figures are derived in
+      <a href="#annual-twh">§How big is AI, really?</a> — gaming as
+      the 75–285 TWh range and global data centers at 460 TWh.
+    </p>
+
+    <SourceLine
+      sources={gaming.sources}
+      lastVerified={gaming.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-streaming">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: Global video streaming vs. data centers</h2>
+
+    <p>
+      This card sets the global video-streaming layer — Netflix, YouTube,
+      Disney+, Twitch and the rest — against every data center on the
+      planet, in terawatt-hours per year. Two bars: streaming somewhere
+      between 100 and 300 TWh, global data centers at 460.
+    </p>
+
+    <p>
+      The card pairs streaming and data centers because the "streaming
+      uses as much electricity as a small country" headline circulates in
+      much the same shape as the gaming and AI ones. The IEA has spent
+      years correcting the upper end of the streaming range, and the
+      range remains wide: most of the energy lives in components shared
+      with everything else — routers, content-delivery networks, screens,
+      home Wi-Fi — and analysts disagree on which side of the ledger to
+      put each one. The hourly hero on the home page renders the same
+      activity per hour rather than per year (36–56 grams of CO₂ for an
+      HD stream on a TV); the per-hour figure is steadier than the annual
+      one because it sidesteps most of the boundary fight.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>Global video streaming, recent (100–300 TWh).</strong>
+      A composite range from the IEA streaming fact-check (which argues
+      for the lower end after correcting widely-cited 2019 figures), the
+      Carbon Trust's video-streaming carbon study, and the IEA Energy
+      and AI rollup. Whether end-user devices, home Wi-Fi, and last-mile
+      networks count on streaming's side of the ledger or get attributed
+      elsewhere is the dominant source of spread; choices on those three
+      accounting questions move the figure two- or three-fold. Confidence
+      is low.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (460 TWh).</strong> Same IEA
+      Energy and AI source as the rest of the electricity comparisons,
+      derived in <a href="#annual-twh">§How big is AI, really?</a> with
+      the IEA April 2026 reconciliation (415 → 460) noted there.
+    </p>
+
+    <p>
+      For the per-hour version of this comparison — what an hour of HD
+      streaming looks like alongside an hour of driving, gaming, or AI
+      chat — see <a href="#hourly-hero">§Per-hour CO₂ comparison</a>.
+    </p>
+
+    <SourceLine
+      sources={streaming.sources}
+      lastVerified={streaming.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-bitcoin">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: Bitcoin mining vs. data centers</h2>
+
+    <p>
+      This card sets Bitcoin's mining electricity against every data
+      center on the planet, in terawatt-hours per year. Two bars: Bitcoin
+      somewhere between 140 and 200 TWh, global data centers at 460.
+    </p>
+
+    <p>
+      Bitcoin earns its place because it is one of the only other
+      pure-compute, planet-scale electrical loads on the chart, and
+      because it answers an obvious question: is AI bigger than Bitcoin
+      yet? Today the answer is no — AI's 30–80 TWh slice fits inside
+      Bitcoin's range. But Bitcoin's load is structurally fixed by its
+      consensus mechanism (the network's security depends on burning
+      electricity) while AI's load grows with usage. Whatever you make of
+      the trade-offs of either, they sit in the same scale conversation
+      without being part of each other: most Bitcoin mining lives outside
+      hyperscale data centers and is excluded from the IEA's data-center
+      figures.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      Both figures are derived in
+      <a href="#annual-twh">§How big is AI, really?</a> — Bitcoin as the
+      140–200 TWh range (Cambridge CBECI low end; market-based
+      estimators higher) and global data centers at 460 TWh.
+    </p>
+
+    <SourceLine
+      sources={bitcoin.sources}
+      lastVerified={bitcoin.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-ev-charging">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: Global EV charging vs. data centers</h2>
+
+    <p>
+      This card sets electricity drawn by the world's electric vehicles
+      against every data center on the planet, in terawatt-hours per
+      year. Two bars: EV charging at 180 TWh in 2024, global data
+      centers at 460.
+    </p>
+
+    <p>
+      The two are growing on similar curves and for similar reasons:
+      both are new gigawatt-scale loads landing in the same regional
+      grids that are also trying to retire coal. EVs grew nearly
+      60 percent in a single year and the IEA expects them past 2,000
+      TWh by 2035 in its main scenario; data-center load is on its own
+      steep climb in the same window. For grid planners the two
+      questions converge — same kilowatt-hours, same substations, often
+      the same utilities deciding what to commission next.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      Both figures sit in
+      <a href="#annual-twh">§How big is AI, really?</a> — EV charging
+      at 180 TWh (IEA Global EV Outlook 2025) and global data centers
+      at 460 TWh (IEA Energy and AI, April 2026 reconciliation
+      applied).
+    </p>
+
+    <SourceLine
+      sources={evCharging.sources}
+      lastVerified={evCharging.last_verified}
     />
   </section>
 
