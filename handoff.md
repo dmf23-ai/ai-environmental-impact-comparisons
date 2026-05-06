@@ -33,9 +33,11 @@ Completed:
 
 IEA April 2026 audit completed 2026-05-03 — all figures reconciled (electricity 415→460 TWh in 8 places, CO₂ 220→180 Mt in 5 places), prose recomputes applied (ratios, percentages, "X times" phrasings), `last_verified` bumped on 13 sections (12 comparison cards + annual-twh infographic). The site is consistent with the IEA April 2026 "Key Questions on Energy and AI" update across all displays.
 
-**Phase 6 in progress.** /methods page skeleton landed 2026-05-04 with the hourly-hero (per-hour CO₂) section. The "How this was calculated →" link affordance is wired through `SourceLine.astro` via a new optional `methodsAnchor` prop; `HourlyImpactHero.astro` is the first consumer. Visual #7 (training vs. inference over time) stays parked — landing it after /methods exists means the visual ships with its methodology section live on day one. Visual #8 (watt-scale primer) is also a /methods candidate per the original plan.
+**Phase 6 in progress.** Session A of the infographics methodology pass landed 2026-05-05 — three new sections in methods.astro (range-vs-point-primer, annual-twh, water-bracket) plus the matching three components now pass `methodsAnchor={data.anchor}` to SourceLine. Each rendered card on the home page now shows a "How this was calculated →" link below its source line.
 
-Next: **replicate the methodology pattern to the six infographics**, then to the fourteen comparison cards. Each component passes its own `methodsAnchor`; each gets a section in methods.astro. Sensible cadence: all six infographics in one session (they share the schema), then comparison cards in one or two sessions.
+Cadence note: David and Claude opted for two sessions over one, grouped by methodological interlock. Session A took the three independent infographics; Session B takes the interlocking triad (DC trajectory, AI-share trajectory, household-equivalents), which all share IEA scenarios + Goldman April 2026 + the AI 2024 anchor as cross-references and benefit from being written in one pass.
+
+Next: **Session B** — three remaining infographic methodology sections (DC trajectory, AI-share trajectory, household-equivalents) plus their `methodsAnchor` wirings. After that: comparison cards (one or two sessions). Visual #7 (training vs. inference over time) and Visual #8 (watt-scale primer) remain parked, slated to ship after their methodology sections exist.
 
 ## Read these in order
 
@@ -74,9 +76,15 @@ The Anti-AI-speak rubric memory file (in Claude's persistent memory, not this fo
 - **Trajectory band fill opacity (0.16).** May be too pale at typical viewing distance — visible but doesn't carry much weight. Bump to 0.22 if the live charts read under-emphasized.
 - **Two virtue-claim patterns in `website_plan.md` Section 1 prose** — "honest ranges" and "calibrate, not to comfort or alarm" (both on line 9) — flagged during the Section 6 rename pass but not scrubbed. Planning-doc prose rather than site copy; decide whether to scrub next pass.
 - **Historical line jumpiness from irregular anchor years** (2017, 2018, 2022, 2024, 2025) on the DC trajectory. The source-faithful choice creates non-uniform slopes between anchors. If it reads as broken rather than precise, options: smooth interpolation with an "interpolated" note in methodology, or accept the jumpiness as source-truth fidelity.
+- **HourlyImpactHero.astro has stray duplicate-tail content** from a prior recovery — the `<style>` block closes cleanly, then there's an orphan `font-size: 1.7rem; }} </style>` tacked on after. Astro is tolerating it on the live build, but the file is dirty. Five-second cleanup; queued for Session B housekeeping or skip.
 
 Closed during Phase 6:
 
+- Range-vs-point primer methodology section landed 2026-05-05. Walks the AI-2024 demo number (65 TWh central, 30–80 band) with three derivation paragraphs: the single-point framing, the range framing, and "the licensed exception" describing where point estimates are still allowed. `InfographicRangeVsPoint.astro` now passes `methodsAnchor={data.anchor}` to SourceLine.
+- Annual-TWh methodology section landed 2026-05-05. Six-figure walkthrough — U.S. residential reference (1,550 TWh), global data centers (460), gaming (75–285), Bitcoin (140–200), EV charging (180), AI (30–80) — with per-figure source notes. The IEA April 2026 reconciliation (415→460) is called out in the data-centers paragraph. `InfographicAnnualTwh.astro` wired same pattern.
+- Water-bracket methodology section landed 2026-05-05. Walked Derivation by bucket (golf U.S./global, DC direct, DC inclusive) — six rows but four logical buckets, since the U.S./global rows pair within each boundary. Two-paragraph Assumptions block: three modeling assumptions, plus a separate framing note that golf irrigation and data-center water differ in environmental terms and the chart shows volumes not impacts. `InfographicWaterBracket.astro` wired same pattern.
+- methods.astro frontmatter pattern established: a `findInfographic(id)` helper does lookup-by-id on the `infographics` array, with each section's data assigned to a named const (`primer`, `annual`, `waterBracket`, ...). Adding a new section in Session B = one find-call line + one `<section>` block + the component wiring.
+- Warmup scrub of website_plan.md Section 1: replaced "honest ranges" and "calibrate, not to comfort or alarm" virtue-claim patterns. New text: "comparisons exist to set the scale of the thing. Each number is a range with the spread shown and the sources linked." Anti-AI-speak rubric Tier 1 #1 (negation-correction) and Tier 2 #14 (honest virtue-claim) both addressed.
 - /methods page skeleton landed 2026-05-04 — first section ships with the hourly-hero (per-hour CO₂ comparison). Section schema established: small uppercase locator + h2 title + intro paragraph + Derivation subsection + Assumptions subsection + Uncertainty subsection + SourceLine. Reusable for all subsequent per-display sections.
 - "How this was calculated →" link affordance pattern landed via `SourceLine.astro` 2026-05-04 — accepts an optional `methodsAnchor` prop and conditionally renders an `<a>` pointing at `/methods#<methodsAnchor>` below the verified date. Consumers opt in by passing the prop. `HourlyImpactHero.astro` is the first consumer; `ComparisonCard.astro` and the six infographic components plug in next.
 - Anchor convention for /methods: comparison cards reuse their existing `anchor` field (so `/methods#water-vs-golf` matches `/comparisons#water-vs-golf`). Hourly hero is `hourly-hero`. Infographics use their figures.json `infographics` key in lowercase-hyphen form (e.g. `range-vs-point-primer`, `dc-trajectory`).
@@ -114,6 +122,7 @@ Closed during Phase 5:
 - `git config user.name` and `user.email` are already set on David's machine (handled in Phase 1).
 - **Never run git from the sandbox bash, not even read-only commands.** Even `git status` from the sandbox creates a `.git/index.lock` file, and the sandbox can't delete it afterward. The stale lock then blocks David's local git with `fatal: Unable to create '.git/index.lock': File exists`. Clear it with `Remove-Item .git\index.lock` in PowerShell. All git operations should run in David's local terminal.
 - **System-reminder file-dump tax.** Cowork triggers a system-reminder after each component edit that includes the entire post-edit file content (often 250+ lines, ~2–3K tokens each). Invisible to David but real context spend. Account for this when judging fresh-chat timing in iteration-heavy work — the visible turn count understates real token use.
+- **Byte-cap on Edit/Write observed at ~6.5–7K bytes during Session A (2026-05-05).** Both surgical 1-line Edits and full-file Writes truncated at roughly the same byte position when the target file landed near or above that range. Prior episodes hit at 1.5K and 4K respectively, so the cap is variable; within a single session it has appeared more consistent. Practical rule: if the target file is approaching ~6K bytes after the edit, skip Edit/Write entirely and go straight to a Python heredoc through bash. Saves the truncate-and-recover round-trip. The `feedback_edit_tool_truncation.md` memory captures the broader pattern.
 
 ## File map
 
@@ -135,7 +144,7 @@ src/
   pages/
     index.astro                            ← home: hero + thesis + cta + 6 infographics
     comparisons.astro                      ← lists all ComparisonCards from figures.json
-    methods.astro                          ← per-display methodology page (Phase 6, hourly-hero section live)
+    methods.astro                          ← per-display methodology page (Phase 6, 4 sections live: hourly-hero, range-vs-point-primer, annual-twh, water-bracket)
   lib/niceCeiling.ts                       ← shared niceCeiling helper, parameterized for granular mantissa steps
   styles/global.css                        ← design tokens, base styles, masthead, common chrome
 
