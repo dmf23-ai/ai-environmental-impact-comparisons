@@ -14,6 +14,9 @@ const findInfographic = (id: string) =>
 const primer = findInfographic("range-vs-point-primer");
 const annual = findInfographic("annual-twh");
 const waterBracket = findInfographic("water-bracket");
+const dcTrajectory = findInfographic("dc-trajectory");
+const aiShare = findInfographic("ai-share-trajectory");
+const householdEquivalents = findInfographic("household-equivalents");
 ---
 
 <Layout title={title} description={description}>
@@ -429,6 +432,358 @@ const waterBracket = findInfographic("water-bracket");
     <SourceLine
       sources={waterBracket.sources}
       lastVerified={waterBracket.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="dc-trajectory">
+    <p class="display-where">Home page infographic</p>
+    <h2>Data-center electricity, 2017 to 2030</h2>
+
+    <p>
+      The trajectory chart plots global data-center electricity in
+      terawatt-hours per year, with five historical anchor points from
+      2017 to 2025 and a projection band fanning out from 2025 to 2030.
+      The boundary between actual and projected sits at 2025; the right
+      side of the chart is scenario rather than data.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>The flat era (2017–2022).</strong> The IEA's tracking pegs
+      global data-center electricity at roughly 200 TWh in 2017 and
+      2018, climbing to about 290 TWh by 2022. Through that five-year
+      stretch, efficiency gains — Moore's law, improvements in cooling
+      and PUE, the consolidation of enterprise workloads into
+      hyperscale facilities — roughly canceled the underlying growth in
+      compute demand. The line runs nearly flat from 2017 to 2018 and
+      rises gently to 2022.
+    </p>
+
+    <p>
+      <strong>The bend (2024–2025).</strong> Two more recent anchors
+      sit on the chart: 460 TWh in 2024 and 485 TWh in 2025. The 2024
+      figure is the IEA's central estimate for global data-center
+      electricity, revised from 415 to 460 in the April 2026 Key
+      Questions update — the same revision that propagates through
+      every site display showing a 2024 number. The 2025 figure comes
+      from the IEA's April 2026 commentary on the surge year, which
+      reports a 17 percent jump from 2024. The visual effect is a
+      clear bend away from the 2017–2022 baseline.
+    </p>
+
+    <p>
+      <strong>Lower bound — IEA Headwinds (830 TWh by 2030).</strong>
+      The bottom edge of the projection band runs from 485 in 2025 to
+      830 in 2030. The IEA publishes its Headwinds scenario as a
+      constrained case in which permitting delays, transformer
+      shortages, water constraints in arid build sites, and higher
+      capital costs slow construction. 830 TWh in 2030 still
+      represents a near-doubling from 2024, but well short of the
+      base case.
+    </p>
+
+    <p>
+      <strong>Central — IEA base case (950 TWh by 2030).</strong> The
+      dashed central line runs from 485 in 2025 to 950 in 2030. This
+      is the IEA Energy and AI base-case scenario as updated in April
+      2026. It assumes continued hyperscale build-out at announced
+      rates, ordinary efficiency gains in accelerator silicon and
+      cooling, and no major grid-side bottleneck stalling deployments.
+    </p>
+
+    <p>
+      <strong>Upper bound — Goldman Sachs (1,350 TWh by 2030).</strong>
+      The top edge of the band uses Goldman Sachs's April 2026
+      forecast for global data-center power demand, which lands at
+      roughly 1,350 TWh by 2030 — the highest among the major industry
+      trackers' published figures. Pairing it with IEA Headwinds at
+      the bottom gives the chart the widest defensible band.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      Three modeling choices set the shape of the chart. The
+      historical line uses the IEA's published anchor years rather
+      than interpolating annual values; 2019, 2020, 2021, and 2023 are
+      not plotted because the IEA did not publish definitive figures
+      for those years, and the slopes between anchors are therefore
+      artifacts of irregular spacing rather than annual change rates.
+      The projection band is bracketed by IEA Headwinds at the bottom
+      and Goldman Sachs at the top because pairing them yields the
+      widest defensible span; using only IEA scenarios would narrow
+      the band and arguably overstate confidence. The 2024 figure of
+      460 TWh reflects the IEA's April 2026 revision and replaces the
+      415 TWh figure from the original Energy and AI report.
+    </p>
+
+    <p>
+      A separate framing note: most of the new load shown by the
+      projection is hyperscale build-out, and most of that hyperscale
+      build-out is AI-adjacent — meaning the facilities themselves run
+      a mix of training, inference, and ordinary cloud workloads, and
+      the AI-specific share within them is its own question. The next
+      chart on the home page (AI's slice) addresses that share
+      directly.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Confidence climbs across the historical line. The 2017 and 2018
+      figures are medium; the IEA's methodology improved between the
+      original Digitalisation and Energy report and the Energy and AI
+      series, and the early figures carry more spread than the later
+      ones. The 2022 anchor is medium-high. The 2024 and 2025 figures
+      are both high — facility-level disclosures and hyperscaler
+      earnings filings have made the recent past well-bounded. The
+      projection band is medium overall; the spread itself is the
+      confidence statement, with most of the disagreement between IEA
+      and Goldman coming from differing assumptions about how fast
+      accelerator efficiency will improve and how aggressively
+      hyperscalers will buy ahead of demand.
+    </p>
+
+    <SourceLine
+      sources={dcTrajectory.sources}
+      lastVerified={dcTrajectory.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="ai-share-trajectory">
+    <p class="display-where">Home page infographic</p>
+    <h2>AI's slice of data-center electricity</h2>
+
+    <p>
+      This chart plots AI workloads inside global data centers from
+      2024 to 2030. It uses the same time-axis logic as the
+      data-center trajectory above and shares its projection-band
+      shape, but it has a narrower y-axis, only one historical anchor,
+      and a different set of bracketing scenarios.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>The single 2024 anchor (65 TWh, range 30–80).</strong>
+      The IEA's Energy and AI report places AI-specific electricity at
+      roughly 65 TWh in 2024 — about 14 percent of the 460-TWh
+      data-center total for the same year. The wider literature
+      brackets the same year and the same metric at 30 to 80 TWh; the
+      spread is mostly definitional, with different analysts drawing
+      the line in different places between training, inference,
+      research compute, and recommender systems. The chart shows the
+      central 65 figure as the anchor and the 30–80 band as the 2024
+      width of the projection fan.
+    </p>
+
+    <p>
+      <strong>Why 2024 is the start year.</strong> Estimates of AI
+      electricity before 2024 do exist, but they vary by an order of
+      magnitude on the same definitional split — 5 to 50 TWh for 2022
+      is a typical spread across credible sources. Plotting two empty
+      years in front of the only firm anchor would have read as a
+      broken chart; the prose handles the pre-2024 history where the
+      visual cannot.
+    </p>
+
+    <p>
+      <strong>Lower bound — IEA 200 TWh by 2030.</strong> The bottom
+      edge of the band runs from 30 in 2024 to 200 in 2030. The 200
+      figure is the IEA's lower scenario for AI electricity in 2030,
+      consistent with rapid efficiency gains in next-generation
+      accelerators, slowing inference scale-out, or both.
+    </p>
+
+    <p>
+      <strong>Central — IEA midpoint (300 TWh by 2030).</strong> The
+      dashed central line runs from the 65-TWh 2024 anchor to 300 TWh
+      in 2030. The IEA does not publish a single AI-specific central
+      case, so the 300 figure is the geometric center of the 200–400
+      band described in the bounds.
+    </p>
+
+    <p>
+      <strong>Upper bound — IEA 400 TWh by 2030.</strong> The top edge
+      runs from 80 in 2024 to 400 in 2030. The 400 figure is the IEA's
+      upper scenario, consistent with continued aggressive inference
+      scale-out, large agentic workflows, and slower per-query
+      efficiency gains. The wider literature reaches as high as 900
+      TWh at the very upper edge; the chart treats that figure as a
+      tail rather than a central case and addresses it in prose only.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The chart depends on a single source for both the 2024 anchor
+      and the 2030 bracket: the IEA's Energy and AI report and its
+      April 2026 Key Questions update. Pre-2024 history is excluded
+      from the visual on the grounds that the underlying numbers
+      don't survive scrutiny at chart resolution. The 30–80 width at
+      2024 widens the IEA's central 65 with the wider literature's
+      range, on the same logic as the range-vs-point primer: when the
+      spread of credible estimates is meaningful, the band carries
+      more information than the point.
+    </p>
+
+    <p>
+      A separate framing note: AI's slice grows even in the lower
+      scenario, but its share of the data-center total moves only
+      modestly — from about 14 percent in 2024 to roughly 24 percent
+      in the IEA central 2030 case. Most of the rest of the
+      data-center growth shown in the trajectory chart above is
+      non-AI hyperscale capacity.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The 2024 anchor carries low-medium confidence — the wobbliest
+      number on the home page, by the site's own labeling — for the
+      definitional reasons walked through above. The projection band
+      is medium overall, with the wide fan reflecting the same
+      definitional spread compounded by genuine uncertainty about
+      inference scale-up rates and accelerator efficiency. The 200–400
+      IEA bracket holds across most credible analyses; the 900 TWh
+      tail sits well outside it and depends on assumptions about
+      agentic workloads that would need very large behavioral changes
+      to materialize.
+    </p>
+
+    <SourceLine
+      sources={aiShare.sources}
+      lastVerified={aiShare.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="household-equivalents">
+    <p class="display-where">Home page infographic</p>
+    <h2>Data-center electricity, in household-years</h2>
+
+    <p>
+      This chart converts terawatt-hours into a unit most readers have
+      a feel for: U.S. household electricity. A horizontal hairline
+      runs between the 2024 row and the 2030 row, with actual values
+      above and projection below. Six bars in descending priority —
+      U.S. residential reference at the top, then five
+      compute-adjacent loads, ending with the 2030 data-center
+      projection.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>The conversion factor (11.9 MWh per household per year).</strong>
+      The EIA's Electric Power Annual divides total U.S. residential
+      electricity (1,550 TWh in 2024) by the country's roughly 130
+      million households, which yields about 11.9 MWh per household
+      per year. Every TWh therefore stands in for roughly 84,000
+      American homes' annual electricity. The chart applies this same
+      factor to every bar.
+    </p>
+
+    <p>
+      <strong>U.S. residential reference (130 million households).</strong>
+      The reference bar at the top is U.S. total residential
+      electricity — 1,550 TWh in 2024 — converted at the chart's own
+      factor, which by construction yields 130 million households.
+      The bar exists as scaffolding: a calibration line for how big
+      the others are relative to one country's homes. It's styled in
+      faint accent at low opacity so it reads as the chart's
+      background scale rather than as a comparison item.
+    </p>
+
+    <p>
+      <strong>AI workloads, 2024 (2.5–6.7 million households).</strong>
+      The 30–80 TWh AI range, divided by 11.9 MWh per household,
+      yields 2.5 to 6.7 million U.S. households' worth of electricity.
+      Two and a half to seven million homes is roughly the size of a
+      mid-Atlantic state — Pennsylvania at the lower end, somewhere
+      near New Jersey at the upper.
+    </p>
+
+    <p>
+      <strong>Bitcoin mining, 2024 (12–17 million households).</strong>
+      The 140–200 TWh Bitcoin range converts to 12 to 17 million
+      households — roughly the size of Texas, give or take. Bitcoin is
+      bigger than AI by this yardstick today, by a factor of roughly
+      two to five.
+    </p>
+
+    <p>
+      <strong>Global video gaming (6.3–24 million households).</strong>
+      The 75–285 TWh gaming range yields 6.3 to 24 million households.
+      The wide spread reflects the underlying figure's weakness,
+      walked through in the annual-TWh section above. The bar is
+      plotted as a range in the same width and styling as AI's, since
+      both are genuine ranges rather than central estimates.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (39 million households).</strong>
+      The 460-TWh global data-center figure yields about 39 million
+      households — roughly 30 percent of all American homes. This is
+      the chart's anchor row: the figure other bars are sized against.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2030 (70–113 million households,
+      central 80).</strong> The 830–1,350 TWh
+      IEA-Headwinds-to-Goldman band, drawn from the trajectory chart
+      above, converts to 70 to 113 million households at the same
+      11.9 MWh factor. The IEA base case at 950 TWh maps to 80
+      million — the central tick on the bar. The 2030 row sits below
+      the actual/projected hairline; its visual treatment matches the
+      other range bars but the hairline cues the reader that this row
+      is scenario, not measurement.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      Two assumptions deserve explicit framing. The first is the
+      yardstick itself: 11.9 MWh is a U.S. average applied to global
+      figures, which measures scale rather than geography. A bar
+      saying "39 million households" does not mean 39 million homes
+      in any specific country; it means an amount of electricity
+      that, if drawn by U.S.-average households, would supply that
+      many. The second is shape: data centers run flat all year,
+      while residential load is peaky — heavy on summer afternoons in
+      the South, on winter evenings in the North. Equating their
+      annual totals is a useful translation for scale and a
+      misleading one for grid impact at any specific hour.
+    </p>
+
+    <p>
+      A separate framing note about the projection bar: the 2030
+      range is bracketed by IEA Headwinds at the low end and Goldman
+      Sachs at the high end, the same bracketing used by the
+      data-center trajectory chart. Using IEA scenarios alone would
+      yield a narrower band; pairing IEA Headwinds with Goldman gives
+      the widest defensible spread.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Each row inherits the confidence label of its underlying TWh
+      figure, walked through in the annual-TWh and trajectory
+      sections above. Bitcoin (medium) and global data centers
+      (medium-high) are well-bounded. AI (low-medium) and gaming
+      (low) carry the widest fractional uncertainty. The 2030
+      data-center projection (medium) is bracketed by the spread
+      between IEA Headwinds and Goldman, which is the chart's most
+      explicit confidence statement. The 11.9 MWh conversion factor
+      itself is high-confidence — EIA reports both the numerator and
+      denominator on a regular schedule, and the factor moves slowly
+      from year to year.
+    </p>
+
+    <SourceLine
+      sources={householdEquivalents.sources}
+      lastVerified={householdEquivalents.last_verified}
     />
   </section>
 
