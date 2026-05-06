@@ -17,6 +17,17 @@ const waterBracket = findInfographic("water-bracket");
 const dcTrajectory = findInfographic("dc-trajectory");
 const aiShare = findInfographic("ai-share-trajectory");
 const householdEquivalents = findInfographic("household-equivalents");
+
+const findComparison = (id: string) =>
+  (figuresData as any).comparisons.find((c: any) => c.id === id);
+const waterResidential = findComparison("water-residential-outdoor");
+const electricityAc = findComparison("electricity-ac-vs-datacenters");
+const holidayLights = findComparison("electricity-holiday-lights-vs-datacenters");
+const driving = findComparison("co2-driving-vs-datacenters");
+const aviation = findComparison("co2-aviation-vs-datacenters");
+const cementSteel = findComparison("co2-cement-steel-vs-datacenters");
+const cattle = findComparison("co2-cattle-vs-datacenters");
+const lawnEquipment = findComparison("co2-lawn-equipment-vs-datacenters");
 ---
 
 <Layout title={title} description={description}>
@@ -784,6 +795,712 @@ const householdEquivalents = findInfographic("household-equivalents");
     <SourceLine
       sources={householdEquivalents.sources}
       lastVerified={householdEquivalents.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="water-residential-outdoor">
+    <p class="display-where">Comparison card</p>
+    <h2>Water: U.S. residential outdoor use vs. AI data centers</h2>
+
+    <p>
+      This card sets U.S. residential outdoor water use — lawns,
+      gardens, driveways — against the global data-center fleet, in
+      billions of gallons per year. Three bars: U.S. lawn-and-garden
+      water at roughly 3,200 billion gallons (3.2 trillion), global
+      data-center direct cooling at 45–90 billion, and global data
+      centers including electricity-generation water at 500–700
+      billion.
+    </p>
+
+    <p>
+      The editorial point parallels the water-bracket infographic but
+      inverts the geographic scope. The water bracket compares U.S.
+      golf to global data centers; this card compares U.S. residential
+      outdoor use to global data centers. The figure that comes out is
+      even more lopsided than the golf comparison, because U.S.
+      residential outdoor water dwarfs U.S. golf — roughly six times
+      larger. Lawns are the largest irrigated crop in the United
+      States by area, and the EPA estimates about half of all outdoor
+      water is wasted to overwatering.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. residential outdoor water, recent (2,900–3,300 Bgal).</strong>
+      From the EPA WaterSense outdoors statistics page, which
+      aggregates data from the Water Research Foundation's residential
+      end-use surveys and U.S. Geological Survey water-withdrawal
+      accounting. The 2,900–3,300 range brackets recent estimates that
+      vary depending on whether the figure is computed from
+      per-household surveys multiplied by household counts, or from
+      utility-side billed-water accounting with an outdoor allocation
+      factor. EPA's headline figure of "about half of outdoor water is
+      wasted" comes from the same underlying surveys. Confidence is
+      medium; the input methodologies are sound but reach different
+      totals depending on which lever the analyst pulls.
+    </p>
+
+    <p>
+      <strong>Global data centers — direct cooling only, 2025 (45–90 Bgal).</strong>
+      Same LBNL-extrapolation derivation as the water-bracket
+      infographic. Direct cooling means water flowing through cooling
+      towers and evaporative chillers at the facilities themselves.
+      Confidence is medium-low; the global figure extrapolates U.S.
+      per-MW intensity to the global data-center electricity
+      footprint.
+    </p>
+
+    <p>
+      <strong>Global data centers — including electricity-generation water, 2025 (500–700 Bgal).</strong>
+      Same source and same derivation as the water-bracket
+      infographic's inclusive bar. The boundary adds water consumed at
+      the power plants generating data-center electricity — mostly
+      thermoelectric plants that use evaporative cooling on their
+      condensers. Confidence is low-medium; the band reflects regional
+      grid mix variation.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The U.S. residential outdoor figure includes irrigation, pool
+      fill and top-off, vehicle washing, and other outdoor uses; the
+      dominant share is lawn-and-garden irrigation. The global
+      data-center figures use the same U.S.-to-global extrapolation as
+      the water-bracket infographic; the boundary question (direct
+      cooling only vs. inclusive of electricity-generation water) is
+      the editorial pivot of both displays. A separate framing note:
+      lawn irrigation and data-center water differ in environmental
+      terms. Lawn water is mostly applied to permeable ground; some
+      returns to local aquifers, some evaporates, some runs off.
+      Cooling-tower evaporation and thermoelectric consumptive use are
+      largely lost to atmosphere. The chart shows annual volumes;
+      environmental impact is a different question.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The lawn figure (medium) is bracketed by methodology variation
+      as described above; both endpoints are defensible. The
+      data-center bars carry the same uncertainty profile as the
+      water-bracket infographic: medium-low for direct, low-medium for
+      inclusive. The chart's headline ratios — 35–70x for lawns vs.
+      direct cooling, roughly 5x for lawns vs. inclusive — hold
+      across reasonable adjustments to any of the three figures.
+    </p>
+
+    <SourceLine
+      sources={waterResidential.sources}
+      lastVerified={waterResidential.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-ac">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: U.S. residential air conditioning vs. global data centers</h2>
+
+    <p>
+      This card sets U.S. residential air conditioning against the
+      global data-center fleet, both in terawatt-hours per year. U.S.
+      AC alone runs about 254 TWh annually — around 55 percent of
+      every data center on the planet combined.
+    </p>
+
+    <p>
+      The editorial point is one of seasonal scale. AC use rises
+      sharply in summer; on hot afternoons it is the single biggest
+      driver of grid stress in most U.S. regions, and it dwarfs
+      everything else households do with electricity during those
+      hours. A peaky, seasonal residential load in one country sits in
+      the same scale league as the year-round, planet-wide computing
+      fleet — which says more about how big residential cooling has
+      become than about how small data centers are.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. residential air conditioning, 2020 (254 TWh).</strong>
+      From EIA's Residential Energy Consumption Survey (RECS), the
+      2020 vintage being the most recent published wave. RECS combines
+      a national household survey with utility-bill data and
+      engineering simulations to estimate end-use electricity
+      consumption — heating, cooling, water heating, refrigeration,
+      and so on — for the U.S. residential sector. The 254 TWh AC
+      figure includes central air conditioning, room AC units,
+      evaporative coolers, and heat pumps in cooling mode. Confidence
+      is high; RECS is the canonical source and updates on a roughly
+      four-year cadence.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (460 TWh).</strong> Same IEA
+      Energy and AI source as the rest of the site. April 2026
+      revision raised this from 415 to 460. Confidence is medium-high.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The two figures are reported on different vintages: 2020 for
+      residential AC, 2024 for data centers. AC use has likely grown
+      modestly since 2020 with continued cooling-degree-day increases
+      and population growth in hot states; data-center electricity has
+      grown sharply over the same period (from roughly 290 TWh in
+      2022 to 460 in 2024 to 485 in 2025). The 55 percent ratio
+      quoted on the card therefore probably overstates the current
+      AC-to-data-center ratio; the true number today is likely closer
+      to 50 percent or below, though no fresh RECS data is yet
+      available to confirm. A separate framing note: the AC figure is
+      U.S.-only residential. Adding U.S. commercial air conditioning
+      would roughly double it; adding global air conditioning would
+      multiply it several times over.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The AC figure (high) carries the smallest band of any
+      electricity comparison on the site — RECS is well-instrumented
+      and the 2020 wave is a definitive source. The data-center
+      figure (medium-high) is well-bounded but moves with new IEA
+      reports. The chart's qualitative point — one country's seasonal
+      residential cooling sits in the same league as the world's
+      compute layer — holds regardless of which year's figures are
+      used.
+    </p>
+
+    <SourceLine
+      sources={electricityAc.sources}
+      lastVerified={electricityAc.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="electricity-holiday-lights">
+    <p class="display-where">Comparison card</p>
+    <h2>Electricity: U.S. holiday lighting vs. global data centers</h2>
+
+    <p>
+      This card sets U.S. December holiday lighting against the global
+      data-center fleet, both in terawatt-hours per year. The
+      holiday-lighting figure — 6.6 TWh — is small in absolute terms,
+      around 1.4 percent of global data centers. It earns its place
+      on the site because the comparison cuts the other way too: 6.6
+      TWh is more than the entire annual electricity supply of El
+      Salvador and several other smaller nations.
+    </p>
+
+    <p>
+      The card serves as a calibration exercise for "X uses as much
+      electricity as Country Y" headlines. Aesthetic energy use can
+      rival national grids without being structurally significant
+      against the major loads. Holiday lighting is genuinely large at
+      the country-scale and genuinely small at the
+      global-electricity-system scale; both framings are correct, and
+      the card lets readers feel both.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. holiday lighting, 2008 (6.6 TWh).</strong>
+      Originally estimated by the U.S. Department of Energy in 2008
+      and propagated through the Center for Global Development and
+      several news outlets in subsequent years. The estimate combines
+      household-survey data on holiday-lighting penetration, average
+      bulb counts and wattages, and average days-and-hours-per-day of
+      operation. Confidence is low-medium; the 2008 vintage is the
+      latest publicly available defensible figure, and the actual
+      current number is almost certainly lower because LED string
+      lights have largely displaced incandescent bulbs over the
+      intervening years. An LED string draws roughly 80–90 percent
+      less than an incandescent string of comparable length, so a
+      back-of-envelope adjustment for current LED penetration would
+      put the figure closer to 1–2 TWh today. The chart uses the 2008
+      number because it's the last one with a clear methodology
+      trail.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (460 TWh).</strong> Same IEA
+      Energy and AI source. Confidence is medium-high.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The holiday-lighting figure is U.S.-only; the data-center
+      figure is global. The card uses the 2008 estimate without
+      adjustment because the LED-corrected figure has no published
+      authority behind it — applying a back-of-envelope efficiency
+      factor would substitute one set of guesses for another. The
+      "more than El Salvador" framing comes from the original Center
+      for Global Development analysis and uses 2008-era national
+      electricity totals; both numbers have moved since, but the
+      comparison still holds at order of magnitude.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Holiday lighting (low-medium) is the lower-confidence figure on
+      the chart by some distance; the underlying methodology is sound
+      but the 2008 vintage and the LED transition since make the
+      current actual figure highly uncertain. Data centers
+      (medium-high) is well-bounded. The ratio quoted on the card
+      (around 1.4 percent of global data centers) is probably a high
+      estimate; today's true figure is likely closer to 0.3 percent.
+      The country-comparison framing is more durable than the
+      data-center ratio because both holiday lighting and
+      small-country electricity demand have moved together over the
+      years.
+    </p>
+
+    <SourceLine
+      sources={holidayLights.sources}
+      lastVerified={holidayLights.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="co2-driving-vs-datacenters">
+    <p class="display-where">Comparison card</p>
+    <h2>CO₂: U.S. driving vs. global data centers</h2>
+
+    <p>
+      This card sets U.S. on-road transportation against the global
+      data-center fleet, both in millions of metric tons of CO₂ per
+      year. The home page's hourly hero already shows driving
+      outpacing any digital activity per hour; this card moves the
+      same point to the annual ledger and to a national-vs-global
+      scope.
+    </p>
+
+    <p>
+      The pairing is among the most legible benchmarks in the
+      AI-footprint debate. "Cars vs. AI" is a comparison readers
+      reach for instinctively, and the numbers reward the instinct:
+      even restricted to one country's road fleet, transportation
+      runs roughly eight times the global data-center total. Pairing
+      U.S.-only driving against worldwide data centers sets a
+      deliberately tough test — the smaller geographic scope still
+      wins by an order of magnitude.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. on-road transportation, 2022 (1,440 Mt CO₂).</strong>
+      The figure comes from the EPA's Inventory of U.S. Greenhouse
+      Gas Emissions and Sinks, the canonical U.S. GHG accounting
+      document, which reports on-road transportation separately from
+      off-road equipment, aviation, and rail. The 2022 value covers
+      every passenger car, light truck, heavy-duty vehicle, and bus
+      on U.S. roads, with emissions calculated from national
+      fuel-consumption volumes (DOT and EIA data) and the EPA's
+      per-gallon CO₂ factor — the same 8,887 g/gallon constant the
+      hourly hero uses for its per-mile derivation. Confidence is
+      high; the inputs are well-instrumented and the methodology is
+      mature.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (180 Mt CO₂).</strong> Pulled
+      from the IEA's Energy and AI report. The figure is computed
+      bottom-up from global data-center electricity (460 TWh, the
+      same anchor used across the site) times the world's average
+      grid carbon intensity. The April 2026 Key Questions update
+      revised this figure downward — the original report quoted
+      around 220 Mt; the April 2026 version's consistent figure is
+      180. The revision reflects a lower assumed grid intensity
+      rather than a change in electricity use. Confidence is
+      medium-high; the underlying TWh figure is well-bounded, but
+      global average grid intensity shifts year over year as more
+      renewables come online.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      Two scope choices set the comparison. The driving figure is
+      U.S.-only by deliberate constraint: U.S. transportation data
+      is the cleanest available, and pairing one country's road
+      fleet against the world's data centers makes the comparison
+      harder for driving to win, not easier. The data-center figure
+      is global because the IEA does not publish a clean U.S.-only
+      figure on the same recent timetable, and the AI buildout the
+      comparison is meant to address is itself global.
+    </p>
+
+    <p>
+      A separate framing note: 180 Mt is operational CO₂ from
+      electricity generation only. Embedded emissions from
+      data-center construction — concrete and steel for new builds,
+      GPU manufacturing — are not in this figure. The
+      cement-and-steel comparison card flags those embedded
+      emissions in a different bar; readers thinking about the full
+      lifecycle of AI should look at both cards.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The driving figure (high) is anchored to EPA's regulatory
+      accounting, which has a small annual revision history and
+      tracks closely with national fuel-sales data. The data-center
+      figure (medium-high) is bracketed mostly by uncertainty in the
+      global average grid intensity used to convert TWh to Mt — a 10
+      percent shift in grid intensity moves the data-center figure
+      by roughly 18 Mt. That spread is much smaller than the 8x
+      ratio at the heart of the comparison, so the editorial point
+      — driving comfortably exceeds the global data-center fleet
+      even when the geographic scopes are stacked against driving —
+      holds across reasonable assumption shifts.
+    </p>
+
+    <SourceLine
+      sources={driving.sources}
+      lastVerified={driving.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="co2-aviation">
+    <p class="display-where">Comparison card</p>
+    <h2>CO₂: Global commercial aviation vs. data centers</h2>
+
+    <p>
+      This card sets global commercial aviation against the global
+      data-center fleet, both in millions of metric tons of CO₂ per
+      year. Both figures are global; both are operational (in-flight
+      fuel burn for aviation, electricity-driven for data centers).
+    </p>
+
+    <p>
+      The pairing is unusual on this site in that it's apples-to-apples
+      on geographic scope — most of the CO₂ comparisons here pit U.S.
+      activities against a global data-center figure. Aviation also
+      happens to be one of the most-tracked emissions categories
+      outside electricity, with annual disclosures from major carriers
+      and IATA-level rollups, which makes it a tighter comparison than
+      most.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>Global commercial aviation, 2023 (950 Mt CO₂).</strong>
+      From the IEA's Aviation tracker, which compiles emissions from
+      passenger and freight flights worldwide using fuel-burn data
+      reported by airlines and national aviation authorities. The
+      figure includes domestic and international commercial flights
+      but excludes military, general aviation, and contrail/non-CO₂
+      radiative forcing. The 2023 number reflects a near-full
+      recovery from the COVID-era trough, climbing back to within a
+      few percent of 2019 levels. Confidence is medium-high; aviation
+      reports more granularly than most sectors, and the methodology
+      is mature.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (180 Mt CO₂).</strong> Same
+      IEA Energy and AI source as the driving and cement comparisons.
+      The April 2026 Key Questions revision lowered this figure from
+      approximately 220 Mt by adopting a lower global grid carbon
+      intensity. Confidence is medium-high.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The aviation figure is operational only — fuel-burn CO₂ during
+      flight. It excludes ground operations at airports, aircraft
+      manufacturing, fuel refining, and (most importantly for the
+      climate debate) non-CO₂ radiative effects. Cirrus clouds from
+      contrails and high-altitude NOx emissions roughly double
+      aviation's effective warming impact in many studies; this card
+      uses CO₂ alone for parity with the data-center figure, which is
+      also CO₂-only. Readers thinking about full warming impact
+      should mentally double the aviation bar and not the data-center
+      one.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Aviation (medium-high) and data centers (medium-high) carry
+      comparable confidence labels, which is why this comparison
+      reads tighter than most on the site. The 5x ratio holds across
+      most plausible adjustments to either figure. The harder
+      forward-looking question is what happens by 2030: data-center
+      electricity is projected to roughly double in the IEA central
+      case, while aviation is projected to grow modestly, so the
+      ratio narrows but does not invert. Even at the IEA's higher
+      2030 data-center scenarios paired with central grid-intensity
+      assumptions, aviation likely remains comparable or larger.
+    </p>
+
+    <SourceLine
+      sources={aviation.sources}
+      lastVerified={aviation.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="co2-cement-steel">
+    <p class="display-where">Comparison card</p>
+    <h2>CO₂: Global cement and steel vs. data centers</h2>
+
+    <p>
+      This card sets two of the world's largest industrial emitters —
+      cement and iron-and-steel — against the global data-center
+      fleet, all in millions of metric tons of CO₂ per year. The
+      chart shows three bars: cement at roughly 1,600 Mt, iron and
+      steel at roughly 2,600 Mt, and global data centers at 180 Mt.
+    </p>
+
+    <p>
+      The editorial point is one of scale calibration. AI's
+      footprint is real and growing, but the materials industries
+      that built and maintain modern infrastructure run roughly
+      twenty times larger combined. Anyone arguing about whether AI
+      will "swamp the climate" is asking a question whose framing is
+      misleading: the climate ledger is dominated by the things that
+      pour foundations and forge beams, not by the things that draw
+      electricity to compute on those foundations.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>Global cement, 2023 (1,600 Mt CO₂).</strong> From the
+      IEA's Cement tracker, which separates process emissions (the
+      calcination of limestone, which releases CO₂ chemically) from
+      energy emissions (kiln fuel). Process emissions account for
+      roughly 60 percent of cement's footprint; the rest is fuel.
+      The 2023 figure reflects continued growth in cement
+      production, particularly in China and Southeast Asia.
+      Confidence is high; cement emissions are well-instrumented
+      through both production volumes and stack monitoring.
+    </p>
+
+    <p>
+      <strong>Global iron and steel, recent (2,600 Mt CO₂).</strong>
+      From the IEA's Iron and Steel tracker. Steel is the harder of
+      the two industries to decarbonize because most production
+      still uses blast-furnace technology that consumes coking coal
+      as both fuel and chemical reductant. The 2,600 Mt figure
+      includes both blast-furnace primary steel and electric-arc-furnace
+      recycled steel, weighted to current production shares.
+      Confidence is medium-high.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (180 Mt CO₂).</strong> Same
+      IEA Energy and AI source as the other CO₂ comparisons. The
+      April 2026 revision lowered this from around 220 Mt to 180 by
+      adopting a lower global grid carbon intensity. Confidence is
+      medium-high.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      All three figures are operational CO₂ — emissions from making
+      the product or running the facilities, not from upstream
+      extraction or downstream use. The cement and steel figures are
+      global; the data-center figure is also global, so the
+      geographic scope lines up cleanly. A scope mismatch worth
+      flagging: data-center construction itself uses cement and
+      steel (concrete pads, structural steel), so a portion of the
+      cement and steel bars is properly attributable to AI's
+      lifecycle footprint. The chart treats the bars as separate
+      categories; readers thinking about lifecycle accounting should
+      know the categories overlap at the margins.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Cement (high) and steel (medium-high) are among the better-tracked
+      industrial categories. The data-center figure (medium-high)
+      carries the most movement-room of the three, but the 23x
+      combined ratio is robust to reasonable adjustments. Even
+      doubling the data-center bar (a rough proxy for the IEA's
+      2030 central case in CO₂ terms, holding grid intensity flat)
+      leaves cement and steel still about ten times larger combined.
+    </p>
+
+    <SourceLine
+      sources={cementSteel.sources}
+      lastVerified={cementSteel.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="co2-cattle">
+    <p class="display-where">Comparison card</p>
+    <h2>CO₂: Global cattle (beef and dairy) vs. data centers</h2>
+
+    <p>
+      This card sets the world's cattle herd — beef and dairy
+      combined — against the global data-center fleet, both in
+      millions of metric tons of CO₂-equivalent per year. The cattle
+      figure includes methane belched by ruminants and CO₂ from
+      clearing forest and grassland for pasture; the data-center
+      figure is operational electricity-driven CO₂ only.
+    </p>
+
+    <p>
+      The comparison is one of the few on the site where global
+      lines up against global. It also surfaces a non-energy axis of
+      climate impact — methane-driven warming, which moves much
+      faster than CO₂ over the next 20 years. The pairing's
+      editorial point: the things humans do on the surface of the
+      planet to feed themselves are still climate-larger than the
+      things humans do in concrete buildings to compute.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>Global cattle (meat + milk), recent (3,800 Mt CO₂-eq).</strong>
+      From the UN FAO's "Tackling Climate Change Through Livestock"
+      report, which converts methane and nitrous oxide emissions to
+      CO₂-equivalent using GWP100 (the IPCC's 100-year global
+      warming potential standard). Roughly 60 percent of the cattle
+      figure is enteric methane (belching from rumination); the rest
+      is feed production, manure management, and land-use change.
+      Confidence is medium-high; FAO methodology is mature, but the
+      GWP100 framing systematically understates methane's near-term
+      warming impact compared to GWP20.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (180 Mt CO₂).</strong> Same
+      IEA Energy and AI source. April 2026 revision applies.
+      Confidence is medium-high. The cattle figure is CO₂-equivalent
+      (CH₄ converted via GWP100) while the data-center figure is
+      direct CO₂ only — the units match by convention even though
+      the underlying gases differ.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The cattle figure uses GWP100 for methane conversion, which
+      is the standard for national greenhouse-gas inventories.
+      Switching to GWP20 (which weights short-term warming more
+      heavily) would roughly double the methane share of the cattle
+      bar, taking the total closer to 5,500 Mt. The chart's 21x
+      ratio is therefore conservative for near-term warming impact.
+      A separate framing note: cattle emissions also include
+      land-use change in countries where forest is cleared for new
+      pasture, primarily in Brazil. The FAO figure attempts to
+      capture this; some independent estimates run higher.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Cattle (medium-high) is bracketed mostly by methodological
+      choices around GWP framing and land-use accounting. Data
+      centers (medium-high) is bracketed by grid-intensity
+      assumptions. The 21x ratio holds across both reasonable
+      adjustments. Even if the data-center figure doubled by 2030
+      in the IEA central case, cattle would remain about ten times
+      larger.
+    </p>
+
+    <SourceLine
+      sources={cattle.sources}
+      lastVerified={cattle.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="co2-lawn-equipment">
+    <p class="display-where">Comparison card</p>
+    <h2>Emissions: U.S. gas-powered lawn equipment vs. data centers</h2>
+
+    <p>
+      This card sets U.S. gas-powered lawn and garden equipment —
+      mowers, blowers, trimmers, edgers — against the global
+      data-center fleet, both in millions of metric tons of CO₂ per
+      year. The CO₂ comparison alone is striking: thirty million
+      tons from one country's small-engine garden tools is around
+      17 percent of the global data-center figure.
+    </p>
+
+    <p>
+      The editorial point of the card extends past CO₂. The bigger
+      story is air quality. Gas-powered lawn equipment uses
+      two-stroke and small four-stroke engines with no meaningful
+      emissions controls, so per unit of work delivered they emit
+      orders of magnitude more nitrogen oxides, volatile organic
+      compounds, and fine particulates than passenger vehicles.
+      AI's grid load gets headlines; gas mowers and blowers do
+      quieter, dirtier work in the same neighborhoods.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      <strong>U.S. gas-powered lawn equipment, 2020 (30 Mt CO₂).</strong>
+      From the EPA's Banks report on national emissions from lawn
+      and garden equipment, the canonical U.S. inventory for this
+      sector. The 30 Mt figure aggregates residential and commercial
+      small-engine equipment — push mowers, riding mowers, leaf
+      blowers, string trimmers, hedge trimmers, chainsaws — using
+      fuel-consumption estimates from population surveys and
+      operating-hour assumptions. Confidence is medium; the
+      inventory methodology is mature, but the inputs (how many
+      hours per year a typical leaf blower runs) carry meaningful
+      spread.
+    </p>
+
+    <p>
+      The same Banks dataset also reports criteria air pollutants
+      from this equipment. Gas-powered lawn and garden equipment
+      accounts for roughly one in six U.S. volatile-organic-compound
+      emissions and more than one in ten nitrogen-oxide emissions —
+      disproportionate shares for a sector that consumes a small
+      fraction of total fuel.
+    </p>
+
+    <p>
+      <strong>Global data centers, 2024 (180 Mt CO₂).</strong> Same
+      IEA Energy and AI source. April 2026 revision applies.
+      Confidence is medium-high.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The lawn-equipment figure is U.S.-only and the data-center
+      figure is global, so the 17 percent ratio understates how
+      thoroughly small-engine yard tools punch above their weight
+      per unit of energy delivered. Restricting both figures to the
+      same country would narrow the ratio considerably — U.S.
+      data-center CO₂ is a small fraction of the global figure, so
+      U.S. lawn equipment runs much closer to parity against
+      U.S.-only data centers than the global ratio suggests. The
+      card uses the global denominator because the rest of the site
+      does.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      Lawn equipment (medium) carries spread mostly from
+      operating-hour assumptions and population estimates for
+      residential equipment. Data centers (medium-high) carry the
+      usual grid-intensity uncertainty. The 17 percent CO₂ ratio is
+      approximate; the air-quality story (one in six VOCs, one in
+      ten NOx) is firmer because EPA's criteria-pollutant accounting
+      has tighter inputs than its CO₂ accounting for this sector.
+    </p>
+
+    <SourceLine
+      sources={lawnEquipment.sources}
+      lastVerified={lawnEquipment.last_verified}
     />
   </section>
 
