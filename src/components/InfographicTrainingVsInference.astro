@@ -1,0 +1,255 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+interface TrainingEvent {
+  year: number;
+  model: string;
+  tco2: number;
+}
+
+interface InferenceRange {
+  label: string;
+  low_tco2: number;
+  high_tco2: number;
+}
+
+interface Infographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  unit_caption: string;
+  training_events: TrainingEvent[];
+  inference: InferenceRange;
+  x_min_tco2: number;
+  x_max_tco2: number;
+  caption: string;
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: any) => i.id === "training-vs-inference"
+) as Infographic;
+
+if (!data) throw new Error("training-vs-inference missing from figures.json");
+
+// --- Geometry --------------------------------------------------------------
+const W = 720;
+const padX = 30;
+const labelLeft = padX;
+const chartLeft = 180;
+const chartRight = W - padX;
+const chartWidth = chartRight - chartLeft;
+
+// Log axis. Default range: 0.1 to 1e8 tCO2 (9 decades).
+const logMin = Math.log10(data.x_min_tco2);
+const logMax = Math.log10(data.x_max_tco2);
+const logRange = logMax - logMin;
+const xFromTco2 = (tco2: number) =>
+  chartLeft + ((Math.log10(tco2) - logMin) / logRange) * chartWidth;
+
+// Decade exponents that fall within the axis range (every order of magnitude).
+const decadeExponents: number[] = [];
+for (let e = Math.ceil(logMin); e <= Math.floor(logMax); e++) {
+  decadeExponents.push(e);
+}
+const decadeLabel = (exp: number): string => {
+  if (exp < 0) return "0.1";
+  if (exp === 0) return "1";
+  if (exp === 1) return "10";
+  if (exp === 2) return "100";
+  if (exp === 3) return "1k";
+  if (exp === 4) return "10k";
+  if (exp === 5) return "100k";
+  if (exp === 6) return "1M";
+  if (exp === 7) return "10M";
+  if (exp === 8) return "100M";
+  return Math.pow(10, exp).toExponential(0);
+};
+
+// --- Vertical layout -------------------------------------------------------
+const kickerY = 36;
+const titleY = 72;
+const unitCaptionY = 103;
+
+const trainRowsTop = 124;
+const rowPitch = 28;
+const labelOffset = 14;
+const dotOffset = 10;
+const trainRowsBottom = trainRowsTop + data.training_events.length * rowPitch;
+
+const separatorY = trainRowsBottom + 8;
+const infRowTop = separatorY + 8;
+const infRowLabelY = infRowTop + labelOffset;
+const infRowBarCenterY = infRowTop + dotOffset;
+
+const axisLineY = infRowTop + rowPitch + 4;
+const tickLabelY = axisLineY + 16;
+
+const captionY = tickLabelY + 26;
+const footerRuleY = captionY + 22;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+// --- Style tokens ----------------------------------------------------------
+const FONT_SANS =
+  "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF =
+  "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+
+const ACCENT = "#1f4f7a";
+const INK = "#1a1a1a";
+const MID = "#4a4a4a";
+const DIM = "#8a8682";
+const RULE = "#e6e3dc";
+
+const sourceShort =
+  "Sources: Strubell et al. 2019, Patterson et al. 2022, BLOOM impact paper, Meta Llama 2/3 papers, IEA April 2026.";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+
+const dotR = 6;
+const barH = 16;
+
+const infXLow = xFromTco2(data.inference.low_tco2);
+const infXHigh = xFromTco2(data.inference.high_tco2);
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <pattern
+        id="rangeStripeTraining"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(45)"
+      >
+        <rect width="8" height="8" fill={ACCENT} />
+        <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,0.20)" stroke-width="3" />
+      </pattern>
+    </defs>
+
+    {/* Card background */}
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text x={padX} y={kickerY} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
+      {data.kicker.toUpperCase()}
+    </text>
+    <text x={padX} y={titleY} font-family={FONT_SERIF} font-size="26" fill={INK} font-weight="600">
+      {data.title}
+    </text>
+    <text x={padX} y={unitCaptionY} font-family={FONT_SANS} font-size="12" fill={MID} letter-spacing="0.9" font-weight="500">
+      {data.unit_caption.toUpperCase()}
+    </text>
+
+    {/* Training-event rows */}
+    {data.training_events.map((evt, i) => {
+      const rowTop = trainRowsTop + i * rowPitch;
+      const labelY = rowTop + labelOffset;
+      const dotY = rowTop + dotOffset;
+      const dotX = xFromTco2(evt.tco2);
+      return (
+        <g>
+          <text x={labelLeft} y={labelY} font-family={FONT_SANS} font-size="14" fill={INK}>
+            {evt.model} · {evt.year}
+          </text>
+          <circle cx={dotX} cy={dotY} r={dotR} fill={ACCENT} />
+        </g>
+      );
+    })}
+
+    {/* Hairline separator between training rows and inference row */}
+    <line x1={chartLeft} y1={separatorY} x2={chartRight} y2={separatorY} stroke={RULE} stroke-width="1" />
+
+    {/* Inference row */}
+    <text x={labelLeft} y={infRowLabelY} font-family={FONT_SANS} font-size="14" fill={INK}>
+      {data.inference.label}
+    </text>
+    <rect
+      x={infXLow}
+      y={infRowBarCenterY - barH / 2}
+      width={infXHigh - infXLow}
+      height={barH}
+      fill="url(#rangeStripeTraining)"
+      rx="3"
+    />
+
+    {/* Shared x-axis line + decade tick marks + tick labels */}
+    <line x1={chartLeft} y1={axisLineY} x2={chartRight} y2={axisLineY} stroke={RULE} stroke-width="1" />
+    {decadeExponents.map((exp) => {
+      const x = xFromTco2(Math.pow(10, exp));
+      return (
+        <g>
+          <line x1={x} y1={axisLineY} x2={x} y2={axisLineY + 4} stroke={DIM} stroke-width="1" opacity="0.5" />
+          <text x={x} y={tickLabelY} font-family={FONT_SANS} font-size="11" fill={MID} text-anchor="middle">
+            {decadeLabel(exp)}
+          </text>
+        </g>
+      );
+    })}
+
+    {/* Caption — editorial sentence baked into the SVG */}
+    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+      {data.caption}
+    </text>
+
+    {/* Footer */}
+    <line x1={padX} y1={footerRuleY} x2={W - padX} y2={footerRuleY} stroke={RULE} stroke-width="1" />
+    <text x={padX} y={sourceLineY} font-family={FONT_SANS} font-size="12" fill={MID}>
+      {sourceShort}
+    </text>
+    <text x={padX} y={verifiedLineY} font-family={FONT_SANS} font-size="11" fill={DIM}>
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine
+    sources={data.sources}
+    lastVerified={data.last_verified}
+    methodsAnchor={data.anchor}
+  />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>

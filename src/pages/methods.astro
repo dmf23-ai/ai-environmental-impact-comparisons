@@ -18,6 +18,7 @@ const dcTrajectory = findInfographic("dc-trajectory");
 const aiShare = findInfographic("ai-share-trajectory");
 const householdEquivalents = findInfographic("household-equivalents");
 const wattScale = findInfographic("watt-scale-primer");
+const trainingVsInference = findInfographic("training-vs-inference");
 
 const findComparison = (id: string) =>
   (figuresData as any).comparisons.find((c: any) => c.id === id);
@@ -901,6 +902,157 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
     <SourceLine
       sources={wattScale.sources}
       lastVerified={wattScale.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="training-vs-inference">
+    <p class="display-where">Home page infographic</p>
+    <h2>Where AI's carbon actually goes</h2>
+
+    <p>
+      Public arguments about AI emissions often fixate on training. A
+      model's training run is large, dramatic, and reported as a
+      single tCO₂ figure that sticks in memory — GPT-3 at 552 tonnes,
+      Llama 3 at 6,300. These are real numbers, but they describe a
+      single event in a model's life. Once a model is deployed, every
+      query and every API call adds incremental inference emissions,
+      day after day, for as long as the model is in service. By 2024,
+      the aggregate inference burn dwarfs every published training
+      run combined.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      The chart shows five published training-event emissions,
+      ordered by ascending tCO₂:
+    </p>
+
+    <p>
+      <strong>BERT-base (2019) — 0.65 tCO₂.</strong> From Strubell et
+      al.'s "Energy and Policy Considerations for Deep Learning in
+      NLP," which estimated 1,438 lbs CO₂ per training run. The same
+      paper is the source of the famous "five cars" headline, which
+      referred to a neural-architecture-search run rather than to
+      BERT itself; the BERT figure is the more representative number
+      for a single language-model training pass at the scale of that
+      era.
+    </p>
+
+    <p>
+      <strong>BLOOM (2022) — 25 tCO₂.</strong> From the BigScience
+      BLOOM impact paper. The unusually low figure reflects training
+      on the Jean Zay supercomputer in France, which runs largely on
+      nuclear electricity (~57 g CO₂/kWh) rather than the global
+      ~400 g/kWh average.
+    </p>
+
+    <p>
+      <strong>Llama 2 (2023) — 539 tCO₂.</strong> Disclosed by Meta
+      in the Llama 2 paper.
+    </p>
+
+    <p>
+      <strong>GPT-3 (2020) — 552 tCO₂.</strong> From Patterson et
+      al.'s 2022 paper, which back-computed from OpenAI's published
+      314 zettaFLOPs of training compute, with assumptions about the
+      V100/A100 hardware mix and U.S. grid intensity at training
+      time.
+    </p>
+
+    <p>
+      <strong>Llama 3 (2024) — 6,300 tCO₂.</strong> Disclosed by
+      Meta in the Llama 3 paper, summing the 8B, 70B, and 405B
+      training runs across multiple Meta data centers.
+    </p>
+
+    <p>
+      The chart shows annual AI inference for 2024 as a range:
+    </p>
+
+    <p>
+      <strong>All AI inference, 2024 — 8.4 to 27.2 MtCO₂.</strong>
+      Derived from the site's existing AI 2024 electricity range
+      (30–80 TWh, IEA April 2026), assuming inference accounts for
+      70–85% of that total. Patterson et al. (2022) estimated
+      inference at 60–90% of lifetime emissions for widely-deployed
+      models in Google's stack; the chart uses 70–85% as a slightly
+      tighter band consistent with that range. At an average grid
+      intensity of 400 g CO₂/kWh: 30 TWh × 70% × 400 g/kWh ≈
+      8.4 MtCO₂; 80 TWh × 85% × 400 g/kWh ≈ 27.2 MtCO₂.
+    </p>
+
+    <p>
+      The largest single training event on the chart (Llama 3,
+      6,300 tCO₂) is roughly 1,300 times smaller than the lower
+      bound of the 2024 inference range. Per-event training and
+      per-year inference are different units — one is a one-time
+      emission, the other repeats every year — but the chart shows
+      them on the same log axis because the editorial point is that
+      the gap is roughly four orders of magnitude in absolute terms.
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      The biggest assumption is the inference share. Patterson et
+      al. estimated 60–90% inference for widely-deployed Google
+      models in the 2019–2022 timeframe. The chart uses 70–85% as a
+      wider band, which is conservative on the low side and
+      consistent with industry estimates for the 2024 LLM mix. The
+      actual share depends on how much of the year's compute went to
+      one-off training runs versus heavily-used products; the
+      order-of-magnitude conclusion holds across the plausible
+      range.
+    </p>
+
+    <p>
+      The grid-intensity assumption (400 g CO₂/kWh) is the global
+      average used elsewhere on the site. Real per-data-center
+      intensities run from ~50 g/kWh on nuclear- or hydro-rich grids
+      up to ~700 g/kWh on coal-heavy grids. The chosen figure is
+      moderately conservative for U.S.-based hyperscalers, where
+      most LLM inference runs.
+    </p>
+
+    <p>
+      The 2024 inference range inherits the AI 2024 electricity
+      range of 30–80 TWh, which is the site's lowest-confidence
+      electricity figure overall.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The five training figures are well-sourced. Three are
+      first-party disclosures from BigScience and Meta; the other
+      two come from peer-reviewed papers. Each is accurate within
+      roughly ±20%.
+    </p>
+
+    <p>
+      The inference figure is the loose end. The 8.4–27.2 MtCO₂
+      range stacks two uncertainties: the underlying TWh range
+      (30–80, "low-medium" confidence) and the inference-share
+      assumption (70–85%). The true 2024 figure is plausibly
+      anywhere in 5–35 MtCO₂. The order-of-magnitude claim — that
+      annual inference is hundreds to thousands of times larger
+      than the largest single training run on the chart — is robust
+      to the full range of plausible inputs.
+    </p>
+
+    <p>
+      The chart does not aggregate training emissions across all
+      known runs in a year. Rolling that up would tighten the
+      comparison somewhat: a few dozen frontier-model trainings at
+      low-thousands of tCO₂ each total roughly 100,000 tCO₂ per
+      year, still two orders of magnitude smaller than the
+      inference band's lower bound.
+    </p>
+
+    <SourceLine
+      sources={trainingVsInference.sources}
+      lastVerified={trainingVsInference.last_verified}
     />
   </section>
 

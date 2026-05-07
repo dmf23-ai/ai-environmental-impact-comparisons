@@ -985,6 +985,76 @@
         }
       ],
       "last_verified": "2026-05-07"
+    },
+    {
+      "id": "training-vs-inference",
+      "anchor": "training-vs-inference",
+      "kicker": "Training vs. inference",
+      "title": "Where the carbon actually goes",
+      "unit_caption": "Tonnes of CO2, log scale",
+      "training_events": [
+        {
+          "year": 2019,
+          "model": "BERT-base",
+          "tco2": 0.65
+        },
+        {
+          "year": 2022,
+          "model": "BLOOM",
+          "tco2": 25
+        },
+        {
+          "year": 2023,
+          "model": "Llama 2",
+          "tco2": 539
+        },
+        {
+          "year": 2020,
+          "model": "GPT-3",
+          "tco2": 552
+        },
+        {
+          "year": 2024,
+          "model": "Llama 3",
+          "tco2": 6300
+        }
+      ],
+      "inference": {
+        "label": "All AI inference, 2024",
+        "low_tco2": 8400000,
+        "high_tco2": 27200000
+      },
+      "x_min_tco2": 0.1,
+      "x_max_tco2": 100000000,
+      "caption": "Dots are individual training events; the bar is one year of all AI inference combined. The x-axis steps by ten.",
+      "summary": "Five published training emissions sit between 0.65 and 6,300 tCO2 each. A single year of all AI inference sits between 8 and 27 million tCO2 — roughly 1,300 to 4,000 times the largest training event on the chart. The 'but training is huge' framing stops working at 2024 scale.",
+      "sources": [
+        {
+          "name": "Strubell et al. 2019 — Energy and Policy Considerations for Deep Learning in NLP",
+          "url": "https://arxiv.org/abs/1906.02243"
+        },
+        {
+          "name": "Patterson et al. 2022 — Carbon Emissions and Large Neural Network Training",
+          "url": "https://arxiv.org/abs/2104.10350"
+        },
+        {
+          "name": "BigScience — Estimating the Carbon Footprint of BLOOM",
+          "url": "https://arxiv.org/abs/2211.02001"
+        },
+        {
+          "name": "Meta — Llama 2: Open Foundation and Fine-Tuned Chat Models",
+          "url": "https://arxiv.org/abs/2307.09288"
+        },
+        {
+          "name": "Meta — The Llama 3 Herd of Models",
+          "url": "https://arxiv.org/abs/2407.21783"
+        },
+        {
+          "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+        }
+      ],
+      "last_verified": "2026-05-07"
     }
   ]
 }
