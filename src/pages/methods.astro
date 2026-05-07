@@ -17,6 +17,7 @@ const waterBracket = findInfographic("water-bracket");
 const dcTrajectory = findInfographic("dc-trajectory");
 const aiShare = findInfographic("ai-share-trajectory");
 const householdEquivalents = findInfographic("household-equivalents");
+const wattScale = findInfographic("watt-scale-primer");
 
 const findComparison = (id: string) =>
   (figuresData as any).comparisons.find((c: any) => c.id === id);
@@ -801,6 +802,105 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
     <SourceLine
       sources={householdEquivalents.sources}
       lastVerified={householdEquivalents.last_verified}
+    />
+  </section>
+
+  <section class="method-section" id="watt-scale-primer">
+    <p class="display-where">Home page infographic</p>
+    <h2>The watt-scale primer</h2>
+
+    <p>
+      The site's headline figures run from a fraction of a TWh to a
+      few thousand TWh. Most readers have intuition at the bottom of
+      that range — a phone charge, a microwave running — but not at
+      the top. The watt-scale primer is a small ladder for crossing
+      the gap. Each rung is a thousand times the one below, anchored
+      in an everyday reference; the site's actual figures appear
+      along the same axis so the reader can place them.
+    </p>
+
+    <h3>Derivation</h3>
+
+    <p>
+      The ladder has five rungs, each a single decade in scientific
+      notation: 1 kWh, 1 MWh, 1 GWh, 1 TWh, 1,000 TWh. The middle
+      three rungs convert through the same per-household factor used
+      elsewhere on the site — 11.9 MWh per U.S. residential customer
+      per year, the EIA 2023 RECS midpoint.
+    </p>
+
+    <p>
+      <strong>1 kWh — a microwave running for an hour.</strong>
+      Most domestic microwaves are rated 700–1,200 W; a 1,000-W unit
+      running for one hour consumes 1 kWh by definition. The same
+      rung is also roughly 30–45 minutes of average U.S. residential
+      draw.
+    </p>
+
+    <p>
+      <strong>1 MWh — a U.S. home for about a month.</strong> 11.9
+      MWh per year ÷ 12 ≈ 0.99 MWh per month, rounded.
+    </p>
+
+    <p>
+      <strong>1 GWh — 85 U.S. homes for a year.</strong> 1,000 MWh
+      ÷ 11.9 MWh per home = 84.0, rounded up.
+    </p>
+
+    <p>
+      <strong>1 TWh — a city of 85,000 homes for a year.</strong>
+      1,000 × 84.0 = 84,034 households; rounded to 85,000. Cities in
+      roughly that residential range, depending on measurement year:
+      Charleston, SC; Topeka, KS; Bellingham, WA.
+    </p>
+
+    <p>
+      <strong>1,000 TWh — about two-thirds of U.S. residential
+      electricity in a year.</strong> EIA puts the residential total
+      around 1,550 TWh; 1,000 ÷ 1,550 ≈ 64.5%.
+    </p>
+
+    <p>
+      The site's three anchor figures appear along the same axis:
+      AI in 2024 (30–80 TWh), global data centers in 2024 (460 TWh,
+      IEA April 2026), and U.S. residential electricity (1,550 TWh).
+    </p>
+
+    <h3>Assumptions</h3>
+
+    <p>
+      11.9 MWh per U.S. household per year is the conversion factor
+      used throughout the site (EIA 2023 RECS midpoint), the same
+      factor anchoring the household-equivalents bar chart.
+    </p>
+
+    <p>
+      "A microwave for an hour" approximates a 1,000-W unit running
+      continuously. Real domestic microwaves are rated 700–1,200 W;
+      the round number is the closest readable anchor at this scale.
+    </p>
+
+    <p>
+      The "city of 85,000 homes" reference is residential-only. A
+      real city's full electricity footprint includes commercial and
+      industrial loads not counted on this rung.
+    </p>
+
+    <h3>Uncertainty</h3>
+
+    <p>
+      The ladder is pedagogical, not measurement. Each rung is
+      approximate; the named references — a microwave, a home, a
+      city — are illustrative. A reader shouldn't infer that every
+      microwave draws exactly 1 kWh per hour or every city consumes
+      exactly 1 TWh of residential electricity. The point is to
+      give the eye a stepwise feel for what a thousand-fold jump
+      actually looks like.
+    </p>
+
+    <SourceLine
+      sources={wattScale.sources}
+      lastVerified={wattScale.last_verified}
     />
   </section>
 

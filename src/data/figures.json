@@ -922,6 +922,69 @@
         }
       ],
       "last_verified": "2026-05-04"
+    },
+    {
+      "id": "watt-scale-primer",
+      "anchor": "watt-scale-primer",
+      "kicker": "Scale primer",
+      "title": "What a TWh actually is",
+      "rungs": [
+        {
+          "value": 1,
+          "unit": "kWh",
+          "reference": "a microwave for an hour"
+        },
+        {
+          "value": 1,
+          "unit": "MWh",
+          "reference": "a home for a month"
+        },
+        {
+          "value": 1,
+          "unit": "GWh",
+          "reference": "85 homes for a year"
+        },
+        {
+          "value": 1,
+          "unit": "TWh",
+          "reference": "85,000 homes for a year"
+        },
+        {
+          "value": 1000,
+          "unit": "TWh",
+          "reference": "≈⅔ of U.S. residential"
+        }
+      ],
+      "site_anchors": [
+        {
+          "label": "AI 2024",
+          "low_twh": 30,
+          "high_twh": 80
+        },
+        {
+          "label": "Global data centers, 2024",
+          "twh": 460
+        },
+        {
+          "label": "U.S. residential total",
+          "twh": 1550
+        }
+      ],
+      "axis_min_twh": 1e-09,
+      "axis_max_twh": 10000,
+      "caption": "Each rung is a thousand times the one before.",
+      "summary": "The site's headline figures live between 30 and 1,550 TWh — clustered near the right edge of this scale. AI in 2024 (30–80 TWh) sits closer to a single TWh than to the global data-center total. The data-center total (460 TWh) and U.S. residential electricity (1,550 TWh) close out the right end.",
+      "sources": [
+        {
+          "name": "EIA — Use of Electricity / Electric Power Annual",
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+        },
+        {
+          "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+        }
+      ],
+      "last_verified": "2026-05-07"
     }
   ]
 }

@@ -1,0 +1,400 @@
+---
+import SourceLine from "./SourceLine.astro";
+import figuresData from "../data/figures.json";
+
+interface Rung {
+  value: number;
+  unit: "kWh" | "MWh" | "GWh" | "TWh";
+  reference: string;
+}
+
+type SiteAnchor =
+  | { label: string; twh: number }
+  | { label: string; low_twh: number; high_twh: number };
+
+interface Infographic {
+  id: string;
+  anchor: string;
+  kicker: string;
+  title: string;
+  rungs: Rung[];
+  site_anchors: SiteAnchor[];
+  axis_min_twh: number;
+  axis_max_twh: number;
+  caption: string;
+  summary: string;
+  sources: { name: string; url: string }[];
+  last_verified: string;
+}
+
+const data = (figuresData as any).infographics.find(
+  (i: any) => i.id === "watt-scale-primer"
+) as Infographic;
+
+if (!data) throw new Error("watt-scale-primer missing from figures.json");
+
+// --- Geometry --------------------------------------------------------------
+const W = 720;
+const padX = 30;
+const chartLeft = padX;
+const chartRight = W - padX;
+const chartWidth = chartRight - chartLeft;
+
+// Log-scale axis. Each named rung is 1000x the one before; the axis itself
+// is decade-spaced. Default span: 1 kWh (1e-9 TWh) to 10,000 TWh (1e4 TWh).
+const logMin = Math.log10(data.axis_min_twh);
+const logMax = Math.log10(data.axis_max_twh);
+const logRange = logMax - logMin;
+const xFromTwh = (twh: number) =>
+  chartLeft + ((Math.log10(twh) - logMin) / logRange) * chartWidth;
+
+const unitToTwh: Record<string, number> = {
+  kWh: 1e-9,
+  MWh: 1e-6,
+  GWh: 1e-3,
+  TWh: 1,
+};
+
+const rungs = data.rungs.map((r) => {
+  const twh = r.value * (unitToTwh[r.unit] ?? 0);
+  return {
+    value: r.value,
+    unit: r.unit,
+    reference: r.reference,
+    twh,
+    x: xFromTwh(twh),
+    unitLabel:
+      r.value === 1
+        ? `1 ${r.unit}`
+        : `${r.value.toLocaleString()} ${r.unit}`,
+  };
+});
+
+// Decade ticks across the whole axis (faint grid for the log scale).
+const decades: number[] = [];
+for (let e = Math.ceil(logMin); e <= Math.floor(logMax); e++) {
+  decades.push(Math.pow(10, e));
+}
+
+// Render-side wrap rule: rung references longer than 28 characters split at
+// a sensible word boundary so the longest two rungs don't overflow the
+// available column width.
+const refRender = rungs.map((r, i) => {
+  let textAnchor: "start" | "middle" = "middle";
+  if (i === 0) textAnchor = "start";
+  if (r.reference.length > 28) {
+    const breakAfterHomes = r.reference.indexOf(" homes ");
+    if (breakAfterHomes > 0) {
+      return {
+        ...r,
+        textAnchor,
+        line1: r.reference.slice(0, breakAfterHomes + 6),
+        line2: r.reference.slice(breakAfterHomes + 7),
+      };
+    }
+    const mid = Math.floor(r.reference.length / 2);
+    let split = r.reference.lastIndexOf(" ", mid + 6);
+    if (split < 0) split = mid;
+    return {
+      ...r,
+      textAnchor,
+      line1: r.reference.slice(0, split),
+      line2: r.reference.slice(split + 1),
+    };
+  }
+  return { ...r, textAnchor, line1: r.reference, line2: "" };
+});
+
+// Site anchors: dispatch range vs. point at compute time so the SVG block
+// stays narrow.
+type AnchorRender =
+  | {
+      kind: "range";
+      label: string;
+      xLow: number;
+      xHigh: number;
+      valueText: string;
+    }
+  | { kind: "point"; label: string; x: number; valueText: string };
+
+const anchors: AnchorRender[] = data.site_anchors.map((a: any) => {
+  if (typeof a.twh === "number") {
+    return {
+      kind: "point",
+      label: a.label,
+      x: xFromTwh(a.twh),
+      valueText: `${a.twh.toLocaleString()} TWh`,
+    };
+  }
+  return {
+    kind: "range",
+    label: a.label,
+    xLow: xFromTwh(a.low_twh),
+    xHigh: xFromTwh(a.high_twh),
+    valueText: `${a.low_twh}–${a.high_twh} TWh`,
+  };
+});
+
+// --- Vertical layout -------------------------------------------------------
+const headerH = 88;
+const sectionLabel1Y = headerH + 14;
+const refLine1Y = sectionLabel1Y + 28;
+const refLine2Y = refLine1Y + 14;
+const unitLabelY = refLine2Y + 22;
+const rungDotY = unitLabelY + 12;
+const rungAxisY = rungDotY + 18;
+const sectionLabel2Y = rungAxisY + 32;
+const anchor1Y = sectionLabel2Y + 24;
+const anchor2Y = anchor1Y + 26;
+const anchor3Y = anchor2Y + 26;
+const anchorAxisY = anchor3Y + 18;
+const anchorAxisLabelY = anchorAxisY + 16;
+const captionY = anchorAxisLabelY + 30;
+const footerRuleY = captionY + 22;
+const sourceLineY = footerRuleY + 22;
+const verifiedLineY = sourceLineY + 22;
+const H = verifiedLineY + 18;
+
+// --- Style tokens ----------------------------------------------------------
+const FONT_SANS =
+  "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FONT_SERIF =
+  "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
+
+const ACCENT = "#1f4f7a";
+const INK = "#1a1a1a";
+const MID = "#4a4a4a";
+const DIM = "#8a8682";
+const RULE = "#e6e3dc";
+
+const sourceShort =
+  "Sources: EIA — Use of Electricity (per-household figure); IEA April 2026 update (AI and global data-center electricity).";
+const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-impact-comparisons.vercel.app`;
+
+const dotR = 6;
+const barH = 16;
+const pointR = 7;
+---
+
+<figure class="infographic-card" id={data.anchor}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={data.title}
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <defs>
+      <pattern
+        id="rangeStripeWattScale"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(45)"
+      >
+        <rect width="8" height="8" fill={ACCENT} />
+        <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,0.20)" stroke-width="3" />
+      </pattern>
+    </defs>
+
+    {/* Card background */}
+    <rect width={W} height={H} fill="#ffffff" />
+
+    {/* Header */}
+    <text x={padX} y={36} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
+      {data.kicker.toUpperCase()}
+    </text>
+    <text x={padX} y={72} font-family={FONT_SERIF} font-size="26" fill={INK} font-weight="600">
+      {data.title}
+    </text>
+
+    {/* PANEL 1 — orders of magnitude */}
+    <text x={padX} y={sectionLabel1Y} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+      ORDERS OF MAGNITUDE
+    </text>
+
+    {/* Rung references (italic serif) — line 1 */}
+    {refRender.map((r) => (
+      <g>
+        <text
+          x={r.x}
+          y={refLine1Y}
+          font-family={FONT_SERIF}
+          font-size="12"
+          font-style="italic"
+          fill={INK}
+          text-anchor={r.textAnchor}
+        >
+          {r.line1}
+        </text>
+        {r.line2 && (
+          <text
+            x={r.x}
+            y={refLine2Y}
+            font-family={FONT_SERIF}
+            font-size="12"
+            font-style="italic"
+            fill={INK}
+            text-anchor={r.textAnchor}
+          >
+            {r.line2}
+          </text>
+        )}
+      </g>
+    ))}
+
+    {/* Rung unit labels */}
+    {rungs.map((r, i) => {
+      let textAnchor: "start" | "middle" = "middle";
+      if (i === 0) textAnchor = "start";
+      return (
+        <text
+          x={r.x}
+          y={unitLabelY}
+          font-family={FONT_SANS}
+          font-size="13"
+          font-weight="600"
+          fill={INK}
+          text-anchor={textAnchor}
+        >
+          {r.unitLabel}
+        </text>
+      );
+    })}
+
+    {/* Rung lollipops: small dot + vertical tick down to axis */}
+    {rungs.map((r) => (
+      <g>
+        <line x1={r.x} y1={rungDotY} x2={r.x} y2={rungAxisY} stroke={ACCENT} stroke-width="1.5" />
+        <circle cx={r.x} cy={rungDotY} r={dotR / 2} fill={ACCENT} />
+      </g>
+    ))}
+
+    {/* Rung axis line + faint decade ticks */}
+    <line x1={chartLeft} y1={rungAxisY} x2={chartRight} y2={rungAxisY} stroke={RULE} stroke-width="1" />
+    {decades.map((d) => (
+      <line
+        x1={xFromTwh(d)}
+        y1={rungAxisY}
+        x2={xFromTwh(d)}
+        y2={rungAxisY + 4}
+        stroke={DIM}
+        stroke-width="1"
+        opacity="0.35"
+      />
+    ))}
+
+    {/* PANEL 2 — site anchors */}
+    <text x={padX} y={sectionLabel2Y} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+      ON THIS SITE
+    </text>
+
+    {/* Anchor row 1 (range) */}
+    {anchors[0] && anchors[0].kind === "range" && (
+      <g>
+        <text x={padX} y={anchor1Y + 4} font-family={FONT_SANS} font-size="12" fill={INK} font-weight="500">
+          {anchors[0].label} · {anchors[0].valueText}
+        </text>
+        <rect
+          x={anchors[0].xLow}
+          y={anchor1Y - barH / 2}
+          width={anchors[0].xHigh - anchors[0].xLow}
+          height={barH}
+          fill="url(#rangeStripeWattScale)"
+          rx="3"
+        />
+      </g>
+    )}
+
+    {/* Anchor rows 2 and 3 (points) */}
+    {anchors[1] && anchors[1].kind === "point" && (
+      <g>
+        <text x={padX} y={anchor2Y + 4} font-family={FONT_SANS} font-size="12" fill={INK} font-weight="500">
+          {anchors[1].label} · {anchors[1].valueText}
+        </text>
+        <circle cx={anchors[1].x} cy={anchor2Y} r={pointR} fill={ACCENT} />
+      </g>
+    )}
+    {anchors[2] && anchors[2].kind === "point" && (
+      <g>
+        <text x={padX} y={anchor3Y + 4} font-family={FONT_SANS} font-size="12" fill={INK} font-weight="500">
+          {anchors[2].label} · {anchors[2].valueText}
+        </text>
+        <circle cx={anchors[2].x} cy={anchor3Y} r={pointR} fill={ACCENT} />
+      </g>
+    )}
+
+    {/* Site-anchor axis line + decade ticks + endpoint labels */}
+    <line x1={chartLeft} y1={anchorAxisY} x2={chartRight} y2={anchorAxisY} stroke={RULE} stroke-width="1" />
+    {decades.map((d) => (
+      <line
+        x1={xFromTwh(d)}
+        y1={anchorAxisY}
+        x2={xFromTwh(d)}
+        y2={anchorAxisY + 4}
+        stroke={DIM}
+        stroke-width="1"
+        opacity="0.35"
+      />
+    ))}
+    <text x={chartLeft} y={anchorAxisLabelY} font-family={FONT_SANS} font-size="11" fill={DIM}>
+      1 kWh
+    </text>
+    <text x={chartRight} y={anchorAxisLabelY} font-family={FONT_SANS} font-size="11" fill={DIM} text-anchor="end">
+      10,000 TWh
+    </text>
+
+    {/* Caption — editorial sentence baked into the SVG */}
+    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+      {data.caption}
+    </text>
+
+    {/* Footer */}
+    <line x1={padX} y1={footerRuleY} x2={W - padX} y2={footerRuleY} stroke={RULE} stroke-width="1" />
+    <text x={padX} y={sourceLineY} font-family={FONT_SANS} font-size="12" fill={MID}>
+      {sourceShort}
+    </text>
+    <text x={padX} y={verifiedLineY} font-family={FONT_SANS} font-size="11" fill={DIM}>
+      {verifiedStamp}
+    </text>
+  </svg>
+
+  <figcaption>{data.summary}</figcaption>
+
+  <SourceLine
+    sources={data.sources}
+    lastVerified={data.last_verified}
+    methodsAnchor={data.anchor}
+  />
+</figure>
+
+<style>
+  .infographic-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-6) 0 var(--space-7);
+    box-shadow:
+      0 1px 0 rgba(31, 41, 55, 0.02),
+      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+  }
+  .infographic-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  figcaption {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: var(--space-6) 0 0;
+    line-height: 1.6;
+    border-top: 1px solid var(--rule);
+    padding-top: var(--space-5);
+  }
+  @media (min-width: 720px) {
+    .infographic-card {
+      padding: var(--space-7) var(--space-7);
+    }
+  }
+</style>
