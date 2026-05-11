@@ -20,7 +20,7 @@ A static website that puts AI's water and energy footprint next to other large u
 
 ## Where we are
 
-All editorial content is in place. Phases 1–6 closed.
+All editorial content is in place. Phases 1–6 closed; Phase 7 inventory pass closed 2026-05-11.
 
 - **Phases 1–4.** Astro scaffold, GitHub + Vercel deploy, design tokens locked, web fonts, masthead, hourly hero on the home page, all 14 comparison cards live on `/comparisons`.
 
@@ -40,7 +40,9 @@ All editorial content is in place. Phases 1–6 closed.
 
 - **IEA April 2026 audit (closed 2026-05-03).** All site figures reconciled to the IEA April 2026 update — electricity 415→460 TWh in 8 places, CO₂ 220→180 Mt in 5 places, prose recomputed where the math changed, `last_verified` bumped on the affected sections.
 
-**Next: Phase 7** — verifier script and weekly GitHub Action per `website_plan.md` Section 7. The natural first move is a source inventory: for each tracked URL in `figures.json`, classify as stable structured page (parseable HTML/JSON), PDF (needs `pdf-parse`), or paywalled/unparseable. That classification shapes the script's structure and the per-source error handling.
+- **Phase 7 source inventory (closed 2026-05-11).** Source manifest committed as `src/data/sources.json` — 30 sources classified across 4 verification modes: 14 hash-only, 11 snapshot-only, 3 editorial-only, 2 manual-quarterly. Reframes Section 7's parsability axis (stable HTML / PDF / paywalled) as a verification-mode axis — what the script *does* per source, not what the source is. Also consolidated a duplicate LBNL DC report URL in `figures.json` (`water-residential-outdoor` had pointed at the `_1`-suffixed upload variant of the same PDF).
+
+**Next: Phase 7 script.** With the manifest committed, the remaining Phase 7 work is `scripts/verify-sources.mjs` plus `.github/workflows/weekly-verify.yml`. The script reads `sources.json`, dispatches by mode, and either bumps `last_verified` in `figures.json` or opens a PR titled 'Source change detected: [name]'. Hash-only sources get fetched + body-hashed + snapshotted + diffed weekly; snapshot-only sources get archived once on first run and skipped thereafter; manual-quarterly and editorial-only entries are skipped by the weekly cron entirely. The April 2026 IEA refresh is the canonical worked example of the kind of update the verifier needs to surface as a PR rather than auto-apply.
 
 Design refinement (both overall and per-component) is being saved for after Phase 7 ships, so the critique can be a single holistic pass once all structural work is in place.
 
@@ -65,6 +67,8 @@ The anti-AI-speak rubric memory file (in Claude's persistent memory) governs all
 6. **Training/inference shape** (`training_events` array + `inference` range + `x_min_tco2` / `x_max_tco2`) — `training-vs-inference`
 
 Other architectural decisions worth knowing:
+
+- **`src/data/sources.json` is the verifier's manifest**, separate from `figures.json`. Array keyed by stable `id`, with `url`, `name`, `mode`, `anchors` count, and optional `note`. Top of file carries a `modes` legend. Modes: `hash-only` (weekly fetch + hash + snapshot + PR on change), `snapshot-only` (one-time archive, no re-check), `manual-quarterly` (skipped in cron, surfaced via reminder), `editorial-only` (present in figures.json for credit, not verified). 30 entries today, anchoring 23 displays. Worth re-running the URL-set cross-check (figures.json sources blocks ↔ sources.json entries) whenever either file is touched.
 
 - **`niceCeiling` consolidated to `src/lib/niceCeiling.ts`** with a parameterized `granular: true` opt-in for tighter mantissa steps (used by water-bracket; default by other bar charts). Now duplicated across three bar-chart components plus the original coarse version in `RangeBar.astro`. Consolidation queued for next bar-chart visual or design pass.
 - **Editorial captions baked into the SVG** for didactic visuals (range-vs-point, watt-scale, training-vs-inference): a one-line italic Source Serif sentence sits between the axis and the footer rule so a saved image carries the rule.
@@ -114,6 +118,7 @@ The persistent memory files cover most of these; pointers below for context.
 ```
 src/
   data/figures.json                        ← single source of truth (8 infographics + 14 comparisons)
+  data/sources.json                        ← verifier manifest: 30 sources × 4 modes
   layouts/Layout.astro                     ← page wrapper: masthead + main slot
   components/
     ComparisonCard.astro                   ← one card per comparison
