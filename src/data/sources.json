@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "last_inventory": "2026-05-11",
+  "modes": {
+    "hash-only": "Fetch weekly, hash body, snapshot to data/snapshots/, open PR on change.",
+    "snapshot-only": "Fetch once on first run, archive in data/snapshots/, skip the weekly hash compare thereafter.",
+    "manual-quarterly": "Skip in weekly cron; surface in a quarterly human-review reminder.",
+    "editorial-only": "Present in figures.json for credit; not verified."
+  },
+  "sources": [
+    {
+      "id": "iea-energy-and-ai-demand",
+      "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+      "name": "IEA — Energy and AI: Energy Demand from AI",
+      "mode": "hash-only",
+      "anchors": 17,
+      "note": "Workhorse source. A single source-change PR can sweep up to 17 displays. If churn becomes noisy, queue sub-section hashing."
+    },
+    {
+      "id": "iea-key-questions-on-ai",
+      "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+      "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
+      "mode": "hash-only",
+      "anchors": 6,
+      "note": "April 2026 update; source of the current 460 TWh / 180 Mt baselines."
+    },
+    {
+      "id": "eia-use-of-electricity",
+      "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php",
+      "name": "EIA — Use of Electricity / Electric Power Annual",
+      "mode": "hash-only",
+      "anchors": 4,
+      "note": "Updates annually as new EIA totals release."
+    },
+    {
+      "id": "lbnl-gaming-energy",
+      "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers",
+      "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
+      "mode": "hash-only",
+      "anchors": 4,
+      "note": "Publications index page; the figures themselves sit in downstream linked reports."
+    },
+    {
+      "id": "iea-ev-outlook-2025",
+      "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand",
+      "name": "IEA — Global EV Outlook 2025: Outlook for Energy Demand",
+      "mode": "hash-only",
+      "anchors": 2,
+      "note": "URL pattern includes year; may 404 or move when the 2026 outlook drops."
+    },
+    {
+      "id": "goldman-ai-2030",
+      "url": "https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030",
+      "name": "Goldman Sachs — AI to drive 165% increase in data center power demand by 2030",
+      "mode": "hash-only",
+      "anchors": 2,
+      "note": "Corporate insights post; risk of 404 if Goldman reshuffles. Snapshot is the receipt."
+    },
+    {
+      "id": "carbon-trust-streaming",
+      "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming",
+      "name": "Carbon Trust — Carbon impact of video streaming",
+      "mode": "hash-only",
+      "anchors": 2
+    },
+    {
+      "id": "epa-passenger-vehicle",
+      "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle",
+      "name": "U.S. EPA — Greenhouse Gas Emissions from a Typical Passenger Vehicle",
+      "mode": "hash-only",
+      "anchors": 2,
+      "note": "Source of the canonical 400 g CO2/mile figure."
+    },
+    {
+      "id": "epoch-ai-chatgpt",
+      "url": "https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use",
+      "name": "Epoch AI — How much energy does ChatGPT use?",
+      "mode": "hash-only",
+      "anchors": 1,
+      "note": "Hypothesis (unverified this session): post has been revised multiple times since publication. Hash flags on every edit are expected and useful here."
+    },
+    {
+      "id": "iea-streaming-commentary",
+      "url": "https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines",
+      "name": "IEA — The carbon footprint of streaming video: fact-checking the headlines",
+      "mode": "hash-only",
+      "anchors": 1
+    },
+    {
+      "id": "iea-news-dc-surge-2025",
+      "url": "https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions",
+      "name": "IEA — Data centre electricity use surged in 2025 (April 2026)",
+      "mode": "hash-only",
+      "anchors": 1,
+      "note": "News article; expected to be frozen after publication."
+    },
+    {
+      "id": "epa-ghg-inventory",
+      "url": "https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks",
+      "name": "EPA — Inventory of U.S. Greenhouse Gas Emissions and Sinks",
+      "mode": "hash-only",
+      "anchors": 1,
+      "note": "Annual inventory site; expect routine yearly refreshes."
+    },
+    {
+      "id": "epa-watersense-outdoors",
+      "url": "https://www.epa.gov/watersense/outdoors",
+      "name": "EPA WaterSense — Outdoors / Statistics & Facts",
+      "mode": "hash-only",
+      "anchors": 1
+    },
+    {
+      "id": "eia-recs",
+      "url": "https://www.eia.gov/consumption/residential/",
+      "name": "EIA — Residential Energy Consumption Survey (RECS), 2020",
+      "mode": "hash-only",
+      "anchors": 1
+    },
+    {
+      "id": "lbnl-2024-dc-report",
+      "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf",
+      "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
+      "mode": "snapshot-only",
+      "anchors": 3,
+      "note": "Canonical PDF. The _1-suffixed variant has been consolidated into this entry; figures.json updated."
+    },
+    {
+      "id": "gcsaa-phase-4-water",
+      "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf",
+      "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
+      "mode": "snapshot-only",
+      "anchors": 2
+    },
+    {
+      "id": "randa-global-golf-2024",
+      "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf",
+      "name": "R&A — Global Golf Participation Report 2024",
+      "mode": "snapshot-only",
+      "anchors": 2
+    },
+    {
+      "id": "epa-banks-lawn-equipment",
+      "url": "https://www.epa.gov/sites/default/files/2015-09/documents/banks.pdf",
+      "name": "EPA — National Emissions from Lawn and Garden Equipment (Banks)",
+      "mode": "snapshot-only",
+      "anchors": 1,
+      "note": "2015 PDF; canonical for U.S. lawn-equipment emissions."
+    },
+    {
+      "id": "fao-livestock-climate",
+      "url": "https://www.fao.org/4/i3437e/i3437e.pdf",
+      "name": "UN FAO — Tackling Climate Change Through Livestock",
+      "mode": "snapshot-only",
+      "anchors": 1,
+      "note": "2013 PDF; stable URL."
+    },
+    {
+      "id": "cgd-holiday-lights",
+      "url": "https://www.cgdev.org/blog/us-holiday-lights-use-more-electricity-el-salvador-does-year",
+      "name": "U.S. Department of Energy / EIA — 2008 holiday lighting estimate (cited via Center for Global Development)",
+      "mode": "snapshot-only",
+      "anchors": 1,
+      "note": "Frozen blog post citing 2008 DOE figure."
+    },
+    {
+      "id": "arxiv-strubell-2019",
+      "url": "https://arxiv.org/abs/1906.02243",
+      "name": "Strubell et al. 2019 — Energy and Policy Considerations for Deep Learning in NLP",
+      "mode": "snapshot-only",
+      "anchors": 1
+    },
+    {
+      "id": "arxiv-patterson-2022",
+      "url": "https://arxiv.org/abs/2104.10350",
+      "name": "Patterson et al. 2022 — Carbon Emissions and Large Neural Network Training",
+      "mode": "snapshot-only",
+      "anchors": 1
+    },
+    {
+      "id": "arxiv-bloom-2022",
+      "url": "https://arxiv.org/abs/2211.02001",
+      "name": "BigScience — Estimating the Carbon Footprint of BLOOM",
+      "mode": "snapshot-only",
+      "anchors": 1
+    },
+    {
+      "id": "arxiv-llama-2",
+      "url": "https://arxiv.org/abs/2307.09288",
+      "name": "Meta — Llama 2: Open Foundation and Fine-Tuned Chat Models",
+      "mode": "snapshot-only",
+      "anchors": 1
+    },
+    {
+      "id": "arxiv-llama-3",
+      "url": "https://arxiv.org/abs/2407.21783",
+      "name": "Meta — The Llama 3 Herd of Models",
+      "mode": "snapshot-only",
+      "anchors": 1
+    },
+    {
+      "id": "cbeci",
+      "url": "https://ccaf.io/cbnsi/cbeci",
+      "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
+      "mode": "manual-quarterly",
+      "anchors": 3,
+      "note": "Live dashboard; weekly hash drift on timestamps would be noise. Future: structured extraction against CBECI's data endpoint if quarterly cadence proves too coarse."
+    },
+    {
+      "id": "digiconomist-bitcoin",
+      "url": "https://digiconomist.net/bitcoin-energy-consumption",
+      "name": "Digiconomist — Bitcoin Energy Consumption Index",
+      "mode": "manual-quarterly",
+      "anchors": 1,
+      "note": "Live dashboard."
+    },
+    {
+      "id": "iea-aviation-hub",
+      "url": "https://www.iea.org/energy-system/transport/aviation",
+      "name": "IEA — Aviation",
+      "mode": "editorial-only",
+      "anchors": 1,
+      "note": "Topic hub; not the direct source of any cited figure."
+    },
+    {
+      "id": "iea-cement-hub",
+      "url": "https://www.iea.org/energy-system/industry/cement",
+      "name": "IEA — Cement",
+      "mode": "editorial-only",
+      "anchors": 1,
+      "note": "Topic hub; not the direct source of any cited figure."
+    },
+    {
+      "id": "iea-steel-hub",
+      "url": "https://www.iea.org/energy-system/industry/steel",
+      "name": "IEA — Iron and Steel",
+      "mode": "editorial-only",
+      "anchors": 1,
+      "note": "Topic hub; not the direct source of any cited figure."
+    }
+  ]
+}
