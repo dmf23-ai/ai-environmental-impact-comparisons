@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+        body {
+            font-family: "Arial";
+        }
+    </style>
+    <script type="text/javascript">
+    window.awsWafCookieDomainList = [];
+    window.gokuProps = {
+"key":"AQIDAHjcYu/GjX+QlghicBgQ/7bFaQZ+m5FKCMDnO+vTbNg96AHzT1CG8BW+77Y/Mdvg4IwKAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM2arbKbJTobtBjVG+AgEQgDucIppR7td+YK4frUedxnTzCzZQC8VchFodLJFmVcBFv7uLG5FUJB5LkRN1TDLZLp+CG1KvHXntYcYPbQ==",
+          "iv":"A6x+YQESiwAAhIyU",
+          "context":"iehM4GLMnOrCpzkmXuEuEb4g6pZ/o3SoHX/A0rkTCmLuaJPgQa5FYWoTBpxmePEajgud3gjRwr8CH+NmWnuszr1c+xUtm5cvB1lmXAMOqZUMJ2IZmPwNsiCavl1lyPW1e7QH/Pc4EGQWq8pWeOUH4UdCkNWbttoZPAcsAL06ScVlgsPONpPA59Ki2/8u33hKiG99gqpZSfsIr87uvk3TtjwONAuFbbv+4PHh6vwNv2dFAaC+3wYJ4RHJCmTB16EdhNjkLDaC0p+0Kzcy7JdNkznJxJWtY25F0ne18jTwE1Pf+vBW5Dj8Yu6zfyWeiuiPloSFOFjos1hAFBhAVsy86XkOgciaAmaGq1LIuRLL48NogZik7e0Jva0HYzjEbz9tZcCkYYI="
+};
+    </script>
+    <script src="https://5ec2a1ad32dc.d0db0a30.us-east-2.token.awswaf.com/5ec2a1ad32dc/60ea1a4c1295/553dc510dcaf/challenge.js"></script>
+</head>
+<body>
+    <div id="challenge-container"></div>
+    <script type="text/javascript">
+        AwsWafIntegration.saveReferrer();
+        AwsWafIntegration.checkForceRefresh().then((forceRefresh) => {
+            if (forceRefresh) {
+                AwsWafIntegration.forceRefreshToken().then(() => {
+                    window.location.reload(true);
+                });
+            } else {
+                AwsWafIntegration.getToken().then(() => {
+                    window.location.reload(true);
+                });
+            }
+        });
+    </script>
+    <noscript>
+        <h1>JavaScript is disabled</h1>
+        In order to continue, we need to verify that you're not a robot.
+        This requires JavaScript. Enable JavaScript and then reload the page.
+    </noscript>
+</body>
+</html>

@@ -1,11 +1,15 @@
 {
   "schema_version": 1,
   "last_inventory": "2026-05-11",
+  "last_taxonomy_revision": "2026-05-11",
   "modes": {
     "hash-only": "Fetch weekly, hash body, snapshot to data/snapshots/, open PR on change.",
     "snapshot-only": "Fetch once on first run, archive in data/snapshots/, skip the weekly hash compare thereafter.",
     "manual-quarterly": "Skip in weekly cron; surface in a quarterly human-review reminder.",
     "editorial-only": "Present in figures.json for credit; not verified."
+  },
+  "flags": {
+    "via_wayback": "Fetch this source through the Wayback Machine's latest snapshot instead of directly. Use when the origin blocks the verifier (e.g., IEA's Cloudflare)."
   },
   "sources": [
     {
@@ -14,7 +18,8 @@
       "name": "IEA — Energy and AI: Energy Demand from AI",
       "mode": "hash-only",
       "anchors": 17,
-      "note": "Workhorse source. A single source-change PR can sweep up to 17 displays. If churn becomes noisy, queue sub-section hashing."
+      "note": "Workhorse source. A single source-change PR can sweep up to 17 displays. If churn becomes noisy, queue sub-section hashing. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
     },
     {
       "id": "iea-key-questions-on-ai",
@@ -22,7 +27,8 @@
       "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
       "mode": "hash-only",
       "anchors": 6,
-      "note": "April 2026 update; source of the current 460 TWh / 180 Mt baselines."
+      "note": "April 2026 update; source of the current 460 TWh / 180 Mt baselines. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
     },
     {
       "id": "eia-use-of-electricity",
@@ -38,7 +44,7 @@
       "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
       "mode": "hash-only",
       "anchors": 4,
-      "note": "Publications index page; the figures themselves sit in downstream linked reports."
+      "note": "Detail page for the specific report; the figures themselves sit in the linked PDFs, but the page summary carries the headline numbers we cite."
     },
     {
       "id": "iea-ev-outlook-2025",
@@ -46,7 +52,8 @@
       "name": "IEA — Global EV Outlook 2025: Outlook for Energy Demand",
       "mode": "hash-only",
       "anchors": 2,
-      "note": "URL pattern includes year; may 404 or move when the 2026 outlook drops."
+      "note": "URL pattern includes year; may 404 or move when the 2026 outlook drops. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
     },
     {
       "id": "goldman-ai-2030",
@@ -84,7 +91,9 @@
       "url": "https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines",
       "name": "IEA — The carbon footprint of streaming video: fact-checking the headlines",
       "mode": "hash-only",
-      "anchors": 1
+      "anchors": 1,
+      "via_wayback": true,
+      "note": "Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting)."
     },
     {
       "id": "iea-news-dc-surge-2025",
@@ -92,7 +101,8 @@
       "name": "IEA — Data centre electricity use surged in 2025 (April 2026)",
       "mode": "hash-only",
       "anchors": 1,
-      "note": "News article; expected to be frozen after publication."
+      "note": "News article; expected to be frozen after publication. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
     },
     {
       "id": "epa-ghg-inventory",
@@ -115,6 +125,33 @@
       "name": "EIA — Residential Energy Consumption Survey (RECS), 2020",
       "mode": "hash-only",
       "anchors": 1
+    },
+    {
+      "id": "iea-aviation-hub",
+      "url": "https://www.iea.org/energy-system/transport/aviation",
+      "name": "IEA — Aviation",
+      "mode": "hash-only",
+      "anchors": 1,
+      "note": "Reclassified from editorial-only on 2026-05-11 — this hub is the actual cited source for the aviation comparison card, not just topical context. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
+    },
+    {
+      "id": "iea-cement-hub",
+      "url": "https://www.iea.org/energy-system/industry/cement",
+      "name": "IEA — Cement",
+      "mode": "hash-only",
+      "anchors": 1,
+      "note": "Reclassified from editorial-only on 2026-05-11 — this hub carries the headline cement-emissions figure cited on the site. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
+    },
+    {
+      "id": "iea-steel-hub",
+      "url": "https://www.iea.org/energy-system/industry/steel",
+      "name": "IEA — Iron and Steel",
+      "mode": "hash-only",
+      "anchors": 1,
+      "note": "Reclassified from editorial-only on 2026-05-11 — this hub carries the headline iron-and-steel emissions figure cited on the site. Fetched via Wayback Machine; origin blocks the verifier even with a full Chrome header set (Cloudflare TLS fingerprinting).",
+      "via_wayback": true
     },
     {
       "id": "lbnl-2024-dc-report",
@@ -158,9 +195,9 @@
       "id": "cgd-holiday-lights",
       "url": "https://www.cgdev.org/blog/us-holiday-lights-use-more-electricity-el-salvador-does-year",
       "name": "U.S. Department of Energy / EIA — 2008 holiday lighting estimate (cited via Center for Global Development)",
-      "mode": "snapshot-only",
+      "mode": "manual-quarterly",
       "anchors": 1,
-      "note": "Frozen blog post citing 2008 DOE figure."
+      "note": "Frozen blog post citing 2008 DOE figure. Cloudflare or similar bot detection blocks the verifier; demoted from snapshot-only on 2026-05-11 since the content is permanently static anyway."
     },
     {
       "id": "arxiv-strubell-2019",
@@ -212,30 +249,6 @@
       "mode": "manual-quarterly",
       "anchors": 1,
       "note": "Live dashboard."
-    },
-    {
-      "id": "iea-aviation-hub",
-      "url": "https://www.iea.org/energy-system/transport/aviation",
-      "name": "IEA — Aviation",
-      "mode": "editorial-only",
-      "anchors": 1,
-      "note": "Topic hub; not the direct source of any cited figure."
-    },
-    {
-      "id": "iea-cement-hub",
-      "url": "https://www.iea.org/energy-system/industry/cement",
-      "name": "IEA — Cement",
-      "mode": "editorial-only",
-      "anchors": 1,
-      "note": "Topic hub; not the direct source of any cited figure."
-    },
-    {
-      "id": "iea-steel-hub",
-      "url": "https://www.iea.org/energy-system/industry/steel",
-      "name": "IEA — Iron and Steel",
-      "mode": "editorial-only",
-      "anchors": 1,
-      "note": "Topic hub; not the direct source of any cited figure."
     }
   ]
 }

@@ -1,0 +1,104 @@
+name: Weekly source verification
+
+on:
+  schedule:
+    - cron: '0 11 * * 1'  # Mondays, 11:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install cheerio
+        run: npm install --no-save cheerio@1.0.0
+
+      - name: Run verifier
+        run: node scripts/verify-sources.mjs
+        continue-on-error: true
+
+      - name: Decide outcome
+        id: outcome
+        run: |
+          if [ ! -f .verify-summary.json ]; then
+            echo "outcome=noop" >> "$GITHUB_OUTPUT"
+            echo "No summary file; treating as noop."
+            exit 0
+          fi
+          CHANGED=$(jq '.changed | length' .verify-summary.json)
+          BUMPED=$(jq '.bumped' .verify-summary.json)
+          ERRORS=$(jq '.errors | length' .verify-summary.json)
+          SNAPSHOT_DELTA=$(git status --porcelain src/data/snapshots/ | wc -l)
+          PR_TITLE=$(jq -r '.pr_title // empty' .verify-summary.json)
+          echo "changed=$CHANGED bumped=$BUMPED errors=$ERRORS snapshot_delta=$SNAPSHOT_DELTA"
+          if [ "$CHANGED" -gt 0 ]; then
+            echo "outcome=changed" >> "$GITHUB_OUTPUT"
+          elif [ "$BUMPED" -gt 0 ] || [ "$SNAPSHOT_DELTA" -gt 0 ]; then
+            echo "outcome=bumped" >> "$GITHUB_OUTPUT"
+          else
+            echo "outcome=noop" >> "$GITHUB_OUTPUT"
+          fi
+          echo "errors=$ERRORS" >> "$GITHUB_OUTPUT"
+          echo "pr_title=$PR_TITLE" >> "$GITHUB_OUTPUT"
+
+      - name: Commit date bumps and first-run archives to main
+        if: steps.outcome.outputs.outcome == 'bumped'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/data/figures.json src/data/snapshots/
+          DATE=$(date -u +%Y-%m-%d)
+          ERR_NOTE=""
+          if [ "${{ steps.outcome.outputs.errors }}" -gt 0 ]; then
+            ERR_NOTE=" (errors=${{ steps.outcome.outputs.errors }})"
+          fi
+          git commit -m "Verify sources: bump last_verified $DATE$ERR_NOTE"
+          git push
+
+      - name: Build PR body for source changes
+        if: steps.outcome.outputs.outcome == 'changed'
+        run: |
+          {
+            echo "Weekly verifier detected one or more source pages whose content hash changed since the last run."
+            echo
+            echo "## Sources that changed"
+            echo
+            jq -r '.changed[] | "- **" + .name + "** (`" + .id + "`)\n  - URL: " + .url + "\n  - Previous hash: `" + .prev_hash + "`\n  - New hash: `" + .new_hash + "`"' .verify-summary.json
+            echo
+            echo "## Reviewer checklist"
+            echo
+            echo "- [ ] Open each snapshot diff in this PR and skim for substantive change versus cosmetic churn."
+            echo "- [ ] If the displayed figure is now wrong, edit \`src/data/figures.json\` to update the value and bump \`last_verified\` to today."
+            echo "- [ ] If the figure is still correct (cosmetic churn only), merge to refresh the snapshot baseline; the next cron run will bump dates automatically."
+            echo "- [ ] If a source produced repeated cosmetic churn across runs, add a strip rule for it to \`scripts/verify-sources.mjs\`."
+            ERRORS=$(jq '.errors | length' .verify-summary.json)
+            if [ "$ERRORS" -gt 0 ]; then
+              echo
+              echo "## Source errors this run"
+              echo
+              jq -r '.errors[] | "- **" + .name + "** (`" + .id + "`): " + .reason' .verify-summary.json
+            fi
+          } > .pr-body.md
+
+      - name: Open PR for source changes
+        if: steps.outcome.outputs.outcome == 'changed'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: source-changes/run-${{ github.run_id }}
+          title: ${{ steps.outcome.outputs.pr_title }}
+          body-path: .pr-body.md
+          commit-message: 'Capture source-change snapshots'
+          add-paths: |
+            src/data/snapshots/
+          delete-branch: true

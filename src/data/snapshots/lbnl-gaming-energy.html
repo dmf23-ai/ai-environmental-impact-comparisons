@@ -1,0 +1,613 @@
+<!DOCTYPE html><html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#"><head>
+    
+
+
+
+<link rel="canonical" href="https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers">
+
+
+
+
+<link rel="icon" href="/themes/custom/lbl_base/favicon.ico" type="image/vnd.microsoft.icon">
+
+    <title>Taming the Energy Use of Gaming Computers | Center of Expertise for Data Center Efficiency</title>
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_aTuc2fHDc-S8KCkt-sCAXrj70Hh0xYinQ-Bm1zVfALY.css?delta=0&amp;language=en&amp;theme=lbl_base&amp;include=eJxtjEkKgDAMAD9UzJNClyClaROaFvT3Lgh68DYzh4mFUh7SMbdEbQSWWODDjrbBuRVIfarn5VHHgTF4I1hZgufXL4hSVdq5MGe5KhOq6FS8jwY_zdlugypciwPZkjpl">
+<link rel="stylesheet" media="all" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" media="all" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">
+<link rel="stylesheet" media="all" href="//cdn.lbl.gov/stable/2/css/global.css">
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_2rwW3gGpBiZy-Zv_4-GrzABHdKAQtIWtxODVteHqAx4.css?delta=4&amp;language=en&amp;theme=lbl_base&amp;include=eJxtjEkKgDAMAD9UzJNClyClaROaFvT3Lgh68DYzh4mFUh7SMbdEbQSWWODDjrbBuRVIfarn5VHHgTF4I1hZgufXL4hSVdq5MGe5KhOq6FS8jwY_zdlugypciwPZkjpl">
+
+    
+  </head>
+  <body class="path-publications blds-v2">
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      Skip to main content
+    </a>
+
+        <div class="main-page-content">
+      
+        <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas="">
+          <div class="top-bar">
+            <div class="container">
+                    <div class="region">
+    <nav role="navigation" aria-labelledby="block-topbar-menu" id="block-topbar">
+            
+  <h2 class="visually-hidden" id="block-topbar-menu">Top Bar</h2>
+  
+
+        
+  
+  
+  
+                          <ul class="nav">
+                    
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="https://lbl.gov" target="_blank">Berkeley Lab</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="https://eta.lbl.gov" target="_blank">Energy Technologies Area</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+
+
+  </nav>
+
+  </div>
+
+              </div>
+    </div>
+  
+
+  <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+                                <div class="region">
+    <div id="block-lbl-base-branding">
+  
+    
+        <a href="/" title="Home" rel="home" class="site-branding__logo">
+      <img src="/sites/default/files/CEEEDC_logo-2025_WEB2_0.png" alt="Home">
+    </a>
+      
+</div>
+
+  </div>
+
+              
+                        <div class="top-link">
+            <a href="/who-we-are">About Us</a>
+          </div>
+              
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"></path>
+          </svg>
+        </button>
+      
+              <div class="collapse navbar-collapse" id="navbar">
+            <div class="region">
+    
+  
+  
+  
+  
+                          <ul class="nav">
+                    
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="/tools" data-drupal-link-system-path="node/10">Tools</a>
+                  <a class="menu-expand" href="#">+</a>
+        
+        
+                        
+  
+  
+                  <ul>
+                    
+                                      
+              <li class="nav-item">
+      
+        <a href="/dcpro" data-drupal-link-system-path="node/9">DC Pro Tool</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/department-energydoe-energy-assessment" data-drupal-link-system-path="node/550">Department of Energy(DOE) Energy Assessment Process Manual</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/energy-assessment-worksheet" data-drupal-link-system-path="node/315">Energy Assessment Worksheet</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/energy-efficiency-assessment-report" data-drupal-link-system-path="node/552">Energy Efficiency Assessment Report Template</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/air-management-packages-tool" data-drupal-link-system-path="node/591">Air Management Lookup Tables</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/data-center-air-management-estimator" data-drupal-link-system-path="node/323">Data Center Air Management Estimator</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/data-center-air-management-tool" data-drupal-link-system-path="node/556">Data Center Air Management Tool</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/electrical-power-chain-tool" data-drupal-link-system-path="node/502">Data Center Electrical Power Chain Tool</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/data-center-master-list-energy" data-drupal-link-system-path="node/483">Data Center Master List of Energy Efficiency Actions</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/resources/it-efficiency-assessment-tool" data-drupal-link-system-path="node/587">IT Equipment Energy Assessment Tool</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+          
+                      </li>
+                
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="/technologies" data-drupal-link-system-path="node/8">Technologies</a>
+                  <a class="menu-expand" href="#">+</a>
+        
+        
+                        
+  
+  
+                  <ul>
+                    
+                                      
+              <li class="nav-item">
+      
+        <a href="/cooling-air-management" data-drupal-link-system-path="node/11">Cooling &amp; Air Management</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/environmental-conditions" data-drupal-link-system-path="node/15">Environmental Conditions</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/monitoring-controls" data-drupal-link-system-path="node/16">Monitoring &amp; Controls</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/it-equipment-management" data-drupal-link-system-path="node/12">IT Equipment &amp; Management</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/liquid-cooling" data-drupal-link-system-path="node/17">Liquid Cooling</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/power-lighting" data-drupal-link-system-path="node/13">Power &amp; Lighting</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/water-efficiency" data-drupal-link-system-path="node/19">Water Efficiency</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+          
+                      </li>
+                
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="/training" data-drupal-link-system-path="node/20">Training</a>
+                  <a class="menu-expand" href="#">+</a>
+        
+        
+                        
+  
+  
+                  <ul>
+                    
+                                      
+              <li class="nav-item">
+      
+        <a href="/dcep" data-drupal-link-system-path="node/21">Data Center Energy Practitioner (DCEP) Training</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/demand-training" data-drupal-link-system-path="node/24">On-Demand Training</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/webinars-and-presentations" data-drupal-link-system-path="node/26">Webinars and Presentations</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+          
+                      </li>
+                
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="/focus-areas" data-drupal-link-system-path="node/27">Focus Areas</a>
+                  <a class="menu-expand" href="#">+</a>
+        
+        
+                        
+  
+  
+                  <ul>
+                    
+                                      
+              <li class="nav-item">
+      
+        <a href="/activities/0" data-drupal-link-system-path="activities/0">Business Case</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/data-center-types-and-markets" data-drupal-link-system-path="node/33">Data Center Types and Markets</a>
+                  <a class="menu-expand" href="#">+</a>
+        
+        
+                        
+  
+  
+                  <ul>
+                    
+                                      
+              <li class="nav-item">
+      
+        <a href="/federal-data-centers" data-drupal-link-system-path="node/38">Federal Data Centers</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/high-performance-computing-hpc" data-drupal-link-system-path="node/39">High Performance Computing (HPC)</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item">
+      
+        <a href="/small-data-centers" data-drupal-link-system-path="node/30">Small Data Centers</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+          
+                      </li>
+                    </ul>
+      
+          
+                      </li>
+                
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="/resources" data-drupal-link-system-path="resources">Library</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+
+
+<div class="views-exposed-form" data-drupal-selector="views-exposed-form-search-page" id="block-exposedformsearchpage">
+  
+    
+      <form action="/search" method="get" id="views-exposed-form-search-page" accept-charset="UTF-8">
+  <div class="js-form-item form-item js-form-type-textfield form-item-s js-form-item-s">
+      <label for="edit-s">Search</label>
+        <input data-drupal-selector="edit-s" type="text" id="edit-s" name="s" value="" size="30" maxlength="128" class="form-text form-control">
+
+        </div>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 44 44" xml:space="preserve">
+        <path class="st0" d="M42,2v40H2V2H42 M44,0H0v44h44V0L44,0z"></path>
+        <path class="st0" d="M33.4,31.6l-5.8-5.8c0.9-1.4,1.4-3,1.4-4.8c0-5-4-9-9-9s-9,4-9,9c0,5,4,9,9,9c1.8,0,3.4-0.5,4.8-1.4l5.8,5.8
+          L33.4,31.6z M13.5,21c0-3.6,2.9-6.5,6.5-6.5s6.5,2.9,6.5,6.5s-2.9,6.5-6.5,6.5S13.5,24.6,13.5,21z"></path>
+      </svg><div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions"><input data-drupal-selector="edit-submit-search" type="submit" id="edit-submit-search" value="Apply" class="button js-form-submit form-submit form-control">
+</div>
+
+
+</form>
+
+  </div>
+
+  </div>
+
+        </div>
+          </div>
+  </nav>
+
+
+  <div role="main" class="main-container">
+
+        
+        <section>
+
+                              <div class="highlighted">
+            <div class="container">
+                <div class="region">
+    <div data-drupal-messages-fallback="" class="hidden"></div>
+
+  </div>
+
+            </div>
+          </div>
+              
+                              <div class="help">
+            <div class="container">
+              
+            </div>
+          </div>
+              
+                    <a id="main-content"></a>
+        <div class="container">
+            <div class="region">
+    <div id="block-breadcrumbs">
+  
+    
+      
+  </div>
+<div id="block-pagetitle">
+  
+    
+      
+  <h1>Taming the Energy Use of Gaming Computers</h1>
+
+
+  </div>
+<div id="block-lbl-base-content">
+  
+    
+      <div class="publication-full">
+      <h3 class="mt-3">Publication Type</h3>
+    <div>Journal Article</div>
+  
+  
+      <h3 class="mt-3">Authors</h3>
+    <div>
+      <a href="/publications?author=Evan Mills" class="publications--publication-author">Mills, Evan</a><span>, </span><a href="/publications?author=Nathaniel Mills" class="publications--publication-author">Nathaniel Mills</a>    </div>
+  
+      <h3 class="mt-3">DOI</h3>
+    <div>
+      <a href="https://dx.doi.org/10.1007/s12053-015-9371-1" target="_blank">10.1007/s12053-015-9371-1</a>
+    </div>
+  
+      <h3 class="mt-3">Abstract</h3>
+    <div><p>One billion people around the world engage in some form of digital gaming. Gaming is the most energy-intensive use of personal computers, and the high-performance “racecar” systems built expressly for gaming are the fastest growing type of gaming platform. Large performance-normalized variations in nameplate power ratings for gaming computer components available on today’s market indicate significant potential for energy savings: central processing units vary by 4.3-fold, graphics processing units 5.8-fold, power supply units 1.3-fold, motherboards 5.0-fold, and random access memory (RAM) 139.2-fold. Measured performance of displays varies by 11.5-fold. However, underlying the importance of empirical data, we find that measured peak power requirements are considerably lower than nameplate for most components tested, and by about 50&nbsp;% for complete systems. Based on actual measurements of five gaming PCs with progressively more efficient component configurations, we estimate the typical gaming computer (including display) to use approximately 1400&nbsp;kWh/year, which is equivalent to the energy use of ten game consoles, six standard PCs, or three refrigerators. The more intensive user segments could easily consume double this central estimate. While gaming PCs represent only 2.5&nbsp;% of the global installed PC equipment base, our initial scoping estimate suggests that gaming PCs consumed 75&nbsp;TWh/year ($10 billion) of electricity globally in 2012 or approximately 20&nbsp;% of total PC, notebook, and console energy usage. Based on projected changes in the installed base, we estimate that consumption will more than double by the year 2020 if the current rate of equipment sales is unabated and efficiencies are not improved. Although they will represent only 10&nbsp;% of the installed base of gaming platforms in 2020, relatively high unit energy consumption and high hours of use will result in gaming computers being responsible for 40&nbsp;% of gaming energy use. Savings of more than 75&nbsp;% can be achieved via premium efficiency components applied at the time of manufacture or via retrofit, while improving reliability and performance (nearly a doubling of performance per unit of energy). This corresponds to a potential savings of approximately 120&nbsp;TWh/year or $18 billion/year globally by 2020. A consumer decision-making environment largely devoid of energy information and incentives suggests a need for targeted energy efficiency programs and policies in capturing these benefits.</p></div>
+  
+
+      <h3 class="mt-3">Journal</h3>
+    <div>Energy Efficiency</div>
+  
+  
+      <h3 class="mt-3">Year of Publication</h3>
+    <div>2015</div>
+  
+      <h3 class="mt-3">URL</h3>
+    <div>
+      <a href="https://www.springerprofessional.de/en/taming-the-energy-use-of-gaming-computers/11803342" target="_blank">https://www.springerprofessional.de/en/taming-the-energy-use-of-gaming-computers/11803342</a>
+    </div>
+  
+      <h3 class="mt-3">Issue</h3>
+    <div>2</div>
+  
+  
+  
+
+      <h3 class="mt-3">Organization</h3>
+    <div>
+      <a href="/organizations/residential-building-systems">Residential Building Systems</a><span>, </span><a href="/organizations/whole-building-systems-department">Whole Building Systems Department</a><span>, </span><a href="/organizations/building-technology-and-urban-systems">Building Technology and Urban Systems Division</a>    </div>
+  
+      <h3 class="mt-3">Research Areas</h3>
+    <div>
+      <a href="/research-areas/building-technology-and-urban">Building Technology and Urban Systems Division</a><span>, </span><a href="/research-areas/btus-lighting-and-electronics">BTUS Lighting and Electronics</a>    </div>
+  
+
+  </div>
+
+  </div>
+
+  </div>
+
+        </div>
+          </section>
+  </div>
+
+      <footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-region">
+      <div class="footer-logo">
+        
+        <div class="footer-logo--links">
+                                <a class="footer-logo--social-link" href="https://www.facebook.com/energytechnologiesarea.lbnl/" target="_blank">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+                                <a class="footer-logo--social-link" href="https://twitter.com/BerkeleyLabETA" target="_blank">
+              <i class="fab fa-twitter"></i>
+            </a>
+                            </div>
+        <div class="footer-logo--copyright">
+          ©2026 Energy Technologies Area, Berkeley Lab
+        </div>
+      </div>
+        <div class="region">
+    <nav role="navigation" aria-labelledby="block-lbl-base-footer-menu" id="block-lbl-base-footer">
+      
+  <h2 id="block-lbl-base-footer-menu">OUR ORGANIZATION</h2>
+  
+
+        
+  
+  
+  
+                          <ul class="nav">
+                    
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="http://lbl.gov" target="_blank">Lawrence Berkeley National Laboratory</a>
+        
+        
+          
+                      </li>
+                
+                                      
+              <li class="nav-item no-megamenu">
+      
+        <a href="http://eta.lbl.gov" target="_blank">Energy Technologies Area</a>
+        
+        
+          
+                      </li>
+                    </ul>
+      
+
+
+  </nav>
+
+  </div>
+
+    </div>
+  </div>
+</footer>
+  
+  </div>
+
+      
+    </div>
+        
+
+
+
+
+
+
+
+
+
+
+  
+
+</body></html>

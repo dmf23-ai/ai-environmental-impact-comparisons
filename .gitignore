@@ -25,3 +25,7 @@ Thumbs.db
 
 # vercel
 .vercel/
+
+# verifier
+.verify-summary.json
+.pr-body.md
