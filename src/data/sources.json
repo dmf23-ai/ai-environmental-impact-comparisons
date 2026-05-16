@@ -9,7 +9,8 @@
     "editorial-only": "Present in figures.json for credit; not verified."
   },
   "flags": {
-    "via_wayback": "Fetch this source through the Wayback Machine's latest snapshot instead of directly. Use when the origin blocks the verifier (e.g., IEA's Cloudflare)."
+    "via_wayback": "Fetch this source through the Wayback Machine's latest snapshot instead of directly. Use when the origin blocks the verifier (e.g., IEA's Cloudflare).",
+    "strip_selectors": "Optional array of CSS selectors to remove from the page before hashing. Use for navigational chrome (rolling news widgets, A/B banners, dynamic timestamps) that varies without reflecting real content change."
   },
   "sources": [
     {
@@ -36,7 +37,10 @@
       "name": "EIA — Use of Electricity / Electric Power Annual",
       "mode": "hash-only",
       "anchors": 4,
-      "note": "Updates annually as new EIA totals release."
+      "note": "Updates annually as new EIA totals release.",
+      "strip_selectors": [
+        ".header-whats-new"
+      ]
     },
     {
       "id": "lbnl-gaming-energy",
@@ -124,7 +128,10 @@
       "url": "https://www.eia.gov/consumption/residential/",
       "name": "EIA — Residential Energy Consumption Survey (RECS), 2020",
       "mode": "hash-only",
-      "anchors": 1
+      "anchors": 1,
+      "strip_selectors": [
+        ".header-whats-new"
+      ]
     },
     {
       "id": "iea-aviation-hub",

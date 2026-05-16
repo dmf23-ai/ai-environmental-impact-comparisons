@@ -40,7 +40,7 @@ const SUMMARY_PATH = join(ROOT, '.verify-summary.json');
 const DRY_RUN = process.argv.includes('--dry-run');
 const VERBOSE = process.argv.includes('--verbose');
 
-const FETCH_TIMEOUT_MS = 30_000;
+const FETCH_TIMEOUT_MS = 45_000;
 const WAYBACK_CDX_API = 'https://web.archive.org/cdx/search/cdx';
 
 // Sources behind bot-detection (notably IEA's Cloudflare) reject anything that
@@ -92,7 +92,7 @@ async function fetchWithTimeout(url, headers = BROWSER_HEADERS) {
 // Wayback's API sometimes returns transient 5xx; one quick retry usually
 // catches it. We don't retry on 4xx — those mean "no snapshot" and a retry
 // won't help.
-async function fetchWithRetry(url, { attempts = 2, backoffMs = 2000 } = {}) {
+async function fetchWithRetry(url, { attempts = 3, backoffMs = 3000 } = {}) {
   let lastErr;
   for (let i = 0; i < attempts; i++) {
     try {
@@ -135,9 +135,10 @@ async function resolveWaybackSnapshot(originalUrl) {
 // there), preload links, HTML comments. Cosmetic CMS reshuffles can still
 // produce some noise; per-source strip rules can go on the manifest entry if a
 // specific page proves chatty.
-function cleanHtml(html) {
+function cleanHtml(html, { extraSelectors = [] } = {}) {
   const $ = cheerio.load(html);
-  $('script, style, noscript, meta, link[rel="preload"]').remove();
+  $('script, style, noscript, meta, link, input[type="hidden"], astro-island').remove();
+  for (const sel of extraSelectors) $(sel).remove();
   $('*').each((_, el) => {
     const attribs = el.attribs || {};
     for (const name of Object.keys(attribs)) {
@@ -172,7 +173,7 @@ async function verifyHashOnly(source) {
   if (!res.ok) {
     return { ...meta(source), status: 'error', reason: `HTTP ${res.status}` };
   }
-  const cleaned = cleanHtml(await res.text());
+  const cleaned = cleanHtml(await res.text(), { extraSelectors: source.strip_selectors || [] });
   const newHash = sha(cleaned);
 
   if (!(await fileExists(snapshotPath))) {
