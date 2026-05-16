@@ -53,7 +53,7 @@
         "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
       }
     ],
-    "last_verified": "2026-05-01"
+    "last_verified": "2026-05-16"
   },
   "comparisons": [
     {
@@ -142,7 +142,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "electricity-video-streaming-vs-datacenters",
@@ -177,7 +177,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "co2-driving-vs-datacenters",
@@ -207,7 +207,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "water-residential-outdoor",
@@ -245,7 +245,7 @@
           "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf"
         }
       ],
-      "last_verified": "2026-05-01"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "electricity-us-households-vs-datacenters",
@@ -275,7 +275,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "co2-aviation-vs-datacenters",
@@ -305,7 +305,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "co2-cement-steel-vs-datacenters",
@@ -344,7 +344,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "co2-cattle-vs-datacenters",
@@ -374,7 +374,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "electricity-ac-vs-datacenters",
@@ -404,7 +404,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "electricity-ev-charging-vs-datacenters",
@@ -469,7 +469,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "co2-lawn-equipment-vs-datacenters",
@@ -499,7 +499,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     },
     {
       "id": "electricity-holiday-lights-vs-datacenters",
@@ -529,7 +529,7 @@
           "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-16"
     }
   ],
   "infographics": [
@@ -970,7 +970,7 @@
           "twh": 1550
         }
       ],
-      "axis_min_twh": 1e-09,
+      "axis_min_twh": 1e-9,
       "axis_max_twh": 10000,
       "caption": "Each rung is a thousand times the one before.",
       "summary": "The site's headline figures live between 30 and 1,550 TWh — clustered near the right edge of this scale. AI in 2024 (30–80 TWh) sits closer to a single TWh than to the global data-center total. The data-center total (460 TWh) and U.S. residential electricity (1,550 TWh) close out the right end.",
