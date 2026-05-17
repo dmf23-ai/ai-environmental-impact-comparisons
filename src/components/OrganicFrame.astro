@@ -1,13 +1,14 @@
 ---
 // OrganicFrame — thin warm-ink border with asymmetric rounded corners and a
-// paper background. The standard card chrome in the Mucha's Notebook
-// redesign; replaces the prior rectangular bordered card. Phase 2 will add
-// small SVG flourishes at the rounded corners; for now the asymmetric
-// rounding alone provides the organic gesture.
+// paper background. A small fiddlehead-style CornerCurl sits at the top-right
+// corner; the bottom-left is asymmetrically rounded to echo. Standard card
+// chrome for the Mucha's Notebook redesign.
+import CornerCurl from "./CornerCurl.astro";
 ---
 
 <div class="organic-frame">
   <slot />
+  <CornerCurl corner="tr" />
 </div>
 
 <style>
