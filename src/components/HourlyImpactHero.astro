@@ -1,4 +1,5 @@
 ---
+import OrganicFrame from "./OrganicFrame.astro";
 import RangeBar from "./RangeBar.astro";
 import SourceLine from "./SourceLine.astro";
 import figuresData from "../data/figures.json";
@@ -11,65 +12,72 @@ const smallFigures = allFigures.filter(
   (f: { value_high?: number; value?: number }) =>
     (f.value_high ?? f.value ?? 0) < 1000
 );
+const headlineSentence =
+  "An hour of driving emits roughly a thousand times the CO₂ of an hour of AI chat.";
 ---
 
-<figure class="hourly-hero">
-  <header>
-    <p class="kicker">{data.kicker}</p>
-    <h2 class="hero-title">{data.title}</h2>
-  </header>
+<OrganicFrame>
+  <figure class="hourly-hero">
+    <header>
+      <p class="kicker">{data.kicker}</p>
+      <h2 class="hero-title">{data.title}</h2>
+      <p class="at-a-glance">{headlineSentence}</p>
+    </header>
 
-  <div class="chart-block">
-    <p class="unit-caption">Grams of CO₂ equivalent per hour</p>
-    <RangeBar figures={allFigures} />
-  </div>
+    <div class="chart-block">
+      <p class="unit-caption">Grams of CO₂ equivalent per hour</p>
+      <RangeBar figures={allFigures} />
+    </div>
 
-  <div class="chart-block">
-    <p class="unit-caption">
-      Same activities, driving omitted so the others are readable
-    </p>
-    <RangeBar figures={smallFigures} />
-  </div>
+    <div class="chart-block">
+      <p class="unit-caption">
+        Same activities, driving omitted so the others are readable
+      </p>
+      <RangeBar figures={smallFigures} />
+    </div>
 
-  <figcaption>{data.summary}</figcaption>
+    <figcaption>{data.summary}</figcaption>
 
-  <SourceLine
-    sources={data.sources}
-    lastVerified={data.last_verified}
-    methodsAnchor="hourly-hero"
-  />
-</figure>
+    <SourceLine
+      sources={data.sources}
+      lastVerified={data.last_verified}
+      methodsAnchor="hourly-hero"
+    />
+  </figure>
+</OrganicFrame>
 
 <style>
   .hourly-hero {
-    background: white;
-    border: 1px solid var(--rule);
-    border-radius: 8px;
-    padding: var(--space-6) var(--space-5);
-    margin: var(--space-6) 0 var(--space-7);
-    box-shadow:
-      0 1px 0 rgba(31, 41, 55, 0.02),
-      0 6px 18px -8px rgba(31, 41, 55, 0.1);
+    margin: 0;
   }
   .kicker {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     color: var(--ink-faint);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
     margin: 0 0 var(--space-2);
   }
   .hero-title {
     font-family: var(--font-serif);
-    font-size: 1.4rem;
-    line-height: 1.25;
+    font-size: 1.55rem;
+    font-weight: 700;
+    line-height: 1.2;
     letter-spacing: -0.005em;
     margin: 0;
+  }
+  .at-a-glance {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--subject-electricity);
+    line-height: 1.45;
+    margin: var(--space-3) 0 0;
   }
   .chart-block {
     margin-top: var(--space-6);
   }
   .unit-caption {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     color: var(--ink-soft);
     text-transform: uppercase;
     letter-spacing: 0.06em;
@@ -79,16 +87,16 @@ const smallFigures = allFigures.filter(
     font-size: 1rem;
     color: var(--ink);
     margin: var(--space-6) 0 0;
-    line-height: 1.6;
+    line-height: 1.65;
     border-top: 1px solid var(--rule);
     padding-top: var(--space-5);
   }
   @media (min-width: 720px) {
-    .hourly-hero {
-      padding: var(--space-7) var(--space-7);
-    }
     .hero-title {
-      font-size: 1.7rem;
+      font-size: 1.95rem;
+    }
+    .at-a-glance {
+      font-size: 1.2rem;
     }
   }
 </style>
