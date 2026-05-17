@@ -1,0 +1,61 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import OrganicFrame from "../../components/OrganicFrame.astro";
+import SectionDivider from "../../components/SectionDivider.astro";
+---
+
+<Layout title="Ornaments — dev" description="QA page for ornament primitives">
+  <h1>Ornaments</h1>
+  <p class="lede">
+    Internal QA page for the Mucha's Notebook ornament library. Each primitive
+    rendered in isolation so visual review can happen without surrounding chart
+    noise.
+  </p>
+
+  <h2>OrganicFrame (with CornerCurl)</h2>
+  <OrganicFrame>
+    <p style="margin: 0;">A framed block of body prose. The fiddlehead curl
+    should sit in the top-right corner; the asymmetric rounded corners are top-right
+    and bottom-left. Background is paper, border is ink-soft, padding is
+    consistent across viewports.</p>
+  </OrganicFrame>
+
+  <h2>SectionDivider — wheat (electricity)</h2>
+  <SectionDivider motif="wheat" />
+
+  <h2>SectionDivider — vine (electricity, trajectory feel)</h2>
+  <SectionDivider motif="vine" />
+
+  <h2>SectionDivider — water</h2>
+  <SectionDivider motif="water" />
+
+  <h2>SectionDivider — carbon</h2>
+  <SectionDivider motif="carbon" />
+
+  <h2>All four in sequence</h2>
+  <p>How a reader would experience the dividers as they scroll the home page:</p>
+  <SectionDivider motif="carbon" />
+  <p style="text-align: center; font-style: italic; color: var(--ink-faint);">
+    The Hour
+  </p>
+  <SectionDivider motif="wheat" />
+  <p style="text-align: center; font-style: italic; color: var(--ink-faint);">
+    The Year
+  </p>
+  <SectionDivider motif="water" />
+  <p style="text-align: center; font-style: italic; color: var(--ink-faint);">
+    The Water
+  </p>
+  <SectionDivider motif="vine" />
+  <p style="text-align: center; font-style: italic; color: var(--ink-faint);">
+    The Trajectory
+  </p>
+  <SectionDivider motif="wheat" />
+  <p style="text-align: center; font-style: italic; color: var(--ink-faint);">
+    In Equivalents
+  </p>
+  <SectionDivider motif="carbon" />
+  <p style="text-align: center; font-style: italic; color: var(--ink-faint);">
+    Training vs. Inference
+  </p>
+</Layout>
