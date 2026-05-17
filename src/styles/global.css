@@ -1,28 +1,39 @@
 /* ============================================================
    Web fonts — self-hosted via Fontsource
+   Cardo for body and display (chapter titles use it at large size);
+   Inter for chart labels, kickers, and small UI.
+   No separate Nouveau face — letterform restraint, ornament does the period work.
    ============================================================ */
 @import "@fontsource-variable/inter";
-@import "@fontsource-variable/source-serif-4";
+@import "@fontsource/cardo/400.css";
+@import "@fontsource/cardo/400-italic.css";
+@import "@fontsource/cardo/700.css";
+@import "@fontsource/cardo/700-italic.css";
 
 /* ============================================================
-   Design tokens — locked for the site.
+   Design tokens — Mucha's Notebook palette.
    Change here, change everywhere.
    ============================================================ */
 :root {
-  /* Color */
-  --ink: #1a1a1a;
-  --ink-soft: #4a4a4a;
-  --ink-faint: #8a8682;
-  --paper: #fafaf7;
-  --paper-soft: #f3f1eb;
-  --rule: #e6e3dc;
-  --accent: #1f4f7a;
-  --accent-soft: rgba(31, 79, 122, 0.85);
+  /* Color — ivory paper, warm ink, restrained botanical accents */
+  --ink: #211d1b;
+  --ink-soft: #4a3f3a;
+  --ink-faint: #8a7f78;
+  --paper: #f4ede0;
+  --paper-soft: #ebe2cf;
+  --rule: #ddd2bd;
+  --accent: #a85a3a;
+  --accent-soft: rgba(168, 90, 58, 0.85);
 
-  /* Typography — Inter for body, Source Serif 4 for headings, with system fallbacks */
+  /* Subject colors — tie charts to their topic without explicit labels */
+  --subject-water: #3a6b75;        /* muted teal */
+  --subject-electricity: #7a8c6a;  /* sage green */
+  --subject-carbon: #a85a3a;       /* terracotta/rust (same as default accent) */
+
+  /* Typography — Cardo for body and display, Inter for chart labels and UI */
   --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont,
     "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Source Serif 4 Variable", ui-serif, Charter, "Iowan Old Style",
+  --font-serif: "Cardo", ui-serif, Charter, Constantia, "Iowan Old Style",
     "Apple Garamond", Georgia, "Times New Roman", serif;
 
   /* Spacing scale */
@@ -49,7 +60,6 @@
 }
 
 html {
-  /* Always reserve scrollbar space so layout stays put across pages. */
   scrollbar-gutter: stable;
 }
 
@@ -59,9 +69,9 @@ body {
   padding: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-size: 18px;
-  line-height: 1.55;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -86,11 +96,11 @@ main.wide {
 }
 .wordmark {
   display: inline-block;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.05em;
   color: var(--ink-soft);
   text-decoration: none;
 }
@@ -99,41 +109,41 @@ main.wide {
 }
 .wordmark .dot {
   color: var(--accent);
-  margin: 0 0.25em;
-  font-weight: 700;
+  margin: 0 0.35em;
+  font-style: normal;
 }
 
 /* ============================================================
-   Headings — serif, used sparingly
+   Headings — Cardo serif throughout
    ============================================================ */
 h1,
 h2,
 h3 {
   font-family: var(--font-serif);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.005em;
-  line-height: 1.2;
+  line-height: 1.15;
   margin: 0 0 var(--space-4);
 }
 
 h1 {
-  font-size: 1.85rem;
+  font-size: 2.1rem;
 }
 h2 {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
 }
 h3 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 }
 
 p {
   margin: 0 0 var(--space-4);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 a {
   color: var(--accent);
-  text-decoration-color: rgba(31, 79, 122, 0.4);
+  text-decoration-color: rgba(168, 90, 58, 0.4);
   text-underline-offset: 2px;
 }
 a:hover {
@@ -144,9 +154,11 @@ a:hover {
    Common page elements
    ============================================================ */
 .lede {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--ink);
   margin: 0 0 var(--space-6);
+  font-style: italic;
+  line-height: 1.55;
 }
 
 .back {
@@ -180,13 +192,13 @@ a:hover {
    ============================================================ */
 @media (min-width: 720px) {
   h1 {
-    font-size: 2.3rem;
+    font-size: 2.6rem;
   }
   h2 {
-    font-size: 1.55rem;
+    font-size: 1.7rem;
   }
   .lede {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
   main {
     padding: var(--space-9) var(--space-5);
