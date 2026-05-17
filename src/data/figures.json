@@ -1,8 +1,8 @@
 {
   "hourly_impact": {
-    "kicker": "Per-hour CO2 comparison",
+    "kicker": "Per-hour CO₂ comparison",
     "title": "Driving still dwarfs every digital activity in the conversation.",
-    "summary": "An hour of gasoline driving emits 14,000-18,000 grams of CO2. An hour of ordinary AI chat emits 5-200 grams. Heavy AI workflows, high-end gaming, and HD streaming all cluster between those two -- and far closer to chat than to driving. The big numbers live at data-center scale: grid load, water draw, where new construction lands and what local utilities can carry. That's where the rest of the site looks.",
+    "summary": "An hour of gasoline driving emits 14,000-18,000 grams of CO₂. An hour of ordinary AI chat emits 5-200 grams. Heavy AI workflows, high-end gaming, and HD streaming all cluster between those two -- and far closer to chat than to driving. The big numbers live at data-center scale: grid load, water draw, where new construction lands and what local utilities can carry. That's where the rest of the site looks.",
     "figures": [
       {
         "label": "Gasoline driving (~30 mph passenger car)",
@@ -970,7 +970,7 @@
           "twh": 1550
         }
       ],
-      "axis_min_twh": 1e-9,
+      "axis_min_twh": 1e-09,
       "axis_max_twh": 10000,
       "caption": "Each rung is a thousand times the one before.",
       "summary": "The site's headline figures live between 30 and 1,550 TWh — clustered near the right edge of this scale. AI in 2024 (30–80 TWh) sits closer to a single TWh than to the global data-center total. The data-center total (460 TWh) and U.S. residential electricity (1,550 TWh) close out the right end.",
@@ -991,7 +991,7 @@
       "anchor": "training-vs-inference",
       "kicker": "Training vs. inference",
       "title": "Where the carbon actually goes",
-      "unit_caption": "Tonnes of CO2, log scale",
+      "unit_caption": "Tonnes of CO₂, log scale",
       "training_events": [
         {
           "year": 2019,
@@ -1027,7 +1027,7 @@
       "x_min_tco2": 0.1,
       "x_max_tco2": 100000000,
       "caption": "Dots are individual training events; the bar is one year of all AI inference combined. The x-axis steps by ten.",
-      "summary": "Five published training emissions sit between 0.65 and 6,300 tCO2 each. A single year of all AI inference sits between 8 and 27 million tCO2 — roughly 1,300 to 4,000 times the largest training event on the chart. The 'but training is huge' framing stops working at 2024 scale.",
+      "summary": "Five published training emissions sit between 0.65 and 6,300 tCO₂ each. A single year of all AI inference sits between 8 and 27 million tCO₂ — roughly 1,300 to 4,000 times the largest training event on the chart. The 'but training is huge' framing stops working at 2024 scale.",
       "sources": [
         {
           "name": "Strubell et al. 2019 — Energy and Policy Considerations for Deep Learning in NLP",
