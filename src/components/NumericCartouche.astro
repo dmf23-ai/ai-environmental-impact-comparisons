@@ -1,0 +1,110 @@
+---
+// NumericCartouche — ornamental container for a chart's headline figure.
+// Display-size Cardo number flanked by two small subject-colored almond
+// flourishes, with optional unit and caption. Used at the top of bar charts
+// in the Mucha's Notebook redesign to surface the most consequential figure
+// before the chart itself is read — the "at-a-glance" affordance.
+//
+// Distinct from SubjectMarker: the corner marker identifies the chart's
+// subject; the cartouche surfaces its key value. Same subject-color logic,
+// different visual vocabulary so the two don't compete.
+
+interface Props {
+  value: string;
+  unit?: string;
+  caption?: string;
+  subject: "water" | "electricity" | "carbon";
+}
+const { value, unit, caption, subject } = Astro.props;
+
+const subjectColors: Record<string, string> = {
+  water: "var(--subject-water)",
+  electricity: "var(--subject-electricity)",
+  carbon: "var(--subject-carbon)",
+};
+const color = subjectColors[subject];
+---
+
+<div class="cartouche-wrap">
+  <div class="cartouche">
+    <span class="flourish" style={`color: ${color}`} aria-hidden="true">
+      <svg viewBox="0 0 8 16" width="8" height="16">
+        <path
+          d="M 4 2 C 6.5 5, 6.5 11, 4 14 C 1.5 11, 1.5 5, 4 2 Z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+    <span class="figure">
+      <span class="value">{value}</span>
+      {unit && <span class="unit">{unit}</span>}
+    </span>
+    <span class="flourish" style={`color: ${color}`} aria-hidden="true">
+      <svg viewBox="0 0 8 16" width="8" height="16">
+        <path
+          d="M 4 2 C 6.5 5, 6.5 11, 4 14 C 1.5 11, 1.5 5, 4 2 Z"
+          fill="currentColor"
+        />
+      </svg>
+    </span>
+  </div>
+  {caption && <p class="cartouche-caption">{caption}</p>}
+</div>
+
+<style>
+  .cartouche-wrap {
+    margin: 0 0 var(--space-5);
+  }
+  .cartouche {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--space-3);
+    margin: 0;
+  }
+  .flourish {
+    display: inline-flex;
+    align-self: center;
+    line-height: 0;
+  }
+  .flourish svg {
+    display: block;
+  }
+  .figure {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3em;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .value {
+    font-size: 2.5rem;
+    line-height: 1.1;
+  }
+  .unit {
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink-soft);
+    letter-spacing: 0;
+  }
+  .cartouche-caption {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: var(--space-2) 0 0;
+  }
+  @media (min-width: 720px) {
+    .value {
+      font-size: 3rem;
+    }
+    .unit {
+      font-size: 1.25rem;
+    }
+  }
+</style>

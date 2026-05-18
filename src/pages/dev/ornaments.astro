@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import OrganicFrame from "../../components/OrganicFrame.astro";
 import SectionDivider from "../../components/SectionDivider.astro";
+import NumericCartouche from "../../components/NumericCartouche.astro";
 ---
 
 <Layout title="Ornaments — dev" description="QA page for ornament primitives">
@@ -30,6 +31,32 @@ import SectionDivider from "../../components/SectionDivider.astro";
     <p style="margin: 0;"><strong>Carbon.</strong> Rust diamond in the corner.
     Use on the hourly hero, training-vs-inference, and CO₂ comparison cards.</p>
   </OrganicFrame>
+
+  <h2>NumericCartouche</h2>
+  <p>Headline figure treatment. Display-size Cardo number flanked by small
+  subject-colored almond flourishes. Used at the top of bar charts to surface
+  the chart's most consequential figure before the bars themselves are read.</p>
+
+  <NumericCartouche
+    value="460"
+    unit="TWh"
+    subject="electricity"
+    caption="Global data centers, 2024"
+  />
+
+  <NumericCartouche
+    value="500–700"
+    unit="billion gallons"
+    subject="water"
+    caption="Global data-center water, 2025 (including electricity-generation)"
+  />
+
+  <NumericCartouche
+    value="8.4–27"
+    unit="million tCO₂"
+    subject="carbon"
+    caption="All AI inference, 2024"
+  />
 
   <h2>SectionDividers in chapter order</h2>
   <p>How the dividers will read as the reader scrolls the home page.</p>
