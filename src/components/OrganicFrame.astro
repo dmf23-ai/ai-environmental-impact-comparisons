@@ -1,14 +1,19 @@
 ---
 // OrganicFrame — thin warm-ink border with asymmetric rounded corners and a
-// paper background. A small fiddlehead-style CornerCurl sits at the top-right
-// corner; the bottom-left is asymmetrically rounded to echo. Standard card
-// chrome for the Mucha's Notebook redesign.
-import CornerCurl from "./CornerCurl.astro";
+// paper background. If a `subject` prop is provided, a SubjectMarker (filled
+// motif in the matching subject color) sits at the top-right corner.
+// Standard card chrome for the Mucha's Notebook redesign.
+import SubjectMarker from "./SubjectMarker.astro";
+
+interface Props {
+  subject?: "water" | "electricity" | "carbon";
+}
+const { subject } = Astro.props;
 ---
 
 <div class="organic-frame">
   <slot />
-  <CornerCurl corner="tr" />
+  {subject && <SubjectMarker subject={subject} />}
 </div>
 
 <style>
