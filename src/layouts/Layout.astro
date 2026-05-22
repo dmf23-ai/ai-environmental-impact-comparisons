@@ -22,9 +22,56 @@ const { title, description, wide = false } = Astro.props;
       <a href="/" class="wordmark"
         >AI Environmental Impact <span class="dot">·</span> Comparisons</a
       >
+      <img
+        class="masthead-strip"
+        src="/ornaments/masthead-strip.png"
+        alt=""
+        aria-hidden="true"
+        fetchpriority="high"
+      />
     </header>
     <main class={wide ? "wide" : ""}>
       <slot />
     </main>
+    <footer class="site-footer">
+      <div class="footer-close">
+        <p class="footer-italic">All figures are ranges.</p>
+        <p class="footer-italic">All ranges are sourced.</p>
+        <p class="footer-italic">All sources are checked weekly.</p>
+      </div>
+      <div class="footer-cta">
+        <a class="footer-cta-link" href="/comparisons"
+          >View all comparisons →</a
+        >
+        <p class="footer-cta-sub">
+          <a href="/methods">Read the methodology</a>
+        </p>
+      </div>
+      <div class="footer-bottom">
+        <img
+          class="footer-roundel footer-roundel-left"
+          src="/ornaments/footer-roundel-earth.png"
+          alt=""
+          aria-hidden="true"
+        />
+        <div class="footer-tagline-wrap">
+          <hr class="footer-rule" aria-hidden="true" />
+          <p class="footer-tagline">Argue from the same place.</p>
+        </div>
+        <img
+          class="footer-roundel footer-roundel-right"
+          src="/ornaments/footer-roundel-landscape.png"
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+      <p class="footer-credit">
+        Open source ·
+        <a
+          href="https://github.com/dmf23-ai/ai-environmental-impact-comparisons"
+          >code on GitHub</a
+        > · sources verified weekly
+      </p>
+    </footer>
   </body>
 </html>

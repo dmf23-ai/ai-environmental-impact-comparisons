@@ -3,16 +3,46 @@
 // paper background. If a `subject` prop is provided, a SubjectMarker (filled
 // motif in the matching subject color) sits at the top-right corner.
 // Standard card chrome for the Mucha's Notebook redesign.
+//
+// Ornate variant (Phase 2e.1): pass `sideLeft` and/or `sideRight` to render
+// botanical side accents climbing the inside of the frame. Assets live at
+// /ornaments/frame-side-left.png and /ornaments/frame-side-right.png. The
+// frame automatically expands its horizontal padding to give the accents
+// room without overlapping the chart content.
 import SubjectMarker from "./SubjectMarker.astro";
 
 interface Props {
   subject?: "water" | "electricity" | "carbon";
+  sideLeft?: boolean;
+  sideRight?: boolean;
 }
-const { subject } = Astro.props;
+const { subject, sideLeft = false, sideRight = false } = Astro.props;
 ---
 
-<div class="organic-frame">
-  <slot />
+<div
+  class="organic-frame"
+  data-side-left={sideLeft ? "true" : "false"}
+  data-side-right={sideRight ? "true" : "false"}
+>
+  {sideLeft && (
+    <img
+      class="frame-side frame-side-left"
+      src="/ornaments/frame-side-left.png"
+      alt=""
+      aria-hidden="true"
+    />
+  )}
+  {sideRight && (
+    <img
+      class="frame-side frame-side-right"
+      src="/ornaments/frame-side-right.png"
+      alt=""
+      aria-hidden="true"
+    />
+  )}
+  <div class="frame-content">
+    <slot />
+  </div>
   {subject && <SubjectMarker subject={subject} />}
 </div>
 
@@ -29,6 +59,46 @@ const { subject } = Astro.props;
     .organic-frame {
       padding: var(--space-7) var(--space-7);
       border-radius: 0 24px 0 24px;
+    }
+  }
+
+  /* Side accents (Phase 2e.1) */
+  .frame-side {
+    position: absolute;
+    top: 4%;
+    height: 92%;
+    width: auto;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    display: block;
+  }
+  .frame-side-left {
+    left: 0.5rem;
+  }
+  .frame-side-right {
+    right: 0.5rem;
+  }
+
+  .frame-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Grow horizontal padding when side accents are present so content doesn't
+     collide with the botanicals. */
+  .organic-frame[data-side-left="true"] {
+    padding-left: 5rem;
+  }
+  .organic-frame[data-side-right="true"] {
+    padding-right: 5rem;
+  }
+  @media (min-width: 720px) {
+    .organic-frame[data-side-left="true"] {
+      padding-left: 6.5rem;
+    }
+    .organic-frame[data-side-right="true"] {
+      padding-right: 6.5rem;
     }
   }
 </style>

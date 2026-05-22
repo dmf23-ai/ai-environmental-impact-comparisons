@@ -1,0 +1,279 @@
+---
+// ChapterRail — six-dot reading-progress widget for the right margin of the
+// home page. The rail is a fixed-position compass: which of six chapters am
+// I in, and where else can I jump to. Not a scroll bar — dots are equally
+// spaced regardless of section length.
+//
+// Quiet at rest. Each dot is a thin warm-ink ring with an ivory fill. The
+// active dot fills with its chapter's subject color and grows slightly.
+// Dots above the active one carry a little more opacity so the rail also
+// reads as progress.
+//
+// Hover or keyboard focus reveals a small tooltip to the left of the dot
+// with the chapter number and title. Click or Enter smooth-scrolls to that
+// chapter; ArrowDown / ArrowUp cycle focus between dots.
+//
+// Hidden below 980px viewport — at narrower widths the right gutter has no
+// room and the SectionDividers do the wayfinding instead.
+//
+// Mounted in index.astro only. /comparisons and /methods aren't chaptered.
+
+interface Chapter {
+  id: string;
+  title: string;
+  subject: "water" | "electricity" | "carbon";
+}
+
+const chapters: Chapter[] = [
+  { id: "the-hour", title: "The Hour", subject: "carbon" },
+  { id: "the-year", title: "The Year", subject: "electricity" },
+  { id: "the-water", title: "The Water", subject: "water" },
+  { id: "the-trajectory", title: "The Trajectory", subject: "electricity" },
+  { id: "in-equivalents", title: "In Equivalents", subject: "electricity" },
+  { id: "training-vs-inference", title: "Training vs. Inference", subject: "carbon" },
+];
+---
+
+<nav class="chapter-rail" aria-label="Chapter navigation">
+  <ol class="rail-list">
+    {chapters.map((chapter, index) => (
+      <li class="rail-item">
+        <button
+          class="rail-dot"
+          type="button"
+          data-rail-dot
+          data-rail-index={index}
+          data-rail-target={chapter.id}
+          data-rail-subject={chapter.subject}
+          data-state="default"
+          aria-label={`Chapter ${index + 1}: ${chapter.title}`}
+        >
+          <span class="rail-dot-circle" aria-hidden="true"></span>
+          <span class="rail-tooltip" aria-hidden="true">
+            <span class="rail-tooltip-num">{String(index + 1).padStart(2, "0")}</span>
+            <span class="rail-tooltip-title">{chapter.title}</span>
+          </span>
+        </button>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .chapter-rail {
+    position: fixed;
+    top: 50%;
+    right: 2rem;
+    transform: translateY(-50%);
+    z-index: 20;
+    pointer-events: none; /* re-enabled on the buttons */
+  }
+  @media (max-width: 979px) {
+    .chapter-rail { display: none; }
+  }
+
+  .rail-list {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.85rem;
+    align-items: center;
+  }
+
+  /* Hairline connecting the dots, sits behind them */
+  .rail-list::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 50%;
+    width: 1px;
+    background: var(--ink);
+    opacity: 0.35;
+    transform: translateX(-50%);
+  }
+
+  .rail-item {
+    position: relative;
+    line-height: 0;
+  }
+
+  .rail-dot {
+    position: relative;
+    pointer-events: auto;
+    background: transparent;
+    border: 0;
+    padding: 6px;
+    margin: 0;
+    cursor: pointer;
+    line-height: 0;
+    display: block;
+  }
+  .rail-dot:focus { outline: none; }
+  .rail-dot:focus-visible .rail-dot-circle {
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink);
+  }
+
+  .rail-dot-circle {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    opacity: 0.4;
+    transition: opacity 160ms ease, background-color 160ms ease,
+      width 160ms ease, height 160ms ease, border-color 160ms ease;
+  }
+
+  /* Visited — chapter scrolled past */
+  .rail-dot[data-state="visited"] .rail-dot-circle {
+    opacity: 0.7;
+  }
+
+  /* Active — current chapter; subject color fills the dot */
+  .rail-dot[data-state="active"] .rail-dot-circle {
+    width: 11px;
+    height: 11px;
+    opacity: 1;
+    border-color: transparent;
+  }
+  .rail-dot[data-state="active"][data-rail-subject="water"] .rail-dot-circle {
+    background: var(--subject-water);
+  }
+  .rail-dot[data-state="active"][data-rail-subject="electricity"] .rail-dot-circle {
+    background: var(--subject-electricity);
+  }
+  .rail-dot[data-state="active"][data-rail-subject="carbon"] .rail-dot-circle {
+    background: var(--subject-carbon);
+  }
+
+  /* Tooltip — appears on hover or keyboard focus, sits to the left of the dot */
+  .rail-tooltip {
+    position: absolute;
+    top: 50%;
+    right: calc(100% + 4px);
+    transform: translateY(-50%);
+    display: flex;
+    align-items: baseline;
+    gap: 0.55em;
+    padding: 0.3rem 0.7rem;
+    background: var(--paper);
+    border: 1px solid var(--ink-soft);
+    border-radius: 2px;
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: var(--ink);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 140ms ease;
+  }
+  .rail-tooltip-num {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .rail-tooltip-title {
+    font-style: italic;
+  }
+  .rail-dot:hover .rail-tooltip,
+  .rail-dot:focus-visible .rail-tooltip {
+    opacity: 1;
+  }
+
+  /* Honor reduced-motion: skip the dot grow/shrink transitions */
+  @media (prefers-reduced-motion: reduce) {
+    .rail-dot-circle,
+    .rail-tooltip {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Scroll-spy and click-to-scroll. Runs once on page load.
+  const rail = document.querySelector(".chapter-rail");
+  if (rail) {
+    const dots = Array.from(
+      rail.querySelectorAll("[data-rail-dot]")
+    ) as HTMLButtonElement[];
+    const targets = dots
+      .map((d) => document.getElementById(d.dataset.railTarget as string))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const setActive = (activeIndex: number) => {
+      dots.forEach((dot, i) => {
+        dot.dataset.state =
+          i < activeIndex ? "visited" : i === activeIndex ? "active" : "default";
+      });
+    };
+
+    const intersecting = new Set<number>();
+    const recompute = () => {
+      if (intersecting.size > 0) {
+        setActive(Math.min(...intersecting));
+        return;
+      }
+      // Nothing in the middle band — fall back to "last passed"
+      let lastPassed = 0;
+      targets.forEach((t, i) => {
+        if (t.getBoundingClientRect().top < window.innerHeight * 0.5) {
+          lastPassed = i;
+        }
+      });
+      setActive(lastPassed);
+    };
+
+    if (targets.length > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const i = targets.indexOf(entry.target as HTMLElement);
+            if (i === -1) continue;
+            if (entry.isIntersecting) intersecting.add(i);
+            else intersecting.delete(i);
+          }
+          recompute();
+        },
+        { rootMargin: "-35% 0px -55% 0px" }
+      );
+      targets.forEach((t) => observer.observe(t));
+      recompute();
+    }
+
+    // Click → smooth scroll (respect reduced-motion)
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const target = document.getElementById(dot.dataset.railTarget as string);
+        if (target) {
+          target.scrollIntoView({
+            behavior: prefersReducedMotion ? "auto" : "smooth",
+            block: "start",
+          });
+        }
+      });
+    });
+
+    // ArrowDown / ArrowUp cycle focus within the rail
+    rail.addEventListener("keydown", (e) => {
+      const ke = e as KeyboardEvent;
+      if (ke.key !== "ArrowDown" && ke.key !== "ArrowUp") return;
+      const i = dots.findIndex((d) => d === document.activeElement);
+      if (i === -1) return;
+      ke.preventDefault();
+      const next = ke.key === "ArrowDown" ? i + 1 : i - 1;
+      if (next >= 0 && next < dots.length) dots[next].focus();
+    });
+  }
+</script>

@@ -3,9 +3,13 @@ import Layout from "../../layouts/Layout.astro";
 import OrganicFrame from "../../components/OrganicFrame.astro";
 import SectionDivider from "../../components/SectionDivider.astro";
 import NumericCartouche from "../../components/NumericCartouche.astro";
+import ChapterRail from "../../components/ChapterRail.astro";
+import ChapterTitle from "../../components/ChapterTitle.astro";
 ---
 
 <Layout title="Ornaments — dev" description="QA page for ornament primitives">
+  <ChapterRail />
+
   <h1>Ornaments</h1>
   <p class="lede">
     Internal QA page for the Mucha's Notebook ornament library.
@@ -30,6 +34,30 @@ import NumericCartouche from "../../components/NumericCartouche.astro";
   <OrganicFrame subject="carbon">
     <p style="margin: 0;"><strong>Carbon.</strong> Rust diamond in the corner.
     Use on the hourly hero, training-vs-inference, and CO₂ comparison cards.</p>
+  </OrganicFrame>
+
+  <h2>Ornate OrganicFrame (Phase 2e.1)</h2>
+  <p>The ornate variant adds botanical side accents climbing the inside of
+  the frame. Pass <code>sideLeft</code> and/or <code>sideRight</code>. The
+  frame grows its horizontal padding automatically so content doesn't
+  collide with the accents.</p>
+
+  <OrganicFrame subject="electricity" sideLeft>
+    <p style="margin: 0;"><strong>Left side only.</strong> Wheat-and-leaves
+    motif climbing the inside-left edge. Used on charts that want a single
+    botanical accent — most home-page infographics.</p>
+  </OrganicFrame>
+
+  <OrganicFrame subject="water" sideLeft sideRight>
+    <p style="margin: 0;"><strong>Both sides.</strong> Wheat on the left,
+    floral spray on the right. Used on the most ceremonial chart of a chapter
+    — typically the headline plate.</p>
+  </OrganicFrame>
+
+  <OrganicFrame subject="carbon" sideRight>
+    <p style="margin: 0;"><strong>Right side only.</strong> Floral motif
+    climbing the inside-right. Less common — for charts whose left side
+    wants to be clean.</p>
   </OrganicFrame>
 
   <h2>NumericCartouche</h2>
@@ -58,6 +86,54 @@ import NumericCartouche from "../../components/NumericCartouche.astro";
     caption="All AI inference, 2024"
   />
 
+  <h2>Ornate NumericCartouche (Phase 2e.1)</h2>
+  <p>The ornate variant wraps the value in an Art Nouveau cartouche frame
+  asset. Pass <code>ornate</code>. Suitable for hero figures within a chapter
+  rather than every bar chart.</p>
+
+  <NumericCartouche
+    value="460"
+    unit="TWh"
+    subject="electricity"
+    caption="Global data centers, 2024"
+    ornate
+  />
+
+  <NumericCartouche
+    value="500–700"
+    unit="billion gallons"
+    subject="water"
+    caption="Global data-center water, 2025"
+    ornate
+  />
+
+  <NumericCartouche
+    value="8.4–27"
+    unit="million tCO₂"
+    subject="carbon"
+    caption="All AI inference, 2024"
+    ornate
+  />
+
+  <h2>ChapterTitle (Phase 2e.2)</h2>
+  <p>Chapter-opening header used on the home page. Roman-numeral kicker,
+  Cardo display title with a terracotta dropcap on the first letter,
+  diamond-accented ornament rule, optional sage-italic headline sentence.
+  First example carries the finalized headline; the other five show the
+  title without a headline so the no-headline variant gets exercised.</p>
+
+  <ChapterTitle
+    number={1}
+    title="The Hour"
+    headline="One hour, one person: where most claims wander furthest from the data."
+  />
+
+  <ChapterTitle number={2} title="The Year" />
+  <ChapterTitle number={3} title="The Water" />
+  <ChapterTitle number={4} title="The Trajectory" />
+  <ChapterTitle number={5} title="In Equivalents" />
+  <ChapterTitle number={6} title="Training vs. Inference" />
+
   <h2>SectionDividers in chapter order</h2>
   <p>How the dividers will read as the reader scrolls the home page.</p>
 
@@ -85,4 +161,62 @@ import NumericCartouche from "../../components/NumericCartouche.astro";
   <p style="text-align: center; font-style: italic; color: var(--ink-faint); margin-top: 0;">
     Training vs. Inference
   </p>
+
+  <h2>ChapterRail</h2>
+  <p>Six-dot reading-progress widget for the right margin of the home page.
+  Visible to the right of this page at viewport widths ≥ 980px. Quiet rings
+  at rest; the active dot fills with its chapter's subject color. Hover or
+  tab onto a dot for the chapter title; click to scroll to that chapter.</p>
+  <p>Below are six tall scroll-dummy sections with the matching ids
+  (<code>the-hour</code> through <code>training-vs-inference</code>) so the
+  scroll-spy and tooltip behaviors can be exercised end-to-end. The active
+  dot should update as you scroll through them.</p>
+
+  <section id="the-hour" class="rail-dummy">
+    <h3>The Hour</h3>
+    <p class="dummy-note">Dummy section. Active dot should fill rust.</p>
+  </section>
+  <section id="the-year" class="rail-dummy">
+    <h3>The Year</h3>
+    <p class="dummy-note">Dummy section. Active dot should fill sage.</p>
+  </section>
+  <section id="the-water" class="rail-dummy">
+    <h3>The Water</h3>
+    <p class="dummy-note">Dummy section. Active dot should fill teal.</p>
+  </section>
+  <section id="the-trajectory" class="rail-dummy">
+    <h3>The Trajectory</h3>
+    <p class="dummy-note">Dummy section. Active dot should fill sage.</p>
+  </section>
+  <section id="in-equivalents" class="rail-dummy">
+    <h3>In Equivalents</h3>
+    <p class="dummy-note">Dummy section. Active dot should fill sage.</p>
+  </section>
+  <section id="training-vs-inference" class="rail-dummy">
+    <h3>Training vs. Inference</h3>
+    <p class="dummy-note">Dummy section. Active dot should fill rust.</p>
+  </section>
 </Layout>
+
+<style>
+  .rail-dummy {
+    min-height: 70vh;
+    border-top: 1px solid var(--rule);
+    padding: var(--space-7) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .rail-dummy h3 {
+    margin: 0;
+    text-align: center;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+  .dummy-note {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 0.9rem;
+    margin: var(--space-3) 0 0;
+  }
+</style>

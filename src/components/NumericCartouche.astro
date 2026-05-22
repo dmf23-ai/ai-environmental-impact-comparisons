@@ -2,20 +2,22 @@
 // NumericCartouche — ornamental container for a chart's headline figure.
 // Display-size Cardo number flanked by two small subject-colored almond
 // flourishes, with optional unit and caption. Used at the top of bar charts
-// in the Mucha's Notebook redesign to surface the most consequential figure
-// before the chart itself is read — the "at-a-glance" affordance.
+// to surface the most consequential figure before the chart itself is read.
 //
-// Distinct from SubjectMarker: the corner marker identifies the chart's
-// subject; the cartouche surfaces its key value. Same subject-color logic,
-// different visual vocabulary so the two don't compete.
+// Ornate variant (Phase 2e.1): pass `ornate={true}` to wrap the value in an
+// Art Nouveau cartouche frame asset (/ornaments/cartouche-frame.png). The
+// ornate variant locks to the asset's native 3:2 aspect so the frame's
+// embellishments don't stretch. Value and unit stack vertically inside so
+// long unit phrases (e.g., "billion gallons") don't blow out the box.
 
 interface Props {
   value: string;
   unit?: string;
   caption?: string;
   subject: "water" | "electricity" | "carbon";
+  ornate?: boolean;
 }
-const { value, unit, caption, subject } = Astro.props;
+const { value, unit, caption, subject, ornate = false } = Astro.props;
 
 const subjectColors: Record<string, string> = {
   water: "var(--subject-water)",
@@ -25,8 +27,16 @@ const subjectColors: Record<string, string> = {
 const color = subjectColors[subject];
 ---
 
-<div class="cartouche-wrap">
-  <div class="cartouche">
+<div class:list={["cartouche-wrap", ornate && "cartouche-wrap-ornate"]}>
+  <div class:list={["cartouche", ornate && "cartouche-ornate"]}>
+    {ornate && (
+      <img
+        class="cartouche-frame-bg"
+        src="/ornaments/cartouche-frame.png"
+        alt=""
+        aria-hidden="true"
+      />
+    )}
     <span class="flourish" style={`color: ${color}`} aria-hidden="true">
       <svg viewBox="0 0 8 16" width="8" height="16">
         <path
@@ -55,12 +65,53 @@ const color = subjectColors[subject];
   .cartouche-wrap {
     margin: 0 0 var(--space-5);
   }
+  .cartouche-wrap-ornate {
+    text-align: center;
+  }
   .cartouche {
     display: flex;
     align-items: baseline;
     justify-content: center;
     gap: var(--space-3);
     margin: 0;
+  }
+  /* Ornate variant locks to the asset's 3:2 aspect so the frame doesn't
+     stretch. Long unit phrases stack below the value rather than running
+     out horizontally. */
+  .cartouche-ornate {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 3 / 2;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .cartouche-frame-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .cartouche-ornate > .flourish,
+  .cartouche-ornate > .figure {
+    position: relative;
+    z-index: 1;
+  }
+  /* In ornate mode, stack value over unit vertically so long unit phrases
+     stay readable inside the 3:2 box. */
+  .cartouche-ornate > .figure {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.1em;
   }
   .flourish {
     display: inline-flex;
@@ -90,6 +141,14 @@ const color = subjectColors[subject];
     color: var(--ink-soft);
     letter-spacing: 0;
   }
+  /* In ornate mode the value runs a touch smaller so long values like
+     "500–700" leave room for the unit beneath. */
+  .cartouche-ornate .value {
+    font-size: 2.1rem;
+  }
+  .cartouche-ornate .unit {
+    font-size: 0.95rem;
+  }
   .cartouche-caption {
     text-align: center;
     font-family: var(--font-serif);
@@ -105,6 +164,15 @@ const color = subjectColors[subject];
     }
     .unit {
       font-size: 1.25rem;
+    }
+    .cartouche-ornate {
+      max-width: 400px;
+    }
+    .cartouche-ornate .value {
+      font-size: 2.4rem;
+    }
+    .cartouche-ornate .unit {
+      font-size: 1.05rem;
     }
   }
 </style>

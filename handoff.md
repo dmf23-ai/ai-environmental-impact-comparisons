@@ -21,54 +21,92 @@ A static website that puts AI's water and energy footprint next to other large u
 
 ## Mucha's Notebook redesign — progress (May 2026)
 
-The site is currently mid-visual-redesign under the working title "Mucha's Notebook" — restrained Art Nouveau with Tufte data discipline. Live site reflects work through Phase 2c.
+The site is mid-visual-redesign under the working title "Mucha's Notebook" — full Art Nouveau ornamental density with Tufte data discipline. Live site reflects work through Phase 2c. Phases 2d (ChapterRail) and 2e (mockup-density ornament augmentation) are committed locally and pending push + Vercel deploy.
 
 **Design direction locked:**
 
 - Palette: ivory paper (#f4ede0), warm ink (#211d1b), subject colors — water (#3a6b75 teal), electricity (#7a8c6a sage), carbon (#a85a3a rust).
-- Typography: Cardo (Fontsource) for body, headlines, and chapter titles at display size. Inter retained for chart labels and UI. No dedicated Nouveau face — letterform restraint, ornament does the period work.
-- Home page restructured into six paired chapters: The Hour, The Year, The Water, The Trajectory, In Equivalents, Training vs. Inference.
-- Reading style: hybrid spine — essay-led paragraphs interleaved with chart-led plates.
-- Scope: all three pages (home, /comparisons, /methods) in this redesign pass.
+- Typography: Cardo (Fontsource) for body, headlines, chapter titles. Inter retained for chart labels, kickers, UI, and the masthead wordmark.
+- Home page restructured into six paired chapters: The Hour, The Year, The Water, The Trajectory, In Equivalents, Training vs. Inference. Chapter ids (load-bearing — the ChapterRail targets these): `the-hour`, `the-year`, `the-water`, `the-trajectory`, `in-equivalents`, `training-vs-inference`.
+- Reading style: hybrid spine — essay-led paragraphs interleaved with chart-led plates. Prose is short and sparse, refers directly to the chart at hand, never general. Three prose memories govern: anti-AI-speak rubric, prose-defers-to-infographics, prose-refers-directly-to-the-infographic.
+- Scope: all three pages (home, /comparisons, /methods) are highly styled. Home is the showcase with maximum ornament density; /comparisons and /methods sit slightly below.
+- Ornament density: full Mucha, matching `design/mockup_art_nouveau_reference.png`. The data marks inside charts stay clean — that's the Tufte side.
+- Asset pipeline: hybrid. Complex botanicals (masthead strip, frame side accents, footer roundels, cartouche frame) live in `/public/ornaments/` as PNGs generated via ChatGPT with the reference mockup attached. Simple ornaments (subject markers, rail dots, divider motifs, cartouche flourishes) stay hand-coded.
 
 **Phase progress:**
 
-- Phase 0 (cleanup) — done. Fixed stray `</style>` in `HourlyImpactHero.astro`.
-- Phase 1 (design tokens) — done. New palette and Cardo serif in `global.css`. CO₂ subscript restored in `figures.json`.
-- Phase 1.5 (hero direction check) — done. `HourlyImpactHero` pulled through end-to-end: wrapped in `OrganicFrame`, sage-italic headline sentence added, rust palette from `--accent`.
-- Phase 2a (SubjectMarker + OrganicFrame) — done. Replaced original CornerCurl with subject-themed filled markers (water droplet, electricity lightning bolt, carbon diamond). `OrganicFrame` takes a `subject` prop.
-- Phase 2b (SectionDividers) — done. Four motifs: wheat (electricity), vine (electricity, trajectory feel), water (wave + droplets), carbon (diamond). Stroke weights ~2px and filled accents so subject colors hold against ivory.
-- Phase 2c (NumericCartouche) — done. Display-size Cardo number with subject-colored almond flourishes on either side. Used in Phase 4 at the top of bar charts.
-- Phase 2d (ChapterRail) — pending. Six-dot reading-progress widget for the right margin of the home page.
+- Phase 0 (cleanup) — done.
+- Phase 1 (design tokens) — done.
+- Phase 1.5 (hero direction check) — done.
+- Phase 2a (SubjectMarker + OrganicFrame) — done.
+- Phase 2b (SectionDividers) — done. Four motifs: wheat, vine, water, carbon.
+- Phase 2c (NumericCartouche) — done.
+- Phase 2d (ChapterRail) — done 2026-05-22. Six-dot reading-progress widget, right margin, hidden below 980px. Mounted in `index.astro` only.
+- Phase 2e.1 (ornate frame + cartouche variants) — done 2026-05-22. `OrganicFrame` gained `sideLeft` / `sideRight` boolean props; `NumericCartouche` gained `ornate` boolean prop locked to 3:2 aspect with vertical value/unit stack.
+- Phase 2e.2 (ChapterTitle component) — done 2026-05-22. Roman-numeral kicker, Cardo display title with terracotta dropcap via `::first-letter`, ornament rule with diamond accent, optional sage-italic headline.
+- Phase 2e.3 (masthead botanical strip) — done 2026-05-22. `Layout.astro` masthead now: centered uppercase wordmark above `/ornaments/masthead-strip.png` running full page width; `.site-mast` rewritten in `global.css` with mobile-friendly wrap (0.82rem mobile / 1.05rem desktop).
+- Phase 2e.4 (footer composition) — done 2026-05-22. `Layout.astro` gained `<footer class="site-footer">` block: three italic close lines (`All figures are ranges. / All ranges are sourced. / All sources are checked weekly.`), CTA block (View all comparisons → /comparisons + Read the methodology → /methods), two roundels flanking a tagline rule (`Argue from the same place.`), small credit line linking to the GitHub repo. Sticky-footer body flex applied so the footer doesn't float on short pages.
+- Phase 3 — ready. Unblocked by Phase 2e completion.
 
-**Remaining phases:**
+**Phase 3 setup (prose draft already approved for chapter 1):**
 
-- 3 — Home page chapter shell (rewrite `index.astro` into six chapters with `SectionDivider` openings, sage-italic headline sentences, and chapter-by-chapter prose).
-- 4a — `InfographicAnnualTwh` + `InfographicWaterBracket` redesign. Includes the right-edge-touching bar fix on water bracket and the U.S./global pair affordance.
-- 4b — `InfographicDcTrajectory` + `InfographicAiShareTrajectory` redesign. Sage projection band, stroke modulation on historical line, decision on irregular-anchor-year jumpiness.
-- 4c — `InfographicHouseholdEquivalents` + `InfographicWattScalePrimer` redesign. Fix the rung-0 / rung-1 overlap on watt-scale.
-- 4d — `InfographicRangeVsPoint` + `InfographicTrainingVsInference` redesign. Fix the truncated caption on training-vs-inference; add a numeric label adjacent to the narrow inference bar.
-- 5 — `/comparisons` herbarium rebuild.
-- 6 — `/methods` rebuild (2,058 lines — bash heredoc required).
-- 7 — Mobile adaptive pass.
-- 8 — Anti-AI-speak rubric prose sweep + final Unicode restoration (em-dash, en-dash).
+In the previous chat David approved a register direction for the home page prose: short sentences, no preamble, refer directly to the chart, no general statements. The "The Hour" headline and intro paragraph were drafted and signed off:
 
-**QA page:** `/dev/ornaments` renders each ornament primitive in isolation plus the four section dividers in chapter order. Internal-only, no nav link from production pages.
+- Sage-italic headline (sits between SectionDivider and chapter intro): *One hour, one person: where most claims wander furthest from the data.*
+- Intro paragraph (sits between chapter headline and the HourlyImpactHero): Most arguments about AI start at this scale. The comparisons rarely hold up. Driving is the clean one.
 
-**New components added during the redesign:**
+Chapters 2–6 still need headline + intro drafts at the same density. RangeVsPoint sits before The Hour as a no-chapter preamble; the existing thesis paragraph stays as a closing coda after Training vs. Inference.
 
-- `src/components/OrganicFrame.astro` — thin warm-ink border with asymmetric rounded corners (top-right + bottom-left) and optional `SubjectMarker` corner.
+**Remaining phases (post Phase 3):**
+
+- 4a — `InfographicAnnualTwh` + `InfographicWaterBracket` redesign. Right-edge-touching bar fix on water bracket; U.S./global pair affordance. Plate frame uses the ornate variant.
+- 4b — `InfographicDcTrajectory` + `InfographicAiShareTrajectory` redesign. Sage projection band, stroke modulation on historical line, decision on irregular-anchor-year jumpiness. Ornate frame.
+- 4c — `InfographicHouseholdEquivalents` + `InfographicWattScalePrimer` redesign. Fix rung-0 / rung-1 overlap on watt-scale. Ornate frame.
+- 4d — `InfographicRangeVsPoint` + `InfographicTrainingVsInference` redesign. Truncated caption fix + numeric label adjacent to narrow inference bar. Ornate frame.
+- 5 — `/comparisons` herbarium rebuild. Comparison cards as richly-ornamented herbarium plates. Slightly below home density.
+- 6 — `/methods` rebuild (2,058 lines / 88.6K). Bash heredoc with sentinel-anchored replaces required. High styling at lower per-section density.
+- 7 — Mobile adaptive pass. Walk every component at narrow viewport.
+- 8 — Prose sweep + Unicode restoration + design critique. Sweep all site copy against the three prose memories; restore Unicode in `figures.json` where ASCII fallbacks remain; do the holistic design critique deferred per the "build all, critique once" preference.
+
+**Components in place (all Phase 2 work):**
+
+- `src/components/OrganicFrame.astro` — thin warm-ink border, asymmetric rounded corners, optional SubjectMarker corner. Ornate variant via `sideLeft` / `sideRight` props loads `/ornaments/frame-side-{left,right}.png`.
 - `src/components/SubjectMarker.astro` — small filled motif in corner: water droplet (teal), electricity lightning bolt (sage), carbon diamond (rust).
 - `src/components/SectionDivider.astro` — chapter divider with four motif options (wheat / vine / water / carbon).
-- `src/components/NumericCartouche.astro` — headline-figure treatment for bar charts.
-- `src/pages/dev/ornaments.astro` — internal QA page.
+- `src/components/NumericCartouche.astro` — headline-figure treatment. Ornate variant via `ornate` prop loads `/ornaments/cartouche-frame.png` at locked 3:2 aspect with vertical value/unit stack.
+- `src/components/ChapterRail.astro` — six-dot reading-progress widget for the right margin of the home page (Phase 2d).
+- `src/components/ChapterTitle.astro` — chapter-opening header: kicker + Cardo display title with `::first-letter` dropcap + ornament rule + optional sage-italic headline (Phase 2e.2).
+- `src/layouts/Layout.astro` — site shell with masthead (wordmark + botanical strip) and footer (close lines + CTA + roundels + tagline + credit).
+- `src/pages/dev/ornaments.astro` — internal QA page with render blocks for every primitive plus a six-section scroll dummy for the ChapterRail.
 
-**Design decisions confirmed during Phase 2:**
+**Runtime assets in `/public/ornaments/`:**
 
-- Corner ornament must be informational, not just decorative. `SubjectMarker` earned the corner by identifying the chart's subject; the prior generic `CornerCurl` did not and was retired.
-- Stroke weights for botanical motifs must be ~2px or thicker for sage and teal to hold against ivory paper. Lighter weights drift toward gray.
-- Water marker uses the canonical droplet shape (bezier sides + half-circle bottom), scaled to roughly match the visual weight of the bolt and diamond.
-- `SectionDivider` motifs and `SubjectMarker` motifs use deliberately different vocabularies. The divider is decorative and contextual (chapter title clarifies subject); the marker has to communicate subject in isolation, so it uses the more conventional iconography (droplet, bolt, diamond).
+- `masthead-strip.png` — wheat + poppies + leaves, page-wide horizontal strip.
+- `frame-side-left.png` — wheat-and-leaves climbing vertical motif.
+- `frame-side-right.png` — floral spray climbing vertical motif.
+- `cartouche-frame.png` — ornate Art Nouveau border with transparent interior, 3:2 native aspect.
+- `footer-roundel-earth.png` — earth globe in Art Nouveau medallion.
+- `footer-roundel-landscape.png` — landscape vignette in matching medallion.
+
+All ~1.5–2 MB each; Phase 8 will compress or vectorize before launch.
+
+**Design references:**
+
+- `design/mockup_art_nouveau_reference.png` — the ChatGPT-generated mockup David picked as the design destination. Provides the ornament density and chapter title treatment.
+- `design/README.md` — describes what's in the mockup and where the runtime assets live (`/public/ornaments/`).
+- `design/assets/` — superseded by `/public/ornaments/`; the empty directory may persist locally and can be deleted.
+
+**QA page:** `/dev/ornaments` renders every primitive in isolation: restrained and ornate variants of OrganicFrame, restrained and ornate variants of NumericCartouche, the four SectionDividers in chapter order, all six ChapterTitle treatments, plus the ChapterRail with a six-section scroll dummy. Masthead and footer render on every page via `Layout.astro`.
+
+**Design decisions confirmed during Phases 1–2e:**
+
+- Corner ornament must be informational, not just decorative (SubjectMarker earned the corner; CornerCurl was retired).
+- Stroke weights for botanical motifs must be ~2px or thicker for sage and teal to hold against ivory paper.
+- ChapterRail mounts only on the home page; the other pages aren't chaptered.
+- Asset pipeline is hybrid: complex botanicals as imported PNG assets, simple ornaments hand-coded. Six PNGs generated by David via ChatGPT in May 2026 with the reference mockup attached.
+- Ornate cartouche locks to 3:2 aspect (the asset's native ratio) with value/unit stacked vertically inside. `object-fit: fill` with variable content width stretches the corner embellishments visibly — ruled out.
+- Prose discipline (Phase 3 onward): short sentences, no preamble, refer directly to the chart, no general statements. Three memories govern.
+- Footer's three-line close uses parallel anaphora ("All X are Y"); flagged as a borderline tier-2 AI-speak risk but earns its place as a mantra/oath structure rather than default architecture.
 
 ## Where we are
 
@@ -190,6 +228,8 @@ src/
   layouts/Layout.astro                     ← page wrapper: masthead + main slot
   components/
     ComparisonCard.astro                   ← one card per comparison
+    ChapterRail.astro                      ← six-dot reading-progress widget, home page only (Phase 2d)
+    ChapterTitle.astro                     ← chapter header: kicker + dropcap + rule + headline (Phase 2e.2)
     HourlyImpactHero.astro                 ← home-page hourly CO2 hero (two stacked RangeBars)
     InfographicAnnualTwh.astro             ← "How big is AI, really?"
     InfographicWaterBracket.astro          ← water bracket (six bars)
@@ -209,6 +249,17 @@ src/
   styles/global.css                        ← design tokens, base styles, masthead, common chrome
 scripts/verify-sources.mjs                 ← weekly source verifier (Phase 7)
 .github/workflows/weekly-verify.yml        ← cron + manual dispatch for the verifier
+design/                                    ← visual reference material (Mucha's Notebook redesign)
+  README.md                                ← describes what's in the references
+  mockup_art_nouveau_reference.png         ← the mockup David picked as the design destination
+public/
+  ornaments/                               ← six runtime PNG assets served at /ornaments/<name>.png
+    masthead-strip.png
+    frame-side-left.png
+    frame-side-right.png
+    cartouche-frame.png
+    footer-roundel-earth.png
+    footer-roundel-landscape.png
 
 website_plan.md                            ← the plan
 phase1_setup.md                            ← original setup walkthrough

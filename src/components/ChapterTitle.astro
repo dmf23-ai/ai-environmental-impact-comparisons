@@ -1,0 +1,112 @@
+---
+// ChapterTitle — chapter-opening header for the home page (Phase 2e.2).
+// Sits between the chapter's SectionDivider and the intro paragraph.
+//
+// Layout (centered, top to bottom):
+//   - Small-caps "Chapter N" kicker (Inter, ink-soft, Roman numeral)
+//   - Large Cardo display title with a terracotta dropcap on the first
+//     letter (styled via ::first-letter — clean for screen readers)
+//   - Thin ornament rule with a small diamond accent at center
+//   - Sage-italic headline sentence (optional)
+
+interface Props {
+  number: 1 | 2 | 3 | 4 | 5 | 6;
+  title: string;
+  headline?: string;
+}
+const { number, title, headline } = Astro.props;
+
+const romanNumerals: Record<number, string> = {
+  1: "I",
+  2: "II",
+  3: "III",
+  4: "IV",
+  5: "V",
+  6: "VI",
+};
+const roman = romanNumerals[number];
+---
+
+<header class="chapter-title">
+  <p class="chapter-kicker">Chapter {roman}</p>
+  <h2 class="chapter-heading">{title}</h2>
+  <hr class="chapter-rule" aria-hidden="true" />
+  {headline && <p class="chapter-headline">{headline}</p>}
+</header>
+
+<style>
+  .chapter-title {
+    text-align: center;
+    margin: var(--space-6) 0 var(--space-7);
+  }
+  .chapter-kicker {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--ink-soft);
+    margin: 0 0 var(--space-3);
+  }
+  .chapter-heading {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 2.4rem;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 auto;
+    letter-spacing: -0.005em;
+    max-width: 36rem;
+  }
+  /* Dropcap on the first letter of the heading. Terracotta accent, ~1.5×
+     the surrounding glyphs. ::first-letter is accessibility-clean — screen
+     readers read the title once, naturally. */
+  .chapter-heading::first-letter {
+    font-size: 1.5em;
+    color: var(--accent);
+    padding-right: 0.04em;
+  }
+  .chapter-rule {
+    width: 5rem;
+    height: 1px;
+    border: none;
+    background: var(--ink-soft);
+    margin: var(--space-4) auto;
+    position: relative;
+    overflow: visible;
+  }
+  .chapter-rule::before {
+    content: "◆";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--paper);
+    padding: 0 0.5em;
+    color: var(--accent);
+    font-size: 0.65rem;
+    line-height: 1;
+  }
+  .chapter-headline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--subject-electricity);
+    margin: 0 auto;
+    max-width: 30rem;
+  }
+  @media (min-width: 720px) {
+    .chapter-kicker {
+      font-size: 0.78rem;
+    }
+    .chapter-heading {
+      font-size: 3.2rem;
+    }
+    .chapter-headline {
+      font-size: 1.4rem;
+    }
+    .chapter-rule {
+      width: 7rem;
+    }
+  }
+</style>
