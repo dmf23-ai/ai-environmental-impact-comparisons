@@ -90,13 +90,13 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
         height="8"
         patternTransform="rotate(45)"
       >
-        <rect width="8" height="8" fill="#1f4f7a" />
+        <rect width="8" height="8" fill="#7a8c6a" />
         <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(255,255,255,0.20)" stroke-width="3" />
       </pattern>
     </defs>
 
     {/* Card background — explicit white so the saved SVG never inherits a transparent background. */}
-    <rect width={W} height={H} fill="#ffffff" />
+    <rect width={W} height={H} fill="#f4ede0" />
 
     {/* Header */}
     <text
@@ -104,7 +104,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={36}
       font-family={FONT_SANS}
       font-size="12"
-      fill="#8a8682"
+      fill="#8a7f78"
       letter-spacing="1.6"
       font-weight="500"
     >
@@ -115,7 +115,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={72}
       font-family={FONT_SERIF}
       font-size="26"
-      fill="#1a1a1a"
+      fill="#211d1b"
       font-weight="600"
     >
       {data.title}
@@ -125,7 +125,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={103}
       font-family={FONT_SANS}
       font-size="12"
-      fill="#4a4a4a"
+      fill="#4a3f3a"
       letter-spacing="0.9"
       font-weight="500"
     >
@@ -150,7 +150,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
             y={labelY}
             font-family={FONT_SANS}
             font-size="14"
-            fill="#1a1a1a"
+            fill="#211d1b"
           >
             {f.label}
           </text>
@@ -159,7 +159,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
             y={labelY}
             font-family={FONT_SANS}
             font-size="14"
-            fill="#1a1a1a"
+            fill="#211d1b"
             font-weight="500"
             text-anchor="end"
           >
@@ -171,7 +171,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
             y={barY}
             width={chartWidth}
             height={barH}
-            fill="rgba(0,0,0,0.05)"
+            fill="rgba(33, 29, 27, 0.06)"
             rx="3"
           />
           {/* fill */}
@@ -181,7 +181,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
               y={barY}
               width={xHi - chartLeft}
               height={barH}
-              fill="#1f4f7a"
+              fill="#7a8c6a"
               opacity="0.32"
               rx="3"
             />
@@ -191,7 +191,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
               y={barY}
               width={xHi - chartLeft}
               height={barH}
-              fill="#1f4f7a"
+              fill="#7a8c6a"
               rx="3"
             />
           ) : (
@@ -214,7 +214,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y1={axisLineY}
       x2={chartRight}
       y2={axisLineY}
-      stroke="#e6e3dc"
+      stroke="#ddd2bd"
       stroke-width="1"
     />
     <text
@@ -222,7 +222,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={axisLabelY}
       font-family={FONT_SANS}
       font-size="12"
-      fill="#4a4a4a"
+      fill="#4a3f3a"
     >
       0
     </text>
@@ -231,7 +231,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={axisLabelY}
       font-family={FONT_SANS}
       font-size="12"
-      fill="#4a4a4a"
+      fill="#4a3f3a"
       text-anchor="end"
     >
       {fmt(maxVal)}
@@ -243,7 +243,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y1={footerRuleY}
       x2={W - padX}
       y2={footerRuleY}
-      stroke="#e6e3dc"
+      stroke="#ddd2bd"
       stroke-width="1"
     />
     <text
@@ -251,7 +251,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={sourceLineY}
       font-family={FONT_SANS}
       font-size="12"
-      fill="#4a4a4a"
+      fill="#4a3f3a"
     >
       {sourceShort}
     </text>
@@ -260,7 +260,7 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
       y={verifiedLineY}
       font-family={FONT_SANS}
       font-size="11"
-      fill="#8a8682"
+      fill="#8a7f78"
     >
       {verifiedStamp}
     </text>

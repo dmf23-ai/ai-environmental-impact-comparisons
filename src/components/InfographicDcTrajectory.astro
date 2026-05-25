@@ -67,11 +67,11 @@ const H = verifiedLineY + 18;
 const FONT_SANS = "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
 const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
 
-const ACCENT = "#1f4f7a";
-const INK = "#1a1a1a";
-const MID = "#4a4a4a";
-const DIM = "#8a8682";
-const RULE = "#e6e3dc";
+const ACCENT = "#7a8c6a";
+const INK = "#211d1b";
+const MID = "#4a3f3a";
+const DIM = "#8a7f78";
+const RULE = "#ddd2bd";
 
 const fmt = (n: number) => n.toLocaleString("en-US");
 
@@ -87,8 +87,27 @@ const yTicks = [0, 500, 1000, 1500].filter((t) => t <= data.y_max);
 // X-axis ticks: a chosen subset, including the boundary year and endpoints.
 const xTicks = [2017, 2020, 2024, 2025, 2030];
 
-// Historical polyline points string.
-const histPoints = data.historicals
+// Historical line — split into two segments so stroke weight tracks
+// confidence. The DC anchors carry uneven confidence: early years are
+// medium, recent years are medium-high or high. The early segment
+// renders faintly (1.75px, 55% opacity), the recent segment renders
+// bold (3px, 100%). Both share the boundary vertex so the joint is
+// continuous; the existing dot at that vertex sits on top.
+//
+// Anchor spacing is irregular (1, 4, 2, 1 year gaps). We do not smooth
+// the polyline — the slopes between anchors reflect actual annual
+// rates of change, and the bend between 2022 and 2024 is the chart's
+// editorial point. Smoothing would soften a true claim.
+const _firmIdx = data.historicals.findIndex(
+  (p) => p.confidence === "medium-high" || p.confidence === "high"
+);
+const firmIdx = _firmIdx === -1 ? 0 : _firmIdx;
+const earlyHistPoints = data.historicals
+  .slice(0, firmIdx + 1)
+  .map((p) => `${xFor(p.year)},${yFor(p.value)}`)
+  .join(" ");
+const recentHistPoints = data.historicals
+  .slice(firmIdx)
   .map((p) => `${xFor(p.year)},${yFor(p.value)}`)
   .join(" ");
 
@@ -120,7 +139,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
     preserveAspectRatio="xMidYMid meet"
   >
     {/* Background — explicit white so the saved SVG never inherits a transparent backdrop. */}
-    <rect width={W} height={H} fill="#ffffff" />
+    <rect width={W} height={H} fill="#f4ede0" />
 
     {/* Header */}
     <text
@@ -181,7 +200,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
     ))}
 
     {/* Uncertainty band (drawn before the lines so they sit on top). */}
-    <path d={bandPath} fill={ACCENT} fill-opacity="0.16" />
+    <path d={bandPath} fill={ACCENT} fill-opacity="0.22" />
 
     {/* Central projection line — dashed to mark it as a forecast. */}
     <line
@@ -194,12 +213,22 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
       stroke-dasharray="5 4"
     />
 
-    {/* Historical line — solid through anchor years. */}
+    {/* Historical line — split into early (medium) and recent
+        (medium-high+) segments. Stroke weight tracks confidence. */}
     <polyline
-      points={histPoints}
+      points={earlyHistPoints}
       fill="none"
       stroke={ACCENT}
-      stroke-width="2.5"
+      stroke-width="1.75"
+      opacity="0.55"
+      stroke-linejoin="round"
+      stroke-linecap="round"
+    />
+    <polyline
+      points={recentHistPoints}
+      fill="none"
+      stroke={ACCENT}
+      stroke-width="3"
       stroke-linejoin="round"
       stroke-linecap="round"
     />
@@ -211,7 +240,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
         cy={yFor(p.value)}
         r="3.5"
         fill={ACCENT}
-        stroke="#ffffff"
+        stroke="#f4ede0"
         stroke-width="1.5"
       />
     ))}
@@ -221,7 +250,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
       cx={xFor(cEnd.year)}
       cy={yFor(cEnd.value)}
       r="3.5"
-      fill="#ffffff"
+      fill="#f4ede0"
       stroke={ACCENT}
       stroke-width="2"
     />

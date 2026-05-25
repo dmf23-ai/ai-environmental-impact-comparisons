@@ -54,7 +54,7 @@ const scale2PlotY = scale2HeaderY + 28;
 const axisLineY = scale2PlotY + 32;
 const axisLabelY = axisLineY + 16;
 const captionY = axisLabelY + 32;
-const footerRuleY = captionY + 22;
+const footerRuleY = captionY + 22 + captionLine2H;
 const sourceLineY = footerRuleY + 22;
 const verifiedLineY = sourceLineY + 22;
 const H = verifiedLineY + 18;
@@ -74,11 +74,39 @@ const FONT_SANS =
 const FONT_SERIF =
   "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
 
-const ACCENT = "#1f4f7a";
-const INK = "#1a1a1a";
-const MID = "#4a4a4a";
-const DIM = "#8a8682";
-const RULE = "#e6e3dc";
+const ACCENT = "#7a8c6a";
+const INK = "#211d1b";
+const MID = "#4a3f3a";
+const DIM = "#8a7f78";
+const RULE = "#ddd2bd";
+
+// Soft-wrap a caption to two lines when it would otherwise overflow the
+// chart's horizontal extent at font-size 14. Prefer punctuation breaks
+// ("; ", ". ", ", ") in the middle half of the string; fall back to the
+// nearest space. Single line returns empty line2.
+function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
+  if (text.length <= maxFirstLine) return [text, ""];
+  const lo = Math.floor(text.length / 4);
+  const hi = Math.floor((text.length * 3) / 4);
+  for (const sep of ["; ", ". ", ", "]) {
+    let best = -1;
+    let idx = text.indexOf(sep);
+    while (idx !== -1) {
+      if (idx >= lo && idx <= hi) { best = idx; break; }
+      idx = text.indexOf(sep, idx + 1);
+    }
+    if (best !== -1) {
+      return [text.slice(0, best + 1), text.slice(best + 2)];
+    }
+  }
+  const mid = Math.floor(text.length / 2);
+  let split = text.lastIndexOf(" ", mid);
+  if (split < 0) split = text.indexOf(" ", mid);
+  if (split < 0) return [text, ""];
+  return [text.slice(0, split), text.slice(split + 1)];
+}
+const [captionLine1, captionLine2] = wrapCaption(data.caption);
+const captionLine2H = captionLine2 ? 18 : 0;
 ---
 
 <figure class="infographic-card" id={data.anchor}>
@@ -103,7 +131,7 @@ const RULE = "#e6e3dc";
     </defs>
 
     {/* Card background — explicit white so the saved SVG never inherits a transparent background. */}
-    <rect width={W} height={H} fill="#ffffff" />
+    <rect width={W} height={H} fill="#f4ede0" />
 
     {/* Header */}
     <text x={padX} y={36} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
@@ -176,10 +204,16 @@ const RULE = "#e6e3dc";
       {maxVal} TWh
     </text>
 
-    {/* Caption — editorial sentence baked into the SVG so the saved image carries the rule. */}
+    {/* Caption — editorial sentence baked into the SVG so the saved image
+        carries the rule. Soft-wrapped to two lines when long enough. */}
     <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
-      {data.caption}
+      {captionLine1}
     </text>
+    {captionLine2 && (
+      <text x={padX} y={captionY + 18} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+        {captionLine2}
+      </text>
+    )}
 
     {/* Footer */}
     <line x1={padX} y1={footerRuleY} x2={W - padX} y2={footerRuleY} stroke={RULE} stroke-width="1" />

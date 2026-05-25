@@ -363,3 +363,23 @@ a:hover {
     padding: var(--space-9) var(--space-5);
   }
 }
+
+/* ============================================================
+   Infographic chrome inside the ornate frame
+   ============================================================
+   Each Infographic*.astro renders its own .infographic-card with a border,
+   shadow, padding, and white background — chrome designed for standalone
+   presentation. On the home page, the chart sits inside an ornate
+   OrganicFrame, and the inner card chrome would double-up against the
+   frame's border and corners. Strip it when nested. */
+.organic-frame .infographic-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+}
+.organic-frame .infographic-card figcaption {
+  margin: var(--space-5) 0 0;
+}

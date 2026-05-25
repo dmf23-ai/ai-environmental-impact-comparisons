@@ -82,7 +82,12 @@ for (let e = Math.ceil(logMin); e <= Math.floor(logMax); e++) {
 const refRender = rungs.map((r, i) => {
   let textAnchor: "start" | "middle" = "middle";
   if (i === 0) textAnchor = "start";
-  if (r.reference.length > 28) {
+  // Rung 0 always wraps. Its reference is left-anchored at the chart's
+  // left edge, and even at modest text widths a single line collides with
+  // rung 1's centered label three decades to the right. Two short lines
+  // keep both readable.
+  const forceWrap = i === 0;
+  if (forceWrap || r.reference.length > 28) {
     const breakAfterHomes = r.reference.indexOf(" homes ");
     if (breakAfterHomes > 0) {
       return {
@@ -90,6 +95,15 @@ const refRender = rungs.map((r, i) => {
         textAnchor,
         line1: r.reference.slice(0, breakAfterHomes + 6),
         line2: r.reference.slice(breakAfterHomes + 7),
+      };
+    }
+    const breakAfterFor = r.reference.indexOf(" for ");
+    if (breakAfterFor > 0) {
+      return {
+        ...r,
+        textAnchor,
+        line1: r.reference.slice(0, breakAfterFor),
+        line2: r.reference.slice(breakAfterFor + 1),
       };
     }
     const mid = Math.floor(r.reference.length / 2);
@@ -161,11 +175,11 @@ const FONT_SANS =
 const FONT_SERIF =
   "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
 
-const ACCENT = "#1f4f7a";
-const INK = "#1a1a1a";
-const MID = "#4a4a4a";
-const DIM = "#8a8682";
-const RULE = "#e6e3dc";
+const ACCENT = "#7a8c6a";
+const INK = "#211d1b";
+const MID = "#4a3f3a";
+const DIM = "#8a7f78";
+const RULE = "#ddd2bd";
 
 const sourceShort =
   "Sources: EIA — Use of Electricity (per-household figure); IEA April 2026 update (AI and global data-center electricity).";
@@ -198,7 +212,7 @@ const pointR = 7;
     </defs>
 
     {/* Card background */}
-    <rect width={W} height={H} fill="#ffffff" />
+    <rect width={W} height={H} fill="#f4ede0" />
 
     {/* Header */}
     <text x={padX} y={36} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">

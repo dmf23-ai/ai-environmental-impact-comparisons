@@ -1,5 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ChapterRail from "../components/ChapterRail.astro";
+import SectionDivider from "../components/SectionDivider.astro";
+import ChapterTitle from "../components/ChapterTitle.astro";
+import OrganicFrame from "../components/OrganicFrame.astro";
 import HourlyImpactHero from "../components/HourlyImpactHero.astro";
 import InfographicRangeVsPoint from "../components/InfographicRangeVsPoint.astro";
 import InfographicAnnualTwh from "../components/InfographicAnnualTwh.astro";
@@ -16,26 +20,121 @@ const description =
 ---
 
 <Layout title={title} description={description}>
-  <h1>{title}</h1>
-  <p class="lede">{description}</p>
+  <h1 class="sr-only">{title}</h1>
 
-  <HourlyImpactHero />
+  <ChapterRail />
 
-  <InfographicRangeVsPoint />
+  <section class="preamble" aria-label="How to read this site">
+    <OrganicFrame sideLeft={true}>
+      <InfographicRangeVsPoint />
+    </OrganicFrame>
+  </section>
 
-  <InfographicAnnualTwh />
+  <section id="the-hour" class="chapter">
+    <SectionDivider motif="carbon" />
+    <ChapterTitle
+      number={1}
+      title="The Hour"
+      headline="One hour, one person: where most claims wander furthest from the data."
+    />
+    <p class="chapter-intro">
+      Most arguments about AI start at this scale. The comparisons rarely
+      hold up. Driving is the clean one.
+    </p>
+    <OrganicFrame subject="carbon" sideLeft={true}>
+      <HourlyImpactHero />
+    </OrganicFrame>
+  </section>
 
-  <InfographicWaterBracket />
+  <section id="the-year" class="chapter">
+    <SectionDivider motif="wheat" />
+    <ChapterTitle
+      number={2}
+      title="The Year"
+      headline="Over a year, AI is still the shortest bar on the chart."
+    />
+    <p class="chapter-intro">
+      Bitcoin is larger. EV charging is larger. The data-center stack AI
+      sits inside is six times the AI bar; U.S. homes are thirty.
+    </p>
+    <OrganicFrame subject="electricity" sideLeft={true}>
+      <InfographicAnnualTwh />
+    </OrganicFrame>
+  </section>
 
-  <InfographicDcTrajectory />
+  <section id="the-water" class="chapter">
+    <SectionDivider motif="water" />
+    <ChapterTitle
+      number={3}
+      title="The Water"
+      headline="Direct cooling, or counting the power plants — the answer changes."
+    />
+    <p class="chapter-intro">
+      Direct cooling, globally: 45 to 90 billion gallons. Counting the
+      water that generates the electricity: 500 to 700. Where you draw
+      the line decides the answer.
+    </p>
+    <OrganicFrame subject="water" sideLeft={true}>
+      <InfographicWaterBracket />
+    </OrganicFrame>
+  </section>
 
-  <InfographicAiShareTrajectory />
+  <section id="the-trajectory" class="chapter">
+    <SectionDivider motif="vine" />
+    <ChapterTitle
+      number={4}
+      title="The Trajectory"
+      headline="The line was flat through 2018, then it bent."
+    />
+    <p class="chapter-intro">
+      Through 2018 the total ran near 200 TWh. In 2025, 485. By 2030 the
+      fan opens from 830 to 1,350. The AI slice runs from 65 to between
+      200 and 400.
+    </p>
+    <OrganicFrame subject="electricity" sideLeft={true}>
+      <InfographicDcTrajectory />
+    </OrganicFrame>
+    <OrganicFrame subject="electricity" sideLeft={true}>
+      <InfographicAiShareTrajectory />
+    </OrganicFrame>
+  </section>
 
-  <InfographicHouseholdEquivalents />
+  <section id="in-equivalents" class="chapter">
+    <SectionDivider motif="wheat" />
+    <ChapterTitle
+      number={5}
+      title="In Equivalents"
+      headline="Translated into homes: 39 million in 2024, past 70 million by 2030."
+    />
+    <p class="chapter-intro">
+      A terawatt-hour is 85,000 American homes for a year. The world's
+      data centers ran 460 in 2024 — about 39 million homes. By 2030,
+      70 to 113 million.
+    </p>
+    <OrganicFrame subject="electricity" sideLeft={true}>
+      <InfographicWattScalePrimer />
+    </OrganicFrame>
+    <OrganicFrame subject="electricity" sideLeft={true}>
+      <InfographicHouseholdEquivalents />
+    </OrganicFrame>
+  </section>
 
-  <InfographicWattScalePrimer />
-
-  <InfographicTrainingVsInference />
+  <section id="training-vs-inference" class="chapter">
+    <SectionDivider motif="carbon" />
+    <ChapterTitle
+      number={6}
+      title="Training vs. Inference"
+      headline="Five dots for training, one bar for inference — and the bar is bigger."
+    />
+    <p class="chapter-intro">
+      The training events scatter across four orders of magnitude. The
+      inference bar sits above all of them. Most of AI's carbon shows up
+      after the model ships.
+    </p>
+    <OrganicFrame subject="carbon" sideLeft={true}>
+      <InfographicTrainingVsInference />
+    </OrganicFrame>
+  </section>
 
   <p class="thesis">
     This is an infrastructure argument: where data centers get built,
@@ -48,8 +147,44 @@ const description =
 </Layout>
 
 <style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .preamble {
+    margin: 0 0 var(--space-8);
+  }
+
+  .chapter {
+    margin: 0 0 var(--space-8);
+  }
+
+  .chapter-intro {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--ink);
+    text-align: center;
+    max-width: 32rem;
+    margin: 0 auto var(--space-6);
+  }
+  @media (min-width: 720px) {
+    .chapter-intro {
+      font-size: 1.15rem;
+      max-width: 36rem;
+    }
+  }
+
   .thesis {
-    margin: var(--space-6) 0 0;
+    margin: var(--space-7) 0 0;
     font-size: 1.05rem;
     color: var(--ink);
   }

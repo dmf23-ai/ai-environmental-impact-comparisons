@@ -6,15 +6,22 @@
 // chart uses the granular path; the other charts use the default. Without
 // the opt-in, mantissas above 5 round straight up to 10, which gives most
 // charts useful breathing room on the right edge.
+//
+// `headroom: true` multiplies n by 1.05 before rounding so the longest bar
+// can't sit flush against the axis right edge. Opted in by charts where a
+// data value can land exactly on a nice-number boundary (water-bracket's
+// 1,500 Bgal on a granular step is the canonical case).
 
 export interface NiceCeilingOptions {
   granular?: boolean;
+  headroom?: boolean;
 }
 
 export function niceCeiling(n: number, opts: NiceCeilingOptions = {}): number {
   if (n <= 10) return Math.ceil(n);
-  const magnitude = Math.pow(10, Math.floor(Math.log10(n)));
-  const mantissa = n / magnitude;
+  const effective = opts.headroom ? n * 1.05 : n;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(effective)));
+  const mantissa = effective / magnitude;
   let rounded: number;
   if (mantissa <= 1) rounded = 1;
   else if (mantissa <= 1.25) rounded = 1.25;
