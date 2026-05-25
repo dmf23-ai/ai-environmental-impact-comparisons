@@ -30,6 +30,34 @@ const data = (figuresData as any).infographics.find(
 
 if (!data) throw new Error("range-vs-point-primer missing from figures.json");
 
+// Soft-wrap a caption to two lines when it would otherwise overflow the
+// chart's horizontal extent at font-size 14. Prefer punctuation breaks
+// ("; ", ". ", ", ") in the middle half of the string; fall back to the
+// nearest space. Single line returns empty line2.
+function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
+  if (text.length <= maxFirstLine) return [text, ""];
+  const lo = Math.floor(text.length / 4);
+  const hi = Math.floor((text.length * 3) / 4);
+  for (const sep of ["; ", ". ", ", "]) {
+    let best = -1;
+    let idx = text.indexOf(sep);
+    while (idx !== -1) {
+      if (idx >= lo && idx <= hi) { best = idx; break; }
+      idx = text.indexOf(sep, idx + 1);
+    }
+    if (best !== -1) {
+      return [text.slice(0, best + 1), text.slice(best + 2)];
+    }
+  }
+  const mid = Math.floor(text.length / 2);
+  let split = text.lastIndexOf(" ", mid);
+  if (split < 0) split = text.indexOf(" ", mid);
+  if (split < 0) return [text, ""];
+  return [text.slice(0, split), text.slice(split + 1)];
+}
+const [captionLine1, captionLine2] = wrapCaption(data.caption);
+const captionLine2H = captionLine2 ? 18 : 0;
+
 // SVG geometry — matches the other infographics for visual continuity.
 const W = 720;
 const padX = 30;
@@ -79,34 +107,6 @@ const INK = "#211d1b";
 const MID = "#4a3f3a";
 const DIM = "#8a7f78";
 const RULE = "#ddd2bd";
-
-// Soft-wrap a caption to two lines when it would otherwise overflow the
-// chart's horizontal extent at font-size 14. Prefer punctuation breaks
-// ("; ", ". ", ", ") in the middle half of the string; fall back to the
-// nearest space. Single line returns empty line2.
-function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
-  if (text.length <= maxFirstLine) return [text, ""];
-  const lo = Math.floor(text.length / 4);
-  const hi = Math.floor((text.length * 3) / 4);
-  for (const sep of ["; ", ". ", ", "]) {
-    let best = -1;
-    let idx = text.indexOf(sep);
-    while (idx !== -1) {
-      if (idx >= lo && idx <= hi) { best = idx; break; }
-      idx = text.indexOf(sep, idx + 1);
-    }
-    if (best !== -1) {
-      return [text.slice(0, best + 1), text.slice(best + 2)];
-    }
-  }
-  const mid = Math.floor(text.length / 2);
-  let split = text.lastIndexOf(" ", mid);
-  if (split < 0) split = text.indexOf(" ", mid);
-  if (split < 0) return [text, ""];
-  return [text.slice(0, split), text.slice(split + 1)];
-}
-const [captionLine1, captionLine2] = wrapCaption(data.caption);
-const captionLine2H = captionLine2 ? 18 : 0;
 ---
 
 <figure class="infographic-card" id={data.anchor}>

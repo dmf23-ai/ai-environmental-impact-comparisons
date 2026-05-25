@@ -36,6 +36,40 @@ const data = (figuresData as any).infographics.find(
 
 if (!data) throw new Error("training-vs-inference missing from figures.json");
 
+// Soft-wrap a caption to two lines when it would otherwise overflow the
+// chart's horizontal extent at font-size 14. Prefer punctuation breaks
+// ("; ", ". ", ", ") in the middle half of the string; fall back to the
+// nearest space. Single line returns empty line2.
+function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
+  if (text.length <= maxFirstLine) return [text, ""];
+  const lo = Math.floor(text.length / 4);
+  const hi = Math.floor((text.length * 3) / 4);
+  for (const sep of ["; ", ". ", ", "]) {
+    let best = -1;
+    let idx = text.indexOf(sep);
+    while (idx !== -1) {
+      if (idx >= lo && idx <= hi) { best = idx; break; }
+      idx = text.indexOf(sep, idx + 1);
+    }
+    if (best !== -1) {
+      return [text.slice(0, best + 1), text.slice(best + 2)];
+    }
+  }
+  const mid = Math.floor(text.length / 2);
+  let split = text.lastIndexOf(" ", mid);
+  if (split < 0) split = text.indexOf(" ", mid);
+  if (split < 0) return [text, ""];
+  return [text.slice(0, split), text.slice(split + 1)];
+}
+const [captionLine1, captionLine2] = wrapCaption(data.caption);
+const captionLine2H = captionLine2 ? 18 : 0;
+
+// Format an inference range in megatons with one decimal, for a numeric
+// label rendered next to the narrow inference bar (which is only ~29 px
+// wide on the log axis and would otherwise lack a visible value).
+const fmtMt = (t: number) => (t / 1_000_000).toFixed(1);
+const inferenceValueLabel = `${fmtMt(data.inference.low_tco2)}–${fmtMt(data.inference.high_tco2)} Mt`;
+
 // --- Geometry --------------------------------------------------------------
 const W = 720;
 const padX = 30;
@@ -106,40 +140,6 @@ const INK = "#211d1b";
 const MID = "#4a3f3a";
 const DIM = "#8a7f78";
 const RULE = "#ddd2bd";
-
-// Soft-wrap a caption to two lines when it would otherwise overflow the
-// chart's horizontal extent at font-size 14. Prefer punctuation breaks
-// ("; ", ". ", ", ") in the middle half of the string; fall back to the
-// nearest space. Single line returns empty line2.
-function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
-  if (text.length <= maxFirstLine) return [text, ""];
-  const lo = Math.floor(text.length / 4);
-  const hi = Math.floor((text.length * 3) / 4);
-  for (const sep of ["; ", ". ", ", "]) {
-    let best = -1;
-    let idx = text.indexOf(sep);
-    while (idx !== -1) {
-      if (idx >= lo && idx <= hi) { best = idx; break; }
-      idx = text.indexOf(sep, idx + 1);
-    }
-    if (best !== -1) {
-      return [text.slice(0, best + 1), text.slice(best + 2)];
-    }
-  }
-  const mid = Math.floor(text.length / 2);
-  let split = text.lastIndexOf(" ", mid);
-  if (split < 0) split = text.indexOf(" ", mid);
-  if (split < 0) return [text, ""];
-  return [text.slice(0, split), text.slice(split + 1)];
-}
-const [captionLine1, captionLine2] = wrapCaption(data.caption);
-const captionLine2H = captionLine2 ? 18 : 0;
-
-// Format an inference range in megatons with one decimal, for a numeric
-// label rendered next to the narrow inference bar (which is only ~29 px
-// wide on the log axis and would otherwise lack a visible value).
-const fmtMt = (t: number) => (t / 1_000_000).toFixed(1);
-const inferenceValueLabel = `${fmtMt(data.inference.low_tco2)}–${fmtMt(data.inference.high_tco2)} Mt`;
 
 const sourceShort =
   "Sources: Strubell et al. 2019, Patterson et al. 2022, BLOOM impact paper, Meta Llama 2/3 papers, IEA April 2026.";
