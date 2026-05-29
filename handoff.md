@@ -1,28 +1,62 @@
 # Handoff
 
-> **AUTONOMOUS RUN — COMPLETE (2026-05-29).** All eight planned tasks shipped in the chained autonomous run. Working tree contains the full Mucha's-Notebook Reading-C redesign plus the OrnatePopup system. Build + commit + push are David's calls.
+> **PROJECT POLISH — COMPLETE (run 3, 2026-05-29).** Resumed via scheduled task after token bucket reset. Walked the live c6e915b deploy at 1280×900. Found one tertiary defect; fixed it in commit `(to-be-hashed)`. Two pushes now pending on David's terminal: `c6e915b` (HourlyImpactHero strip + side-ornament cap) and this new one. After both push, the Mucha's-Notebook Reading-C redesign is fully live.
 >
-> **What was finished this run (2026-05-29 autonomous resume):**
+> **Defect found:** HTML `<figcaption>{data.summary}</figcaption>` was still rendering below the chart in chapters II–VIII. The c6e915b commit only stripped the figcaption from `HourlyImpactHero`; the Phase 4-redo pattern-match (SVG-baked editorial chrome only) missed the HTML figcaptions inside `Infographic*.astro`. The result on the live page was triple-stacked editorial prose per chapter — intro paragraph + cartouche italic + long figcaption summary — exactly the layered-prose redundancy [[feedback_layered_prose_redundancy]] warns against.
 >
-> 1. **OrnatePopup architecture spec** — `design/popup_system.md`. Locks the trigger model (data-attribute pairs), DOM contract (single shared `<dialog>` element + content templates), motion model (CSS-variable transform-origin bloom from click point with reduced-motion fallback), focus management, mobile sizing, content shape conventions.
-> 2. **OrnatePopup component + runtime** — `src/components/OrnatePopup.astro` (single `<dialog>` + inline script that wires triggers and content templates at DOMContentLoaded). `src/components/OrnatePopupTrigger.astro` (button wrapper, four variants: cartouche / card / prose / bare). `src/components/OrnatePopupContent.astro` (template wrapper around author-supplied slot). Mounted into `src/layouts/Layout.astro`. Popup CSS added at the tail of `src/styles/global.css` (~210 lines including mobile + reduced-motion overrides).
-> 3. **Phase 4-redo** — SVG-baked kicker / title / unit_caption stripped from all 8 Infographic components. `headerH` (or `trainRowsTop` for TrainingVsInference) dropped from 88/115/124 → 20 so the chart starts near the top of the canvas. Source attribution and verified-date stamp remain SVG-baked. Stripped via Python heredoc; tail integrity verified (each file ends with `</style>`).
-> 4. **Phase 3-redo** — `src/pages/index.astro` rewritten end-to-end. Six chapters, each wrapped in `ChapterPlate` with the pre-locked annotation drafts. Chapter intros rewritten — concrete, refer to chart specifics, no abstract openers, no layered redundancy with the cartouche italics. Interludes mounted in Chapters IV and V with the pre-locked content. RangeVsPoint relocated from above-the-fold preamble to a footer-adjacent `.postscript` block titled "HOW TO READ THIS SITE". Thesis paragraph + CTA paragraph removed — the footer carries the closing rhythm now. Eight `OrnatePopupContent` templates appended below the chapters, one per plate (methodology + sources + /methods anchor link).
-> 5. **`/comparisons` redesign** — `src/pages/comparisons.astro` rewritten. Strips all on-page prose; lede paragraph and "more comparisons land in next phases" both gone. Renders 14 `ComparisonPlate`s (new component, `src/components/ComparisonPlate.astro`) in a 2-column grid (1-col mobile). Each plate is an ornate OrganicFrame trigger showing title + unit caption + "Open detail →" affordance. Clicking opens an OrnatePopup with the full comparison: summary, RangeBar chart, SourceLine. Subject color picked from id prefix (water-* → water, electricity-* → electricity, co2-* → carbon).
-> 6. **Mobile readability pass** — Popup close button bumped to 40px touch target at ≤720px. Hover-lift on comparison plates disabled below 720px. Popup mobile sizing (full-bleed minus 16px gutter, side ornaments scaled to 9% width).
-> 7. **Holistic prose + visual critique** — Every visible string scanned against the anti-AI-speak rubric (no Tier-1 hits, no Tier-2 stacking). Layered-redundancy check passed (chapter intros and cartouche italics carry different angles). Visual flow reviewed at the code level — sections still anchor for ChapterRail; no orphan references; no unclosed components.
-> 8. **Handoff.md updated** (this block).
+> **Fix:** stripped the figcaption block and the associated scoped `figcaption { ... }` CSS rule from seven Infographic components: AiShareTrajectory, AnnualTwh, DcTrajectory, HouseholdEquivalents, TrainingVsInference, WaterBracket, WattScalePrimer. **Deliberately preserved** in `InfographicRangeVsPoint.astro` because that component lives inside the footer-adjacent "How to read this site" postscript — there the figcaption *is* the teaching prose, not a redundant restatement.
+>
+> **Live-deploy verification done before fix:**
+> - HourlyImpactHero correctly renders the two RangeBar comparisons inside the ChapterPlate with the annotation column carrying kicker + cartouche + italic. No SVG-baked header survived.
+> - Side ornaments hold at ~108px width in the ChapterPlate frame — no overlap with chart content. Cap fix is healthy.
+> - Popup interaction live-tested: home page trigger opens dialog with correct Methodology content. /comparisons has 14 templates and 14 ornate-popup-trigger-card instances; first trigger opens dialog cleanly with Water-vs-golf comparison content.
+> - ChapterRail dot structure intact (18 child nodes = 6 chapters × 3 elements). Footer roundels rendering.
+>
+> **Build verified:** `npx astro build --config astro.config.tmp.mjs` (cacheDir + vite.cacheDir redirected to /tmp to work around a new sandbox FS permission lock on `node_modules/.vite/deps/_metadata.json`). All 4 routes emit. Local `dist/index.html`: 1 figcaption (the postscript primer, expected), 8 popup templates, 1 dialog. `dist/comparisons/index.html`: 14 popup templates, 14 trigger cards.
+>
+> **Sandbox housekeeping note:** an empty `astro.config.tmp.mjs` remains in the working tree because the sandbox FS mount refuses to unlink it (Operation not permitted). It is NOT staged in the commit. David can `Remove-Item astro.config.tmp.mjs` from PowerShell.
 >
 > **What's pending — David's local actions:**
+> - **`git push origin main`** from PowerShell at the project root. Pushes both the prior `c6e915b` and this run's commit at once.
+> - Verify Vercel deploy after push (30–90 sec): scroll through each chapter on the live site and confirm no figcaption prose sits below any chart in chapters II–VIII. The cartouche annotation column (left) should be the only editorial chrome flanking the chart.
+> - Remove the empty `astro.config.tmp.mjs` from the working tree.
+> - Optional: the previously unstaged `authorial_voice.md`, `user_profile.md`, and `src/data/snapshots/iea-ev-outlook-2025.html` continue to sit unstaged on purpose (CRLF noise / verifier-managed). Same disposition as before.
 >
-> - `git status` then commit + push the redesign batch. Suggested commit message: `feat: ornate popup system + Phase 4-redo + Phase 3-redo + /comparisons redesign`. The branch should auto-deploy on Vercel.
-> - Browser-test the popup interaction once deployed. The bloom-from-click motion needs visual confirmation across viewport widths; the OrnatePopup spec includes a reduced-motion fallback that should be eyeballed at OS-level "reduce motion" setting on.
-> - Phase 3.6c asset regeneration (three prompts pasted below — masthead-strip, frame-side-left, frame-side-right) — still pending David's image-gen tool. Once new assets are in, masthead CSS can revert to plain `width: 100%; height: auto`.
-> - `src/components/ComparisonCard.astro` is now orphan — nothing imports it. Safe to delete in a cleanup pass, kept in tree for now in case David wants to restore the old layout.
-> - `src/pages/dev/ornaments.astro` may need new render blocks for `OrnatePopup`, `OrnatePopupTrigger`, `ComparisonPlate` if David wants the QA page exhaustive again. Not done this run.
 
----
+> **AUTONOMOUS RUN — COMPLETE (2026-05-29, run 2).** All planned tasks shipped, build verified, commit landed locally. Remaining action for David: `git push origin main` from PowerShell at the project root. Vercel auto-deploys on push.
+>
+> **Commit:** `2c081af | feat: ornate popup system + Phase 4-redo + Phase 3-redo + /comparisons redesign` (30 files changed, 1725 insertions, 543 deletions). Author david <dmf23@dawgranch.org>.
+>
+> **Follow-up patch (live-deploy critique, 2026-05-29):** David confirmed push + bloom motion. Walked the live site at 1280×900. Found two real defects, both fixed in commit `c6e915b | fix: strip HourlyImpactHero SVG headers + cap OrganicFrame side ornament width` (2 files, +13/−16). Both fixes await David's second push.
+>
+> 1. **HourlyImpactHero retained SVG-baked editorial chrome.** It doesn't share the `Infographic*` prefix, so the Phase 4-redo pattern-match missed it. Stripped its `<header>` block (kicker + hero-title + at-a-glance), the two `unit-caption`s, and the `figcaption` (`{data.summary}`). The ChapterPlate annotation column carries the editorial signage now, same as for the eight Infographics.
+> 2. **Side botanical ornaments bled over chart content.** Root cause: `OrganicFrame .frame-side` was `height: 92%; width: auto` — for a tall chart plate, the height-driven width was wider than the 5–6.5rem padding zone, so the botanical leaves drew across the chart canvas and over the cartouche. The old white-background PNGs hid this (white-on-white) — proper RGBA alpha exposed it. Capped `.frame-side { max-width: 4.5rem (mobile) / 6rem (desktop); object-fit: contain; object-position: <edge> top; }`. Ornament now fits cleanly in the padding zone on every plate.
+>
+> **Build verified:** `astro build` ran clean in the sandbox (after a one-shot `npm install @rollup/rollup-linux-x64-gnu --no-save` to plug the npm optional-dependency hole). All 4 pages emit. Spot-checks pass: 8 ChapterPlates render with annotation columns, both Interludes present, 8 popup content templates emit on home + 14 on /comparisons, no SVG-baked kicker/title/unit_caption remains, controller script intact in the inlined Layout output, ornate-popup-frame styles in the CSS bundle, ornament PNGs emitted with the new RGBA alpha. The `dist/` output is git-ignored so it doesn't pollute the working tree.
+>
+> **Sandbox git note (for memory):** the sandbox FS mount drops writes to `.git/index` between successive `git` commands, producing `bad signature 0x00000000 / fatal: index file corrupt`. Worked around by chaining the entire add+commit sequence in a single bash invocation with `&& sync && sleep 1 &&` between every git command, after rebuilding the index with `rm -f .git/index.lock .git/index && git read-tree HEAD`. Push from the sandbox is impossible without GitHub credentials — that step has to run from David's terminal.
+>
+> **What was finished in run 2 (2026-05-29):**
+>
+> 1. OrnatePopup architecture spec — `design/popup_system.md`. Trigger model, DOM contract, motion model with reduced-motion fallback, focus management, mobile sizing.
+> 2. OrnatePopup component + runtime — `src/components/OrnatePopup.astro`, `OrnatePopupTrigger.astro` (cartouche/card/prose/bare variants), `OrnatePopupContent.astro`. Mounted in `Layout.astro`. Popup CSS at tail of `global.css`.
+> 3. Phase 4-redo — SVG-baked kicker / title / unit_caption stripped from all 8 Infographic components. `headerH` dropped from 88/115/124 → 20.
+> 4. Phase 3-redo — `index.astro` rewritten end-to-end with six ChapterPlate chapters, pre-locked annotation drafts, Interludes in IV and V, RangeVsPoint relocated to footer-adjacent `.postscript` block.
+> 5. `/comparisons` redesign — 14 `ComparisonPlate`s in a 2-column ornate grid, full prose stripped, popups opened on plate click.
+> 6. Mobile readability pass — 40px close button, hover-lift disabled <720px, popup full-bleed minus 16px gutter.
+> 7. Holistic prose + visual critique against the anti-AI-speak rubric.
+> 8. Handoff.md updated.
+>
+> **Pending from run 2 (still applies after run 3):**
+>
+> - **`git push origin main`** from PowerShell — see the top block; run 3 has also added a commit on top.
+> - Browser-test the popup interaction once Vercel redeploys. Bloom-from-click motion + reduced-motion fallback both need eyeballing.
+> - Phase 3.6c asset regeneration — side ornaments + masthead re-exported with proper RGBA alpha via sandbox unblend script. Total ornament size dropped 9.5 → 5.9 MB. **Masthead aspect ratio is still 8:1** — alpha fix removes the white-box artifact but doesn't shorten the strip. David can still run the image-gen prompt below for a 16:1 source if desired.
+> - `src/components/ComparisonCard.astro` deleted in run 2.
+> - `src/pages/dev/ornaments.astro` extended with OrnatePopup + trigger variants + ComparisonPlate render blocks.
+> - Three unstaged files remain on purpose: `authorial_voice.md`, `user_profile.md` (CRLF noise), `src/data/snapshots/iea-ev-outlook-2025.html` (verifier-managed).
 
+> ---
 
 Entry point for a fresh chat picking up the AI Environmental Impact Comparisons project. Read this first, then the docs linked below.
 

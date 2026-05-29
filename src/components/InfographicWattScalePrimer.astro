@@ -364,9 +364,6 @@ const pointR = 7;
       {verifiedStamp}
     </text>
   </svg>
-
-  <figcaption>{data.summary}</figcaption>
-
   <SourceLine
     sources={data.sources}
     lastVerified={data.last_verified}
@@ -389,14 +386,6 @@ const pointR = 7;
     width: 100%;
     height: auto;
     display: block;
-  }
-  figcaption {
-    font-size: 1rem;
-    color: var(--ink);
-    margin: var(--space-6) 0 0;
-    line-height: 1.6;
-    border-top: 1px solid var(--rule);
-    padding-top: var(--space-5);
   }
   @media (min-width: 720px) {
     .infographic-card {
