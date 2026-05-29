@@ -9,6 +9,12 @@
 // ornate variant locks to the asset's native 3:2 aspect so the frame's
 // embellishments don't stretch. Value and unit stack vertically inside so
 // long unit phrases (e.g., "billion gallons") don't blow out the box.
+//
+// Run-6 (2026-05-29): ornate value/unit sizing switched to container queries
+// so values like "14–18" or "830–1,350" don't wrap when the cartouche sits
+// in a narrow plate-annotation column. White-space: nowrap is the load-bearing
+// fix — wrapping was forcing the figure past the frame's 3:2 box and over the
+// bottom border ornament.
 
 interface Props {
   value: string;
@@ -77,7 +83,8 @@ const color = subjectColors[subject];
   }
   /* Ornate variant locks to the asset's 3:2 aspect so the frame doesn't
      stretch. Long unit phrases stack below the value rather than running
-     out horizontally. */
+     out horizontally. container-type: inline-size lets the value/unit
+     font-size scale with the cartouche's actual rendered width via cqi. */
   .cartouche-ornate {
     position: relative;
     display: inline-flex;
@@ -89,6 +96,8 @@ const color = subjectColors[subject];
     aspect-ratio: 3 / 2;
     margin: 0 auto;
     padding: 0;
+    container-type: inline-size;
+    container-name: cartouche;
   }
   .cartouche-frame-bg {
     position: absolute;
@@ -112,6 +121,9 @@ const color = subjectColors[subject];
     align-items: center;
     text-align: center;
     gap: 0.1em;
+    /* Keep the figure inside the frame's interior horizontally. The frame
+       asset's safe inner band is roughly 80% of its width. */
+    max-width: 80%;
   }
   .flourish {
     display: inline-flex;
@@ -141,13 +153,19 @@ const color = subjectColors[subject];
     color: var(--ink-soft);
     letter-spacing: 0;
   }
-  /* In ornate mode the value runs a touch smaller so long values like
-     "500–700" leave room for the unit beneath. */
+  /* Ornate value/unit autoshrink with the cartouche's container width.
+     nowrap prevents the en-dash wrap that used to push "14–18" and
+     "830–1,350" past the frame's bottom ornament. Caps at the previous
+     desktop maxes (2.4rem value, 1.05rem unit) so the visual rhythm at
+     full-size cartouches is unchanged. */
   .cartouche-ornate .value {
-    font-size: 2.1rem;
+    font-size: clamp(0.75rem, 12cqi, 2.4rem);
+    line-height: 1.05;
+    white-space: nowrap;
   }
   .cartouche-ornate .unit {
-    font-size: 0.95rem;
+    font-size: clamp(0.55rem, 4.7cqi, 1.05rem);
+    white-space: nowrap;
   }
   .cartouche-caption {
     text-align: center;
@@ -167,12 +185,6 @@ const color = subjectColors[subject];
     }
     .cartouche-ornate {
       max-width: 400px;
-    }
-    .cartouche-ornate .value {
-      font-size: 2.4rem;
-    }
-    .cartouche-ornate .unit {
-      font-size: 1.05rem;
     }
   }
 </style>
