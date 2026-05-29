@@ -12,7 +12,7 @@
 // Motion: scales from the click point. Reduced-motion fallback is a fade.
 ---
 
-<dialog class="ornate-popup" aria-labelledby="">
+<dialog class="ornate-popup" aria-modal="true" aria-labelledby="">
   <div class="ornate-popup-frame">
     <img
       class="ornate-popup-side ornate-popup-side-left"
@@ -65,6 +65,9 @@
         dialog.style.setProperty("--popup-origin-y", oy + "%");
 
         lastTrigger = trigger;
+        if (trigger && trigger.setAttribute) {
+          trigger.setAttribute("aria-expanded", "true");
+        }
         dialog.showModal();
         // Force reflow then add the open class to run the transition
         // (showModal sets display:block; transitioning from there needs a tick)
@@ -83,9 +86,14 @@
           if (done) return;
           done = true;
           dialog.close();
-          // Restore focus
-          if (lastTrigger && typeof lastTrigger.focus === "function") {
-            lastTrigger.focus();
+          // Restore focus and reset aria-expanded
+          if (lastTrigger) {
+            if (lastTrigger.setAttribute) {
+              lastTrigger.setAttribute("aria-expanded", "false");
+            }
+            if (typeof lastTrigger.focus === "function") {
+              lastTrigger.focus();
+            }
           }
           lastTrigger = null;
         }

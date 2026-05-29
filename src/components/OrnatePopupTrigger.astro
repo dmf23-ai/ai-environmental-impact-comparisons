@@ -24,6 +24,8 @@ const { popupId, as = "bare", label } = Astro.props;
   type="button"
   class:list={["ornate-popup-trigger", `ornate-popup-trigger-${as}`]}
   data-popup-trigger={popupId}
+  aria-haspopup="dialog"
+  aria-expanded="false"
   aria-label={label}
 >
   <slot />
