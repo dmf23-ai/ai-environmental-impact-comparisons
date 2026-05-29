@@ -2,7 +2,7 @@
 
 > **AUTONOMOUS RUN 4 — ACCESSIBILITY + POLISH (2026-05-29).** David flagged that stopping at 41% session use after the figcaption fix was too narrow a read of autonomous mode — finishing the scoped task ≠ project complete; the queued-phase list still had real work. Resumed and finished the genuinely-actionable items.
 >
-> **Commit (this run):** to follow — `(to-be-hashed)`. Single push needed: `git push origin main` after the commit lands.
+> **Commit (this run):** to follow — `fb59351`. Single push needed: `git push origin main` after the commit lands.
 >
 > **What got addressed:**
 >
@@ -27,6 +27,33 @@
 >
 > **Session budget at close:** check `claude.ai/settings/usage` reading at run end recorded below.
 
+>
+> **AUTONOMOUS RUN 6 — CARTOUCHE FIX SHIPPED, MASTHEAD STILL GATED ON DAVID (2026-05-29, session opened at 9%).** Scheduled task `ai-impact-autonomous-resume-3` fired. Of the two defects flagged in the prior pause note, one was Claude-actionable and one is image-gen-gated.
+>
+> **What got done:**
+>
+> 1. **Cartouche overflow fixed (commit `773a7bd`).** Root cause was not "value font too big in absolute terms" — it was that the ornate cartouche sits inside ChapterPlate's 30% annotation column, which on desktop renders ~140px wide. At that width "14–18" at 2.4rem (43.2px on the project's 18px root) wrapped at the en-dash to two lines; the wrapped figure was 95px tall but the 3:2 frame box was only 93px tall, so the figure pushed past the bottom border and overlapped the bottom ornament. Fix: `container-type: inline-size` on `.cartouche-ornate`, value/unit font-sizes switched to `clamp(min, Xcqi, max)` capped at the previous desktop maxes (2.4rem / 1.05rem), plus `white-space: nowrap` on both — wrap-prevention is the load-bearing change. Figure also capped at 80% interior width so wide nowrap strings stay inside the frame's safe inner band. Verified via CSS injection on the live deploy across all 10 ornate cartouches (8 chapter plates + 2 Interlude pairs): every one renders at AR=1.5 with figure inside the box, no overflow. Screenshot of Chapter I post-fix confirms "14–18" sits cleanly on one line inside the frame.
+> 2. **Masthead alpha still RGB — David must re-export.** Verified the file at `public/ornaments/masthead-strip.png` is 5015×314 mode RGB. The commit `2bf0bff "assets: masthead-strip widened to 16:1 with true alpha"` that landed earlier today is misleading — the file shape is correct (16:1) but the alpha claim is false; ChatGPT honored AR but not RGBA. Stronger image-gen prompt provided below for David's next attempt.
+>
+> **Commit (this run):** `773a7bd` (cartouche fix). Push pending — David runs `git push origin main` from PowerShell. Single push covers the cartouche fix + this handoff update (which lands as a follow-on `chore(handoff)` commit below).
+>
+> **What's pending — David's local actions:**
+>
+> - **Before any git command this session:** `Remove-Item .git\index.lock, .git\HEAD.lock, .git\refs\heads\main.lock -ErrorAction SilentlyContinue` from PowerShell at the project root. Run 6's commit was made via the direct-refs-overwrite plumbing fallback and left a zero-byte `.git/index.lock` the sandbox could not delete — confirmed via `ls -la .git/index.lock` at run end (size 0, mtime 22:39 UTC). PowerShell can delete it; the sandbox cannot. See [[feedback_sandbox_lock_cleanup]].
+> - `git push origin main` from PowerShell at the project root. Push covers `773a7bd` (cartouche) plus any follow-on handoff commit.
+> - **Re-export `masthead-strip.png` with real alpha.** Use the stronger prompt below verbatim. Drag-verify the resulting PNG onto a Chrome tab — real alpha renders the botanical against Chrome's clean white tab background with no bounding rectangle. If you still see a rectangle, the file is still RGB and the prompt didn't take.
+> - Phase 8 PNG compression (~9.2MB total) — still deferred to a focused session; autonomous runs avoid this because lossy compression on alpha-channel PNGs damages the botanical edge.
+> - Three files (`authorial_voice.md`, `user_profile.md`, `src/data/snapshots/iea-ev-outlook-2025.html`) continue to sit unstaged on purpose.
+> - `astro.config.build.mjs` is the sandbox build config (cacheDir redirect to /tmp). Safe to delete locally after push — it's not used by Vercel.
+>
+> **Stronger masthead image-gen prompt (for David's tool — paste verbatim):**
+>
+> > A horizontal Art Nouveau botanical banner in the style of Alphonse Mucha, drawn as a continuous wide frieze with no central focal point. Wheat sheaves, ivory-orange California poppies in bloom, slender green-sage leaves and curling tendrils, intertwined and repeating across the full width. Muted antique palette: soft rust-orange poppies (#a85a3a), sage-green foliage (#7a8c6a), warm ink line work (#211d1b). Hand-drawn ink-and-watercolor feel, not flat vector. Canvas dimensions exactly 3200 pixels wide by 200 pixels tall (16:1 aspect ratio). CRITICAL: Return PNG-32 with a real alpha channel. The image mode MUST be RGBA, not RGB. Pixels outside the botanical MUST be fully transparent (alpha = 0), not filled with white or any solid color. Do NOT bake the transparency-indicator checkerboard pattern into the pixels. The botanical elements should sit on absolute transparency so the page's ivory paper color shows through behind them.
+>
+> **Verification step after David's re-export:** `python3 -c "from PIL import Image; im = Image.open('public/ornaments/masthead-strip.png'); print(im.size, im.mode)"` should return `(3200, 200) RGBA` (or larger dimensions at 16:1). If `RGB`, the file is still broken — re-export.
+>
+> **Session budget at run end:** 9% at open, well under the 80% pause threshold throughout. No self-chain scheduled — remaining work is entirely David-gated (image-gen for masthead, PowerShell push, optional Phase 8 compression). Once David's masthead re-export lands and pushes cleanly, the Mucha redesign is complete; the only deferred item is Phase 8 PNG compression for launch readiness.
+>
 > ---
 
 Entry point for a fresh chat picking up the AI Environmental Impact Comparisons project. Read this first, then the docs linked below.
