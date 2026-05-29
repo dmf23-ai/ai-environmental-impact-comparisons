@@ -1,0 +1,75 @@
+---
+// ComparisonPlate — ornate herbarium plate for /comparisons. Front shows the
+// title and unit caption inside an OrganicFrame with a SubjectMarker; the
+// whole plate is an OrnatePopupTrigger that opens the full detail popup.
+import OrganicFrame from "./OrganicFrame.astro";
+import SubjectMarker from "./SubjectMarker.astro";
+import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+
+interface Props {
+  id: string;
+  title: string;
+  unitCaption?: string;
+  subject: "water" | "electricity" | "carbon";
+  popupId: string;
+}
+const { title, unitCaption, subject, popupId } = Astro.props;
+---
+
+<OrnatePopupTrigger popupId={popupId} as="card" label={`Open detail for ${title}`}>
+  <OrganicFrame subject={subject} sideLeft>
+    <div class="plate-front">
+      <p class="plate-title">{title}</p>
+      {unitCaption && <p class="plate-unit">{unitCaption}</p>}
+      <span class="plate-affordance">Open detail →</span>
+    </div>
+  </OrganicFrame>
+</OrnatePopupTrigger>
+
+<style>
+  /* OrganicFrame ships with vertical margins for in-prose use; inside a
+     grid cell those margins push the plate off-center. Override to 0. */
+  :global(.ornate-popup-trigger-card > .organic-frame) {
+    margin: 0;
+  }
+  .plate-front {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-3);
+    min-height: 9rem;
+    justify-content: center;
+  }
+  .plate-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0;
+    max-width: 20rem;
+  }
+  .plate-unit {
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .plate-affordance {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-top: var(--space-2);
+  }
+
+  @media (min-width: 720px) {
+    .plate-title {
+      font-size: 1.25rem;
+    }
+  }
+</style>

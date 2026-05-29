@@ -40,7 +40,7 @@ const chartLeft = padX;
 const chartRight = W - padX;
 const chartWidth = chartRight - chartLeft;
 
-const headerH = 115;
+const headerH = 20;
 const barRowH = 58;
 const labelOffset = 14;
 const barTopOffset = 22;
@@ -166,40 +166,6 @@ const RULE = "#ddd2bd";
 
     {/* Card background — explicit white so the saved SVG never inherits a transparent background. */}
     <rect width={W} height={H} fill="#f4ede0" />
-
-    {/* Header */}
-    <text
-      x={padX}
-      y={36}
-      font-family={FONT_SANS}
-      font-size="12"
-      fill={DIM}
-      letter-spacing="1.6"
-      font-weight="500"
-    >
-      {data.kicker.toUpperCase()}
-    </text>
-    <text
-      x={padX}
-      y={72}
-      font-family={FONT_SERIF}
-      font-size="26"
-      fill={INK}
-      font-weight="600"
-    >
-      {data.title}
-    </text>
-    <text
-      x={padX}
-      y={103}
-      font-family={FONT_SANS}
-      font-size="12"
-      fill={MID}
-      letter-spacing="0.9"
-      font-weight="500"
-    >
-      {data.unit_caption.toUpperCase()}
-    </text>
 
     {/* Bars */}
     {figures.map((f, i) => {
@@ -385,7 +351,7 @@ const RULE = "#ddd2bd";
 
 <style>
   .infographic-card {
-    background: white;
+    background: transparent;
     border: 1px solid var(--rule);
     border-radius: 8px;
     padding: var(--space-6) var(--space-5);

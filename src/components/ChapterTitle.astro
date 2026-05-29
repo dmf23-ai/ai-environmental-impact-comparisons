@@ -1,13 +1,19 @@
 ---
-// ChapterTitle — chapter-opening header for the home page (Phase 2e.2).
+// ChapterTitle — chapter-opening header for the home page.
 // Sits between the chapter's SectionDivider and the intro paragraph.
 //
 // Layout (centered, top to bottom):
-//   - Small-caps "Chapter N" kicker (Inter, ink-soft, Roman numeral)
-//   - Large Cardo display title with a terracotta dropcap on the first
-//     letter (styled via ::first-letter — clean for screen readers)
-//   - Thin ornament rule with a small diamond accent at center
+//   - Small-caps "Chapter N" kicker (Cardo, ink-soft, Roman numeral)
+//   - Large Cardo display title (no dropcap)
+//   - Thin ornament rule (a plain horizontal hairline — no diamond)
 //   - Sage-italic headline sentence (optional)
+//
+// Phase 3.5 refactor: kicker switched from Inter to Cardo so the chapter
+// signage matches the editorial annotation columns inside each plate; the
+// terracotta dropcap retired (it competed with the ornate cartouche for
+// first-look attention); the diamond on the chapter rule retired (it
+// duplicated the SectionDivider's carbon-chapter diamond and read as a
+// stray glyph on the others).
 
 interface Props {
   number: 1 | 2 | 3 | 4 | 5 | 6;
@@ -40,10 +46,10 @@ const roman = romanNumerals[number];
     margin: var(--space-6) 0 var(--space-7);
   }
   .chapter-kicker {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.26em;
     color: var(--ink-soft);
     margin: 0 0 var(--space-3);
   }
@@ -57,34 +63,12 @@ const roman = romanNumerals[number];
     letter-spacing: -0.005em;
     max-width: 36rem;
   }
-  /* Dropcap on the first letter of the heading. Terracotta accent, ~1.5×
-     the surrounding glyphs. ::first-letter is accessibility-clean — screen
-     readers read the title once, naturally. */
-  .chapter-heading::first-letter {
-    font-size: 1.5em;
-    color: var(--accent);
-    padding-right: 0.04em;
-  }
   .chapter-rule {
     width: 5rem;
     height: 1px;
     border: none;
     background: var(--ink-soft);
     margin: var(--space-4) auto;
-    position: relative;
-    overflow: visible;
-  }
-  .chapter-rule::before {
-    content: "◆";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--paper);
-    padding: 0 0.5em;
-    color: var(--accent);
-    font-size: 0.65rem;
-    line-height: 1;
   }
   .chapter-headline {
     font-family: var(--font-serif);
@@ -97,7 +81,7 @@ const roman = romanNumerals[number];
   }
   @media (min-width: 720px) {
     .chapter-kicker {
-      font-size: 0.78rem;
+      font-size: 0.88rem;
     }
     .chapter-heading {
       font-size: 3.2rem;

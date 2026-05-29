@@ -1,0 +1,30 @@
+---
+// OrnatePopupTrigger — convenience wrapper that renders a button-styled
+// trigger for an OrnatePopup. Use when wrapping an existing element (a
+// cartouche, a chart annotation, a comparison card) in a clickable trigger.
+//
+// For triggers whose visible text should look like prose (no button chrome),
+// pass `as="prose"` for an underlined inline button.
+//
+// Example:
+//   <OrnatePopupTrigger popupId="how-the-hour-was-computed" as="cartouche">
+//     <NumericCartouche … />
+//   </OrnatePopupTrigger>
+
+interface Props {
+  popupId: string;
+  as?: "cartouche" | "card" | "prose" | "bare";
+  label?: string;
+}
+
+const { popupId, as = "bare", label } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={["ornate-popup-trigger", `ornate-popup-trigger-${as}`]}
+  data-popup-trigger={popupId}
+  aria-label={label}
+>
+  <slot />
+</button>

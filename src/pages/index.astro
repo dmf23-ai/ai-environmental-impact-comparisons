@@ -4,6 +4,9 @@ import ChapterRail from "../components/ChapterRail.astro";
 import SectionDivider from "../components/SectionDivider.astro";
 import ChapterTitle from "../components/ChapterTitle.astro";
 import OrganicFrame from "../components/OrganicFrame.astro";
+import ChapterPlate from "../components/ChapterPlate.astro";
+import Interlude from "../components/Interlude.astro";
+import OrnatePopupContent from "../components/OrnatePopupContent.astro";
 import HourlyImpactHero from "../components/HourlyImpactHero.astro";
 import InfographicRangeVsPoint from "../components/InfographicRangeVsPoint.astro";
 import InfographicAnnualTwh from "../components/InfographicAnnualTwh.astro";
@@ -24,12 +27,6 @@ const description =
 
   <ChapterRail />
 
-  <section class="preamble" aria-label="How to read this site">
-    <OrganicFrame sideLeft={true}>
-      <InfographicRangeVsPoint />
-    </OrganicFrame>
-  </section>
-
   <section id="the-hour" class="chapter">
     <SectionDivider motif="carbon" />
     <ChapterTitle
@@ -38,12 +35,20 @@ const description =
       headline="One hour, one person: where most claims wander furthest from the data."
     />
     <p class="chapter-intro">
-      Most arguments about AI start at this scale. The comparisons rarely
-      hold up. Driving is the clean one.
+      Driving an ordinary car for an hour. Sending prompts to AI for an hour.
+      The bars are not close.
     </p>
-    <OrganicFrame subject="carbon" sideLeft={true}>
+    <ChapterPlate
+      subject="carbon"
+      kicker="ONE HOUR, COMPARED"
+      value="14–18"
+      unit="kg / hr"
+      caption="CO₂ FROM ORDINARY DRIVING"
+      italic="Hundreds of times an hour of gaming. Thousands of times an hour of chat."
+      popupId="hour-driving"
+    >
       <HourlyImpactHero />
-    </OrganicFrame>
+    </ChapterPlate>
   </section>
 
   <section id="the-year" class="chapter">
@@ -54,12 +59,20 @@ const description =
       headline="Over a year, AI is still the shortest bar on the chart."
     />
     <p class="chapter-intro">
-      Bitcoin is larger. EV charging is larger. The data-center stack AI
-      sits inside is six times the AI bar; U.S. homes are thirty.
+      Bitcoin is larger. EV charging is larger. The data-center stack AI sits
+      inside runs six times the AI bar. U.S. homes run thirty.
     </p>
-    <OrganicFrame subject="electricity" sideLeft={true}>
+    <ChapterPlate
+      subject="electricity"
+      kicker="AI'S YEAR, IN CONTEXT"
+      value="30–80"
+      unit="TWh"
+      caption="AI IN DATA CENTERS, 2024"
+      italic="Even at the top of its range, the shortest bar on the chart."
+      popupId="year-ai"
+    >
       <InfographicAnnualTwh />
-    </OrganicFrame>
+    </ChapterPlate>
   </section>
 
   <section id="the-water" class="chapter">
@@ -70,13 +83,20 @@ const description =
       headline="Direct cooling, or counting the power plants — the answer changes."
     />
     <p class="chapter-intro">
-      Direct cooling, globally: 45 to 90 billion gallons. Counting the
-      water that generates the electricity: 500 to 700. Where you draw
-      the line decides the answer.
+      Lawns. Golf courses. The cooling towers AI runs through. The power
+      plants that feed them. Four scales of water on one axis.
     </p>
-    <OrganicFrame subject="water" sideLeft={true}>
+    <ChapterPlate
+      subject="water"
+      kicker="WHERE THE LINE FALLS"
+      value="500–700"
+      unit="Bgal / yr"
+      caption="GLOBAL DC WATER, COUNTING POWER"
+      italic="Direct cooling alone is an order of magnitude smaller. Counting the power plants brings AI near U.S. golf."
+      popupId="water-counting"
+    >
       <InfographicWaterBracket />
-    </OrganicFrame>
+    </ChapterPlate>
   </section>
 
   <section id="the-trajectory" class="chapter">
@@ -87,16 +107,42 @@ const description =
       headline="The line was flat through 2018, then it bent."
     />
     <p class="chapter-intro">
-      Through 2018 the total ran near 200 TWh. In 2025, 485. By 2030 the
-      fan opens from 830 to 1,350. The AI slice runs from 65 to between
-      200 and 400.
+      Two charts, one shape. The first traces every data center on Earth.
+      The second is AI's slice inside that line.
     </p>
-    <OrganicFrame subject="electricity" sideLeft={true}>
+    <ChapterPlate
+      subject="electricity"
+      kicker="THE LINE THAT BENT"
+      value="830–1,350"
+      unit="TWh by 2030"
+      caption="DATA CENTERS, IEA RANGE"
+      italic="Flat through 2018, then bent. Heading for double to triple by 2030."
+      popupId="trajectory-dc"
+    >
       <InfographicDcTrajectory />
-    </OrganicFrame>
-    <OrganicFrame subject="electricity" sideLeft={true}>
+    </ChapterPlate>
+    <Interlude
+      leftSubject="electricity"
+      leftValue="485"
+      leftUnit="TWh"
+      leftCaption="DATA CENTERS, 2025"
+      italic="The line bent because data centers got bigger. They got bigger because of AI."
+      rightSubject="electricity"
+      rightValue="300"
+      rightUnit="TWh"
+      rightCaption="AI BY 2030, CENTRAL CASE"
+    />
+    <ChapterPlate
+      subject="electricity"
+      kicker="AI'S SHARE OF THE LINE"
+      value="200–400"
+      unit="TWh by 2030"
+      caption="AI'S SLICE, IEA RANGE"
+      italic="From 65 in 2024 to three or six times that by 2030."
+      popupId="trajectory-ai"
+    >
       <InfographicAiShareTrajectory />
-    </OrganicFrame>
+    </ChapterPlate>
   </section>
 
   <section id="in-equivalents" class="chapter">
@@ -107,16 +153,42 @@ const description =
       headline="Translated into homes: 39 million in 2024, past 70 million by 2030."
     />
     <p class="chapter-intro">
-      A terawatt-hour is 85,000 American homes for a year. The world's
-      data centers ran 460 in 2024 — about 39 million homes. By 2030,
-      70 to 113 million.
+      One unit, two pictures. First the size of a terawatt-hour. Then global
+      data centers translated into households on the same scale.
     </p>
-    <OrganicFrame subject="electricity" sideLeft={true}>
+    <ChapterPlate
+      subject="electricity"
+      kicker="WHAT A TWh MEANS"
+      value="85,000"
+      unit="homes"
+      caption="ONE TWh, FOR A YEAR"
+      italic="AI in 2024 sits at thirty to eighty of these. U.S. residential at 1,550."
+      popupId="equiv-watt"
+    >
       <InfographicWattScalePrimer />
-    </OrganicFrame>
-    <OrganicFrame subject="electricity" sideLeft={true}>
+    </ChapterPlate>
+    <Interlude
+      leftSubject="electricity"
+      leftValue="1"
+      leftUnit="kWh"
+      leftCaption="A MICROWAVE FOR AN HOUR"
+      italic="From microwave-hour to grid total — and the same math both ways."
+      rightSubject="electricity"
+      rightValue="70–113M"
+      rightUnit="homes"
+      rightCaption="GLOBAL DC, 2030 PROJECTIONS"
+    />
+    <ChapterPlate
+      subject="electricity"
+      kicker="ELECTRICITY, IN HOMES"
+      value="39M"
+      unit="U.S. homes"
+      caption="GLOBAL DATA CENTERS, 2024"
+      italic="AI's slice inside that bar: 2.5 to 7 million households."
+      popupId="equiv-hh"
+    >
       <InfographicHouseholdEquivalents />
-    </OrganicFrame>
+    </ChapterPlate>
   </section>
 
   <section id="training-vs-inference" class="chapter">
@@ -127,23 +199,191 @@ const description =
       headline="Five dots for training, one bar for inference — and the bar is bigger."
     />
     <p class="chapter-intro">
-      The training events scatter across four orders of magnitude. The
-      inference bar sits above all of them. Most of AI's carbon shows up
-      after the model ships.
+      Five labeled dots for individual training runs. One bar for a year of
+      inference. The bar runs longer than the largest dot.
     </p>
-    <OrganicFrame subject="carbon" sideLeft={true}>
+    <ChapterPlate
+      subject="carbon"
+      kicker="TRAINING vs. INFERENCE"
+      value="8.4–27.2"
+      unit="Mt CO₂"
+      caption="ANNUAL AI INFERENCE, 2024"
+      italic="One round of training. One year of every prompt anyone ever sent."
+      popupId="training-inference"
+    >
       <InfographicTrainingVsInference />
+    </ChapterPlate>
+  </section>
+
+  <section class="postscript" aria-label="How to read this site">
+    <SectionDivider motif="wheat" />
+    <p class="postscript-kicker">HOW TO READ THIS SITE</p>
+    <p class="postscript-line">
+      Every figure on this site is a range. Where the range starts, where it
+      ends, and why — below.
+    </p>
+    <OrganicFrame sideLeft={true}>
+      <InfographicRangeVsPoint />
     </OrganicFrame>
   </section>
 
-  <p class="thesis">
-    This is an infrastructure argument: where data centers get built,
-    what powers them, who pays for the grid upgrade, whose water table
-    they draw from. The site collects the numbers — with sources — so
-    people arguing about it can argue from the same place.
-  </p>
+  <!-- ============================================================
+       Popup content templates
+       ============================================================ -->
 
-  <p class="cta"><a href="/comparisons">View comparisons →</a></p>
+  <OrnatePopupContent popupId="hour-driving">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-hour-driving">Driving an hour, in carbon</h2>
+    <p>
+      A U.S. light-duty vehicle emits about 14–18 kilograms of CO₂ over an
+      hour of ordinary driving. The range comes from EPA fleet fuel-economy
+      averages (25–35 mpg) at typical highway speeds of 55–70 mph.
+    </p>
+    <p>
+      An hour of AI chat sits at about 0.005–0.05 kg, depending on model size
+      and grid mix. The driving bar is, on the low end, three orders of
+      magnitude larger.
+    </p>
+    <p class="popup-sources">
+      Sources: EPA fuel-economy and emissions factors; IEA Energy and AI.
+      <a class="popup-methods-link" href="/methods#hourly-hero">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="year-ai">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-year-ai">AI's electricity, 2024</h2>
+    <p>
+      The IEA's Energy and AI report puts AI at the lower end of this range.
+      The upper end accommodates LBNL and Goldman Sachs estimates that place
+      AI's 2024 footprint somewhat higher.
+    </p>
+    <p>
+      The chart's six bars share one axis. AI is the shortest. The data-center
+      stack that contains it is the second-shortest. U.S. residential is the
+      reference bar — about 1,550 TWh.
+    </p>
+    <p class="popup-sources">
+      Sources: IEA Energy and AI; LBNL data-center report; Goldman Sachs DC
+      outlook; EIA.
+      <a class="popup-methods-link" href="/methods#annual-twh">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="water-counting">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-water-counting">Counting the power plants</h2>
+    <p>
+      Direct cooling-tower water for global data centers runs about 45–90
+      billion gallons a year. Including water consumed at the power plants
+      that feed those data centers raises the total to 500–700 billion.
+    </p>
+    <p>
+      The bracket on the chart shows both lines. Where you draw the boundary
+      changes whether AI sits well below U.S. golf or roughly alongside it.
+    </p>
+    <p class="popup-sources">
+      Sources: LBNL; IEA Energy and AI; EIA water-use estimates; GCSAA;
+      R&amp;A Global Golf Participation.
+      <a class="popup-methods-link" href="/methods#water-bracket">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="trajectory-dc">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-trajectory-dc">Data centers, IEA range</h2>
+    <p>
+      The IEA's Energy and AI report sets the 2030 data-center band at
+      830–1,350 TWh. The line is flat through 2018 around 200 TWh, hits 485
+      in 2025, and opens into the fan after 2026.
+    </p>
+    <p>
+      The fan widens because the central case depends on chip efficiency,
+      cooling improvements, and inference demand — all of which span wide
+      ranges.
+    </p>
+    <p class="popup-sources">
+      Sources: IEA Energy and AI; IEA Key Questions on Energy and AI (2026);
+      Goldman Sachs.
+      <a class="popup-methods-link" href="/methods#dc-trajectory">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="trajectory-ai">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-trajectory-ai">AI inside the line</h2>
+    <p>
+      AI's share of data-center electricity was about 65 TWh in 2024. The
+      IEA's 2030 range runs from 200 TWh on the low end to 400 TWh on the
+      high — three to six times the 2024 figure.
+    </p>
+    <p>
+      The 2025 projection sits near 100 TWh. From there the fan opens fast
+      and stays open through 2030.
+    </p>
+    <p class="popup-sources">
+      Sources: IEA Energy and AI; IEA Key Questions on Energy and AI (2026).
+      <a class="popup-methods-link" href="/methods#ai-share-trajectory">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="equiv-watt">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-equiv-watt">One terawatt-hour, translated</h2>
+    <p>
+      One terawatt-hour powers about 85,000 average U.S. homes for a year.
+      The figure comes from EIA's residential energy survey — roughly 11,700
+      kWh per home per year.
+    </p>
+    <p>
+      The chart's ladder runs from a microwave for an hour to a thousand
+      terawatt-hours. AI in 2024 sits at thirty to eighty of these. U.S.
+      residential at 1,550.
+    </p>
+    <p class="popup-sources">
+      Sources: EIA RECS; EIA Use of Electricity; IEA Energy and AI.
+      <a class="popup-methods-link" href="/methods#watt-scale-primer">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="equiv-hh">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-equiv-hh">Global data centers, in households</h2>
+    <p>
+      Global data centers used about 460 TWh in 2024 — equivalent to 39
+      million U.S. homes for a year. AI's slice inside that bar runs from
+      2.5 to 7 million households.
+    </p>
+    <p>
+      By 2030 the data-center band reaches 70 to 113 million households on
+      the same axis. The conversion uses the same per-home figure as the
+      primer: 11,700 kWh per home per year.
+    </p>
+    <p class="popup-sources">
+      Sources: IEA Energy and AI; EIA RECS.
+      <a class="popup-methods-link" href="/methods#household-equivalents">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="training-inference">
+    <p class="popup-kicker">Methodology</p>
+    <h2 id="popup-title-training-inference">A year of inference, in carbon</h2>
+    <p>
+      Annual inference for AI in 2024 totals 8.4–27.2 million tonnes of CO₂.
+      The range depends on grid mix, chip efficiency, and how much of the
+      total query mix runs on frontier vs. smaller models.
+    </p>
+    <p>
+      The five training-event dots — GPT-3 through Gemini Ultra — span four
+      orders of magnitude beneath the bar. Most of AI's carbon shows up
+      after the model ships.
+    </p>
+    <p class="popup-sources">
+      Sources: IEA Energy and AI; Cambridge CCAF; academic carbon-accounting
+      literature.
+      <a class="popup-methods-link" href="/methods#training-vs-inference">How this was calculated →</a>
+    </p>
+  </OrnatePopupContent>
 </Layout>
 
 <style>
@@ -157,10 +397,6 @@ const description =
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  .preamble {
-    margin: 0 0 var(--space-8);
   }
 
   .chapter {
@@ -183,14 +419,31 @@ const description =
     }
   }
 
-  .thesis {
-    margin: var(--space-7) 0 0;
+  .postscript {
+    margin: var(--space-9) 0 var(--space-6);
+  }
+  .postscript-kicker {
+    font-family: var(--font-serif);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 0 0 var(--space-3);
+  }
+  .postscript-line {
+    font-family: var(--font-serif);
+    font-style: italic;
     font-size: 1.05rem;
+    line-height: 1.55;
     color: var(--ink);
+    text-align: center;
+    max-width: 32rem;
+    margin: 0 auto var(--space-5);
   }
   @media (min-width: 720px) {
-    .thesis {
-      font-size: 1.1rem;
+    .postscript-line {
+      font-size: 1.15rem;
     }
   }
 </style>

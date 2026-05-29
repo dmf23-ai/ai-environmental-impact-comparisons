@@ -1,0 +1,140 @@
+---
+// ChapterPlate — asymmetric magazine-spread layout for a chapter's headline
+// infographic (Reading C plan, Phase 3.5). Wraps an OrganicFrame with side
+// botanicals on both edges and splits the interior into a 30/70 column pair:
+//
+//   • Left (30%): annotation column. Small-caps serif kicker, ornate
+//     NumericCartouche, brief italic gloss, subject motif.
+//   • Right (70%): chart canvas. The infographic SVG renders into the slot.
+//
+// Below ~720px the layout collapses to a single column with the annotation
+// stacked above the chart. The subject's corner marker on OrganicFrame is
+// intentionally suppressed — the annotation column carries the subject motif
+// inline, so duplicating it in the corner would just clutter the frame.
+import OrganicFrame from "./OrganicFrame.astro";
+import NumericCartouche from "./NumericCartouche.astro";
+import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+import SubjectMarker from "./SubjectMarker.astro";
+
+interface Props {
+  subject: "water" | "electricity" | "carbon";
+  kicker: string;
+  value: string;
+  unit?: string;
+  caption?: string;
+  italic: string;
+  popupId?: string;
+}
+const { subject, kicker, value, unit, caption, italic, popupId } = Astro.props;
+---
+
+<OrganicFrame sideLeft sideRight>
+  <div class="plate">
+    <aside class="plate-annotation">
+      <p class="plate-kicker">{kicker}</p>
+      {popupId ? (
+        <OrnatePopupTrigger popupId={popupId} as="cartouche" label={`Open detail for ${kicker}`}>
+          <NumericCartouche
+            value={value}
+            unit={unit}
+            caption={caption}
+            subject={subject}
+            ornate
+          />
+        </OrnatePopupTrigger>
+      ) : (
+        <NumericCartouche
+          value={value}
+          unit={unit}
+          caption={caption}
+          subject={subject}
+          ornate
+        />
+      )}
+      <p class="plate-italic">{italic}</p>
+      <div class="plate-marker">
+        <SubjectMarker subject={subject} size={22} />
+      </div>
+    </aside>
+    <div class="plate-canvas">
+      <slot />
+    </div>
+  </div>
+</OrganicFrame>
+
+<style>
+  .plate {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .plate-annotation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-3);
+    margin: 0;
+  }
+  .plate-kicker {
+    font-family: var(--font-serif);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin: 0 0 var(--space-2);
+  }
+  .plate-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: var(--space-2) 0 0;
+    max-width: 22rem;
+  }
+  .plate-marker {
+    margin-top: var(--space-3);
+    line-height: 0;
+  }
+  /* SubjectMarker's default styles position it absolutely in a card corner.
+     Inside the plate annotation column it should sit inline, centered under
+     the italic. Override its positioning via :global so the marker's own
+     scoped CSS doesn't fight us. */
+  .plate-marker > :global(.subject-marker) {
+    position: static;
+    display: block;
+    margin: 0 auto;
+  }
+  .plate-canvas {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .plate-canvas :global(.infographic-card) {
+    margin: 0;
+  }
+
+  @media (min-width: 720px) {
+    .plate {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-6);
+    }
+    .plate-annotation {
+      flex: 0 0 30%;
+      max-width: 30%;
+      padding-top: var(--space-4);
+    }
+    .plate-kicker {
+      font-size: 0.88rem;
+    }
+    .plate-italic {
+      font-size: 1.05rem;
+    }
+    .plate-canvas {
+      flex: 1 1 auto;
+      max-width: calc(70% - var(--space-6));
+    }
+  }
+</style>

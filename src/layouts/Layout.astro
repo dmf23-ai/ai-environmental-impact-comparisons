@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import OrnatePopup from "../components/OrnatePopup.astro";
 
 interface Props {
   title: string;
@@ -35,9 +36,9 @@ const { title, description, wide = false } = Astro.props;
     </main>
     <footer class="site-footer">
       <div class="footer-close">
-        <p class="footer-italic">All figures are ranges.</p>
-        <p class="footer-italic">All ranges are sourced.</p>
-        <p class="footer-italic">All sources are checked weekly.</p>
+        <p class="footer-italic">A shared starting point.</p>
+        <p class="footer-italic">Numbers everyone can see.</p>
+        <p class="footer-italic">Sources everyone can check.</p>
       </div>
       <div class="footer-cta">
         <a class="footer-cta-link" href="/comparisons"
@@ -56,7 +57,7 @@ const { title, description, wide = false } = Astro.props;
         />
         <div class="footer-tagline-wrap">
           <hr class="footer-rule" aria-hidden="true" />
-          <p class="footer-tagline">Argue from the same place.</p>
+          <p class="footer-tagline">Sustainable futures require informed choices.</p>
         </div>
         <img
           class="footer-roundel footer-roundel-right"
@@ -73,5 +74,6 @@ const { title, description, wide = false } = Astro.props;
         > · sources verified weekly
       </p>
     </footer>
+    <OrnatePopup />
   </body>
 </html>

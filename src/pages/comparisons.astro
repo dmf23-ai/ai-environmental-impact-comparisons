@@ -1,48 +1,105 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ComparisonCard from "../components/ComparisonCard.astro";
+import ComparisonPlate from "../components/ComparisonPlate.astro";
+import OrnatePopupContent from "../components/OrnatePopupContent.astro";
+import RangeBar from "../components/RangeBar.astro";
+import SourceLine from "../components/SourceLine.astro";
 import figuresData from "../data/figures.json";
 
 const title = "Comparisons — AI Environmental Impact";
 const description =
   "Side-by-side comparisons of AI's environmental footprint with other large uses of water and electricity.";
+
+function subjectFor(id: string): "water" | "electricity" | "carbon" {
+  if (id.startsWith("water")) return "water";
+  if (id.startsWith("co2")) return "carbon";
+  return "electricity";
+}
+
+const comparisons = (figuresData as any).comparisons as Array<any>;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} wide={true}>
   <p class="back"><a href="/">← Home</a></p>
-  <h1>Comparisons</h1>
-  <p class="lede">
-    Each comparison sets one figure for AI or data-center infrastructure
-    next to a familiar reference point. Numbers are shown as ranges where
-    the underlying data warrants it, with sources and a last-verified date.
-  </p>
+  <h1 class="page-title">Comparisons</h1>
+  <p class="page-kicker">Click a plate to open detail</p>
 
-  {
-    figuresData.comparisons.map((c) => (
-      <ComparisonCard
+  <div class="comparison-grid">
+    {comparisons.map((c) => (
+      <ComparisonPlate
         id={c.id}
-        anchor={c.anchor}
         title={c.title}
-        summary={c.summary}
-        unit_caption={c.unit_caption}
-        figures={c.figures}
-        sources={c.sources}
-        last_verified={c.last_verified}
+        unitCaption={c.unit_caption}
+        subject={subjectFor(c.id)}
+        popupId={`cmp-${c.anchor}`}
       />
-    ))
-  }
+    ))}
+  </div>
 
-  <p class="more">
-    More comparisons land in the next phases — driving, video gaming,
-    streaming, Bitcoin, EV charging, and the rest.
-  </p>
+  {/* Popup content templates — one per comparison, full detail inside. */}
+  {comparisons.map((c) => (
+    <OrnatePopupContent popupId={`cmp-${c.anchor}`}>
+      <p class="popup-kicker">Comparison</p>
+      <h2 id={`popup-title-cmp-${c.anchor}`}>{c.title}</h2>
+      <p>{c.summary}</p>
+      {c.unit_caption && <p class="popup-unit">{c.unit_caption}</p>}
+      <RangeBar figures={c.figures} />
+      <SourceLine
+        sources={c.sources}
+        lastVerified={c.last_verified}
+        methodsAnchor={c.anchor}
+      />
+    </OrnatePopupContent>
+  ))}
 </Layout>
 
 <style>
-  .more {
-    margin-top: var(--space-7);
-    font-size: 0.95rem;
+  .back {
+    margin: 0 0 var(--space-3);
+    font-size: 0.9rem;
+  }
+  .back a {
     color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .back a:hover {
+    color: var(--accent);
+  }
+  .page-title {
+    text-align: center;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin: 0 0 var(--space-2);
+    color: var(--ink);
+  }
+  .page-kicker {
+    text-align: center;
+    font-family: var(--font-serif);
     font-style: italic;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin: 0 0 var(--space-7);
+  }
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    margin: 0 auto;
+  }
+  @media (min-width: 720px) {
+    .comparison-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+  }
+  .popup-unit {
+    font-family: var(--font-serif);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    margin: var(--space-3) 0 var(--space-2);
   }
 </style>

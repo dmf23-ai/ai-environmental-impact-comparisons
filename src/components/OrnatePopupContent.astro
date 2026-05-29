@@ -1,0 +1,22 @@
+---
+// OrnatePopupContent — convenience wrapper that emits a <template> with the
+// content attributes the OrnatePopup controller expects. The first heading
+// should carry id="popup-title-{popupId}" so aria-labelledby resolves.
+//
+// Example:
+//   <OrnatePopupContent popupId="how-the-hour-was-computed">
+//     <p class="popup-kicker">Methodology</p>
+//     <h2 id="popup-title-how-the-hour-was-computed">The hour, in carbon</h2>
+//     <p>…detail…</p>
+//   </OrnatePopupContent>
+
+interface Props {
+  popupId: string;
+}
+
+const { popupId } = Astro.props;
+---
+
+<template data-popup-content={popupId}>
+  <slot />
+</template>

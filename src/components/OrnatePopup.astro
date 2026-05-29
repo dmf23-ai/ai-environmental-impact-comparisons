@@ -1,0 +1,148 @@
+---
+// OrnatePopup — root dialog element + controller. Drop one instance into
+// Layout.astro. Triggers and content templates can live anywhere on the page;
+// the controller wires them at DOMContentLoaded.
+//
+// Trigger element:   <button data-popup-trigger="some-id">…</button>
+// Content template:  <template data-popup-content="some-id"> … </template>
+//
+// The content template's first heading should carry id="popup-title-{id}" so
+// aria-labelledby resolves. The OrnatePopupContent wrapper does this for you.
+//
+// Motion: scales from the click point. Reduced-motion fallback is a fade.
+---
+
+<dialog class="ornate-popup" aria-labelledby="">
+  <div class="ornate-popup-frame">
+    <img
+      class="ornate-popup-side ornate-popup-side-left"
+      src="/ornaments/frame-side-left.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <img
+      class="ornate-popup-side ornate-popup-side-right"
+      src="/ornaments/frame-side-right.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <button class="ornate-popup-close" type="button" aria-label="Close">×</button>
+    <div class="ornate-popup-content" data-popup-mount></div>
+  </div>
+</dialog>
+
+<script is:inline>
+  (function () {
+    function init() {
+      var dialog = document.querySelector("dialog.ornate-popup");
+      if (!dialog) return;
+      var mount = dialog.querySelector("[data-popup-mount]");
+      var closeBtn = dialog.querySelector(".ornate-popup-close");
+      var frame = dialog.querySelector(".ornate-popup-frame");
+      var lastTrigger = null;
+
+      function openFor(id, originX, originY, trigger) {
+        var tpl = document.querySelector(
+          'template[data-popup-content="' + CSS.escape(id) + '"]'
+        );
+        if (!tpl) {
+          console.warn("OrnatePopup: no content template for id", id);
+          return;
+        }
+        // Replace contents
+        while (mount.firstChild) mount.removeChild(mount.firstChild);
+        mount.appendChild(tpl.content.cloneNode(true));
+
+        // Wire aria-labelledby to the first heading id under mount
+        var heading = mount.querySelector("[id^='popup-title-']");
+        if (heading) dialog.setAttribute("aria-labelledby", heading.id);
+        else dialog.removeAttribute("aria-labelledby");
+
+        // Set transform origin to click point
+        var ox = (originX / window.innerWidth) * 100;
+        var oy = (originY / window.innerHeight) * 100;
+        dialog.style.setProperty("--popup-origin-x", ox + "%");
+        dialog.style.setProperty("--popup-origin-y", oy + "%");
+
+        lastTrigger = trigger;
+        dialog.showModal();
+        // Force reflow then add the open class to run the transition
+        // (showModal sets display:block; transitioning from there needs a tick)
+        requestAnimationFrame(function () {
+          dialog.classList.add("is-open");
+          // Move focus to the close button after the animation begins
+          if (closeBtn && typeof closeBtn.focus === "function") closeBtn.focus();
+        });
+      }
+
+      function closePopup() {
+        dialog.classList.remove("is-open");
+        // Wait for transition before closing the dialog so the animation runs
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          dialog.close();
+          // Restore focus
+          if (lastTrigger && typeof lastTrigger.focus === "function") {
+            lastTrigger.focus();
+          }
+          lastTrigger = null;
+        }
+        var prefersReduced = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+        if (prefersReduced) {
+          finish();
+        } else {
+          setTimeout(finish, 220);
+        }
+      }
+
+      // Wire triggers
+      document.addEventListener("click", function (e) {
+        var target = e.target;
+        if (!(target instanceof Element)) return;
+        var trigger = target.closest("[data-popup-trigger]");
+        if (trigger && dialog.contains(trigger) === false) {
+          e.preventDefault();
+          var id = trigger.getAttribute("data-popup-trigger");
+          var ox, oy;
+          if (e.clientX > 0 || e.clientY > 0) {
+            ox = e.clientX;
+            oy = e.clientY;
+          } else {
+            // Keyboard activation — use trigger center
+            var r = trigger.getBoundingClientRect();
+            ox = r.left + r.width / 2;
+            oy = r.top + r.height / 2;
+          }
+          openFor(id, ox, oy, trigger);
+          return;
+        }
+        // Backdrop click — close if click landed outside the frame
+        if (target === dialog) {
+          // Click registered on the dialog element itself = backdrop area
+          closePopup();
+          return;
+        }
+        if (target.closest(".ornate-popup-close")) {
+          closePopup();
+          return;
+        }
+      });
+
+      // ESC native cancel handler
+      dialog.addEventListener("cancel", function (e) {
+        e.preventDefault();
+        closePopup();
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>

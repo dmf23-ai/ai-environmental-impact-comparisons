@@ -5,6 +5,11 @@ import SectionDivider from "../../components/SectionDivider.astro";
 import NumericCartouche from "../../components/NumericCartouche.astro";
 import ChapterRail from "../../components/ChapterRail.astro";
 import ChapterTitle from "../../components/ChapterTitle.astro";
+import ChapterPlate from "../../components/ChapterPlate.astro";
+import Interlude from "../../components/Interlude.astro";
+import OrnatePopupTrigger from "../../components/OrnatePopupTrigger.astro";
+import OrnatePopupContent from "../../components/OrnatePopupContent.astro";
+import ComparisonPlate from "../../components/ComparisonPlate.astro";
 ---
 
 <Layout title="Ornaments — dev" description="QA page for ornament primitives">
@@ -115,12 +120,12 @@ import ChapterTitle from "../../components/ChapterTitle.astro";
     ornate
   />
 
-  <h2>ChapterTitle (Phase 2e.2)</h2>
-  <p>Chapter-opening header used on the home page. Roman-numeral kicker,
-  Cardo display title with a terracotta dropcap on the first letter,
-  diamond-accented ornament rule, optional sage-italic headline sentence.
-  First example carries the finalized headline; the other five show the
-  title without a headline so the no-headline variant gets exercised.</p>
+  <h2>ChapterTitle (Phase 3.5 refactor)</h2>
+  <p>Chapter-opening header used on the home page. Cardo small-caps
+  Roman-numeral kicker, Cardo display title (no dropcap), a plain hairline
+  ornament rule, optional sage-italic headline sentence. First example
+  carries the finalized headline; the other five show the title without a
+  headline so the no-headline variant gets exercised.</p>
 
   <ChapterTitle
     number={1}
@@ -133,6 +138,140 @@ import ChapterTitle from "../../components/ChapterTitle.astro";
   <ChapterTitle number={4} title="The Trajectory" />
   <ChapterTitle number={5} title="In Equivalents" />
   <ChapterTitle number={6} title="Training vs. Inference" />
+
+  <h2>ChapterPlate (Phase 3.5)</h2>
+  <p>Magazine-spread asymmetric layout for a chapter's headline plate.
+  Annotation column on the left (30%) carries the small-caps kicker, the
+  ornate <code>NumericCartouche</code>, a brief italic gloss, and the
+  subject motif. Chart canvas on the right (70%) renders into the slot.
+  Below ~720px the columns stack.</p>
+
+  <ChapterPlate
+    subject="electricity"
+    kicker="AI'S YEAR, IN CONTEXT"
+    value="30–80"
+    unit="TWh"
+    caption="AI IN DATA CENTERS, 2024"
+    italic="Even at the top of its range, the shortest bar on the chart."
+  >
+    <div class="canvas-stub" aria-hidden="true">
+      Chart canvas (slot) — Infographic SVG renders here.
+    </div>
+  </ChapterPlate>
+
+  <h2>Interlude (Phase 3.5)</h2>
+  <p>Three-column mid-chapter pause: two ornate cartouches flanking a
+  centered italic line. Used inside chapters IV (between the DC and
+  AI-share trajectories) and V (between the watt-scale primer and the
+  household equivalents). Below ~720px the three cells stack.</p>
+
+  <Interlude
+    leftSubject="electricity"
+    leftValue="485"
+    leftUnit="TWh"
+    leftCaption="DATA CENTERS, 2025"
+    italic="The line bent because data centers got bigger. They got bigger because of AI."
+    rightSubject="electricity"
+    rightValue="300"
+    rightUnit="TWh"
+    rightCaption="AI BY 2030, CENTRAL CASE"
+  />
+
+  <h2>OrnatePopup (Phase 3.5+) — bloom-from-click dialog</h2>
+  <p>OrnatePopup mounts once in Layout.astro. Triggers pair with content
+  templates via matching ids. Click any of the four below to verify the
+  bloom animation, focus trap, ESC dismissal, and backdrop close.</p>
+
+  <div class="popup-trigger-row">
+    <OrnatePopupTrigger popupId="qa-popup-prose" as="prose">
+      An inline prose trigger
+    </OrnatePopupTrigger>
+    <OrnatePopupTrigger popupId="qa-popup-bare" as="bare">
+      <span style="border: 1px dashed var(--rule); padding: 0.4rem 0.8rem; border-radius: 4px;">Bare button trigger</span>
+    </OrnatePopupTrigger>
+  </div>
+
+  <div class="popup-trigger-row">
+    <div style="max-width: 280px;">
+      <OrnatePopupTrigger popupId="qa-popup-cartouche" as="cartouche">
+        <NumericCartouche
+          value="42"
+          unit="QA units"
+          caption="A CARTOUCHE TRIGGER"
+          subject="electricity"
+          ornate
+        />
+      </OrnatePopupTrigger>
+    </div>
+    <div style="max-width: 320px;">
+      <OrnatePopupTrigger popupId="qa-popup-card" as="card">
+        <OrganicFrame subject="carbon" sideLeft>
+          <p style="margin: 0; text-align: center;">
+            <strong>A card trigger.</strong><br/>Hover for the lift.
+          </p>
+        </OrganicFrame>
+      </OrnatePopupTrigger>
+    </div>
+  </div>
+
+  <OrnatePopupContent popupId="qa-popup-prose">
+    <p class="popup-kicker">QA</p>
+    <h2 id="popup-title-qa-popup-prose">Prose trigger</h2>
+    <p>This popup opens from inline prose. The trigger is styled like a soft accented underline so it reads as interactive without disturbing the paragraph rhythm.</p>
+    <p class="popup-sources">QA only.</p>
+  </OrnatePopupContent>
+  <OrnatePopupContent popupId="qa-popup-bare">
+    <p class="popup-kicker">QA</p>
+    <h2 id="popup-title-qa-popup-bare">Bare trigger</h2>
+    <p>The bare variant carries no styling itself — the wrapped element renders as-is. Good for wrapping anything custom.</p>
+    <p class="popup-sources">QA only.</p>
+  </OrnatePopupContent>
+  <OrnatePopupContent popupId="qa-popup-cartouche">
+    <p class="popup-kicker">QA</p>
+    <h2 id="popup-title-qa-popup-cartouche">Cartouche trigger</h2>
+    <p>Wrap a NumericCartouche. The chapter plates use this variant. The cartouche art reads as the headline; the popup carries the source detail.</p>
+    <p class="popup-sources">QA only.</p>
+  </OrnatePopupContent>
+  <OrnatePopupContent popupId="qa-popup-card">
+    <p class="popup-kicker">QA</p>
+    <h2 id="popup-title-qa-popup-card">Card trigger</h2>
+    <p>Wrap an OrganicFrame. The /comparisons herbarium uses this variant. Hovering lifts the card 2px on desktop; the hover is suppressed below 720px.</p>
+    <p class="popup-sources">QA only.</p>
+  </OrnatePopupContent>
+
+  <h2>ComparisonPlate (Phase 5 redesign)</h2>
+  <p>Renders a single comparison plate. The whole plate is a card trigger;
+  the front carries title + unit caption + an "Open detail →" affordance.</p>
+
+  <div class="plate-grid-stub">
+    <ComparisonPlate
+      id="qa-cmp"
+      title="QA · sample comparison vs. AI"
+      unitCaption="Sample units per year"
+      subject="water"
+      popupId="qa-popup-comparison"
+    />
+    <ComparisonPlate
+      id="qa-cmp-2"
+      title="QA · second sample comparison"
+      unitCaption="Sample units per year"
+      subject="carbon"
+      popupId="qa-popup-comparison-2"
+    />
+  </div>
+
+  <OrnatePopupContent popupId="qa-popup-comparison">
+    <p class="popup-kicker">Comparison</p>
+    <h2 id="popup-title-qa-popup-comparison">QA · sample comparison vs. AI</h2>
+    <p>The popup-driven /comparisons design puts the full detail behind a click. The grid plate carries title + unit caption; the popup carries summary + RangeBar + sources.</p>
+    <p class="popup-sources">QA only.</p>
+  </OrnatePopupContent>
+  <OrnatePopupContent popupId="qa-popup-comparison-2">
+    <p class="popup-kicker">Comparison</p>
+    <h2 id="popup-title-qa-popup-comparison-2">QA · second sample comparison</h2>
+    <p>Second sample so the 2-column grid layout is visible at desktop widths.</p>
+    <p class="popup-sources">QA only.</p>
+  </OrnatePopupContent>
 
   <h2>SectionDividers in chapter order</h2>
   <p>How the dividers will read as the reader scrolls the home page.</p>
@@ -218,5 +357,37 @@ import ChapterTitle from "../../components/ChapterTitle.astro";
     color: var(--ink-faint);
     font-size: 0.9rem;
     margin: var(--space-3) 0 0;
+  }
+  .canvas-stub {
+    min-height: 220px;
+    border: 1px dashed var(--rule);
+    border-radius: 6px;
+    background: rgba(122, 140, 106, 0.05);
+    color: var(--ink-faint);
+    font-style: italic;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-5);
+    text-align: center;
+  }
+  .popup-trigger-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    align-items: center;
+    margin: var(--space-5) 0;
+  }
+  .plate-grid-stub {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    margin: var(--space-5) 0;
+  }
+  @media (min-width: 720px) {
+    .plate-grid-stub {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 </style>

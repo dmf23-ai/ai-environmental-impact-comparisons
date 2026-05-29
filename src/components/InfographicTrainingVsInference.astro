@@ -105,11 +105,7 @@ const decadeLabel = (exp: number): string => {
 };
 
 // --- Vertical layout -------------------------------------------------------
-const kickerY = 36;
-const titleY = 72;
-const unitCaptionY = 103;
-
-const trainRowsTop = 124;
+const trainRowsTop = 20;
 const rowPitch = 28;
 const labelOffset = 14;
 const dotOffset = 10;
@@ -175,17 +171,6 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
 
     {/* Card background */}
     <rect width={W} height={H} fill="#f4ede0" />
-
-    {/* Header */}
-    <text x={padX} y={kickerY} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
-      {data.kicker.toUpperCase()}
-    </text>
-    <text x={padX} y={titleY} font-family={FONT_SERIF} font-size="26" fill={INK} font-weight="600">
-      {data.title}
-    </text>
-    <text x={padX} y={unitCaptionY} font-family={FONT_SANS} font-size="12" fill={MID} letter-spacing="0.9" font-weight="500">
-      {data.unit_caption.toUpperCase()}
-    </text>
 
     {/* Training-event rows */}
     {data.training_events.map((evt, i) => {
@@ -278,7 +263,7 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
 
 <style>
   .infographic-card {
-    background: white;
+    background: transparent;
     border: 1px solid var(--rule);
     border-radius: 8px;
     padding: var(--space-6) var(--space-5);

@@ -1,0 +1,119 @@
+---
+// Interlude — three-column mid-chapter pause that sits between paired
+// plates inside a chapter (Reading C plan, Phase 3.5). Two ornate
+// NumericCartouches flank a short centered italic line. Used in
+// Chapter IV (between DC trajectory and AI-share trajectory) and
+// Chapter V (between watt-scale primer and household equivalents).
+//
+// The pattern mirrors the "De Hydro et Energia" mid-section in the
+// Art Nouveau reference mockup: two anchor figures with the connecting
+// thought stated plainly between them.
+//
+// Below ~720px the three cells stack: left cartouche, italic, right
+// cartouche, so the rhythm survives at narrow viewports.
+import NumericCartouche from "./NumericCartouche.astro";
+
+interface Props {
+  leftSubject: "water" | "electricity" | "carbon";
+  leftValue: string;
+  leftUnit?: string;
+  leftCaption?: string;
+  italic: string;
+  rightSubject: "water" | "electricity" | "carbon";
+  rightValue: string;
+  rightUnit?: string;
+  rightCaption?: string;
+}
+const {
+  leftSubject,
+  leftValue,
+  leftUnit,
+  leftCaption,
+  italic,
+  rightSubject,
+  rightValue,
+  rightUnit,
+  rightCaption,
+} = Astro.props;
+---
+
+<section class="interlude" aria-label="Chapter interlude">
+  <div class="interlude-cell interlude-left">
+    <NumericCartouche
+      value={leftValue}
+      unit={leftUnit}
+      caption={leftCaption}
+      subject={leftSubject}
+      ornate
+    />
+  </div>
+  <p class="interlude-italic">{italic}</p>
+  <div class="interlude-cell interlude-right">
+    <NumericCartouche
+      value={rightValue}
+      unit={rightUnit}
+      caption={rightCaption}
+      subject={rightSubject}
+      ornate
+    />
+  </div>
+</section>
+
+<style>
+  .interlude {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    margin: var(--space-7) auto;
+    max-width: 60rem;
+    padding: 0 var(--space-4);
+  }
+  .interlude-cell {
+    width: 100%;
+    max-width: 22rem;
+  }
+  .interlude-italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--ink);
+    text-align: center;
+    margin: 0;
+    max-width: 28rem;
+  }
+  /* Inside the interlude, the cartouches are slightly smaller than the
+     ones inside ChapterPlate so they read as a pair rather than competing
+     with the headline figures on either side. */
+  .interlude-cell :global(.cartouche-ornate) {
+    max-width: 280px;
+  }
+  .interlude-cell :global(.cartouche-wrap) {
+    margin: 0;
+  }
+
+  @media (min-width: 720px) {
+    .interlude {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: var(--space-6);
+      margin: var(--space-8) auto;
+    }
+    .interlude-left {
+      justify-self: end;
+    }
+    .interlude-right {
+      justify-self: start;
+    }
+    .interlude-italic {
+      font-size: 1.2rem;
+      max-width: 24rem;
+      padding: 0 var(--space-3);
+    }
+    .interlude-cell :global(.cartouche-ornate) {
+      max-width: 300px;
+    }
+  }
+</style>

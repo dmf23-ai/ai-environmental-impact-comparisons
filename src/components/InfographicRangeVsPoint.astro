@@ -74,7 +74,7 @@ const xLow = chartLeft + (fig.low / maxVal) * chartWidth;
 const xHigh = chartLeft + (fig.high / maxVal) * chartWidth;
 
 // Vertical layout
-const headerH = 115;
+const headerH = 20;
 const scale1HeaderY = headerH + 22;
 const scale1PlotY = scale1HeaderY + 28;
 const scale2HeaderY = scale1PlotY + 50;
@@ -132,17 +132,6 @@ const RULE = "#ddd2bd";
 
     {/* Card background — explicit white so the saved SVG never inherits a transparent background. */}
     <rect width={W} height={H} fill="#f4ede0" />
-
-    {/* Header */}
-    <text x={padX} y={36} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
-      {data.kicker.toUpperCase()}
-    </text>
-    <text x={padX} y={72} font-family={FONT_SERIF} font-size="26" fill={INK} font-weight="600">
-      {data.title}
-    </text>
-    <text x={padX} y={103} font-family={FONT_SANS} font-size="12" fill={MID} letter-spacing="0.9" font-weight="500">
-      {data.unit_caption.toUpperCase()}
-    </text>
 
     {/* Faint vertical guide tying the two framings together at the central value. */}
     <line
@@ -236,7 +225,7 @@ const RULE = "#ddd2bd";
 
 <style>
   .infographic-card {
-    background: white;
+    background: transparent;
     border: 1px solid var(--rule);
     border-radius: 8px;
     padding: var(--space-6) var(--space-5);

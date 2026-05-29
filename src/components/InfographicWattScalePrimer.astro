@@ -150,7 +150,7 @@ const anchors: AnchorRender[] = data.site_anchors.map((a: any) => {
 });
 
 // --- Vertical layout -------------------------------------------------------
-const headerH = 88;
+const headerH = 20;
 const sectionLabel1Y = headerH + 14;
 const refLine1Y = sectionLabel1Y + 28;
 const refLine2Y = refLine1Y + 14;
@@ -213,14 +213,6 @@ const pointR = 7;
 
     {/* Card background */}
     <rect width={W} height={H} fill="#f4ede0" />
-
-    {/* Header */}
-    <text x={padX} y={36} font-family={FONT_SANS} font-size="12" fill={DIM} letter-spacing="1.6" font-weight="500">
-      {data.kicker.toUpperCase()}
-    </text>
-    <text x={padX} y={72} font-family={FONT_SERIF} font-size="26" fill={INK} font-weight="600">
-      {data.title}
-    </text>
 
     {/* PANEL 1 — orders of magnitude */}
     <text x={padX} y={sectionLabel1Y} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
@@ -384,7 +376,7 @@ const pointR = 7;
 
 <style>
   .infographic-card {
-    background: white;
+    background: transparent;
     border: 1px solid var(--rule);
     border-radius: 8px;
     padding: var(--space-6) var(--space-5);

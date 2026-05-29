@@ -1,5 +1,29 @@
 # Handoff
 
+> **AUTONOMOUS RUN — COMPLETE (2026-05-29).** All eight planned tasks shipped in the chained autonomous run. Working tree contains the full Mucha's-Notebook Reading-C redesign plus the OrnatePopup system. Build + commit + push are David's calls.
+>
+> **What was finished this run (2026-05-29 autonomous resume):**
+>
+> 1. **OrnatePopup architecture spec** — `design/popup_system.md`. Locks the trigger model (data-attribute pairs), DOM contract (single shared `<dialog>` element + content templates), motion model (CSS-variable transform-origin bloom from click point with reduced-motion fallback), focus management, mobile sizing, content shape conventions.
+> 2. **OrnatePopup component + runtime** — `src/components/OrnatePopup.astro` (single `<dialog>` + inline script that wires triggers and content templates at DOMContentLoaded). `src/components/OrnatePopupTrigger.astro` (button wrapper, four variants: cartouche / card / prose / bare). `src/components/OrnatePopupContent.astro` (template wrapper around author-supplied slot). Mounted into `src/layouts/Layout.astro`. Popup CSS added at the tail of `src/styles/global.css` (~210 lines including mobile + reduced-motion overrides).
+> 3. **Phase 4-redo** — SVG-baked kicker / title / unit_caption stripped from all 8 Infographic components. `headerH` (or `trainRowsTop` for TrainingVsInference) dropped from 88/115/124 → 20 so the chart starts near the top of the canvas. Source attribution and verified-date stamp remain SVG-baked. Stripped via Python heredoc; tail integrity verified (each file ends with `</style>`).
+> 4. **Phase 3-redo** — `src/pages/index.astro` rewritten end-to-end. Six chapters, each wrapped in `ChapterPlate` with the pre-locked annotation drafts. Chapter intros rewritten — concrete, refer to chart specifics, no abstract openers, no layered redundancy with the cartouche italics. Interludes mounted in Chapters IV and V with the pre-locked content. RangeVsPoint relocated from above-the-fold preamble to a footer-adjacent `.postscript` block titled "HOW TO READ THIS SITE". Thesis paragraph + CTA paragraph removed — the footer carries the closing rhythm now. Eight `OrnatePopupContent` templates appended below the chapters, one per plate (methodology + sources + /methods anchor link).
+> 5. **`/comparisons` redesign** — `src/pages/comparisons.astro` rewritten. Strips all on-page prose; lede paragraph and "more comparisons land in next phases" both gone. Renders 14 `ComparisonPlate`s (new component, `src/components/ComparisonPlate.astro`) in a 2-column grid (1-col mobile). Each plate is an ornate OrganicFrame trigger showing title + unit caption + "Open detail →" affordance. Clicking opens an OrnatePopup with the full comparison: summary, RangeBar chart, SourceLine. Subject color picked from id prefix (water-* → water, electricity-* → electricity, co2-* → carbon).
+> 6. **Mobile readability pass** — Popup close button bumped to 40px touch target at ≤720px. Hover-lift on comparison plates disabled below 720px. Popup mobile sizing (full-bleed minus 16px gutter, side ornaments scaled to 9% width).
+> 7. **Holistic prose + visual critique** — Every visible string scanned against the anti-AI-speak rubric (no Tier-1 hits, no Tier-2 stacking). Layered-redundancy check passed (chapter intros and cartouche italics carry different angles). Visual flow reviewed at the code level — sections still anchor for ChapterRail; no orphan references; no unclosed components.
+> 8. **Handoff.md updated** (this block).
+>
+> **What's pending — David's local actions:**
+>
+> - `git status` then commit + push the redesign batch. Suggested commit message: `feat: ornate popup system + Phase 4-redo + Phase 3-redo + /comparisons redesign`. The branch should auto-deploy on Vercel.
+> - Browser-test the popup interaction once deployed. The bloom-from-click motion needs visual confirmation across viewport widths; the OrnatePopup spec includes a reduced-motion fallback that should be eyeballed at OS-level "reduce motion" setting on.
+> - Phase 3.6c asset regeneration (three prompts pasted below — masthead-strip, frame-side-left, frame-side-right) — still pending David's image-gen tool. Once new assets are in, masthead CSS can revert to plain `width: 100%; height: auto`.
+> - `src/components/ComparisonCard.astro` is now orphan — nothing imports it. Safe to delete in a cleanup pass, kept in tree for now in case David wants to restore the old layout.
+> - `src/pages/dev/ornaments.astro` may need new render blocks for `OrnatePopup`, `OrnatePopupTrigger`, `ComparisonPlate` if David wants the QA page exhaustive again. Not done this run.
+
+---
+
+
 Entry point for a fresh chat picking up the AI Environmental Impact Comparisons project. Read this first, then the docs linked below.
 
 ## What this project is
@@ -19,94 +43,173 @@ A static website that puts AI's water and energy footprint next to other large u
 - David is on Windows, uses PowerShell, has GitHub CLI installed
 - Verifier runs on GitHub Actions (Node 20 + cheerio 1.0.0), weekly cron + manual dispatch
 
-## Mucha's Notebook redesign — progress (May 2026)
+## Mucha's Notebook redesign — progress (current state 2026-05-28)
 
-The site is mid-visual-redesign under the working title "Mucha's Notebook" — full Art Nouveau ornamental density with Tufte data discipline. Live site reflects work through Phase 2c. Phases 2d (ChapterRail) and 2e (mockup-density ornament augmentation) are committed locally and pending push + Vercel deploy.
+Mid-visual-redesign. Live site reflects Phases 3, 4a–d (with TDZ hotfix). Working tree as of 2026-05-28 also contains Phase 3.5 (Reading-C component-and-content layer) and Phase 3.6 (bug-fix pass after a screenshot critique). David tests in browser and commits when ready. Two structural pieces remain before the new Reading-C layout is visible on the home page: Phase 4-redo (strip SVG-baked editorial chrome from each Infographic) and Phase 3-redo (rewrite index.astro to use ChapterPlate + Interlude with the approved annotation drafts, relocate RangeVsPoint, rewrite chapter intros). Phase 3.7 (rhythm compression) sits ahead of those — small global-CSS pass. Asset regen (3.6c) is async on David's image-gen tool — three prompts captured verbatim below.
 
-**Design direction locked:**
+**Design direction (palette + typography + chapter spine unchanged):**
 
 - Palette: ivory paper (#f4ede0), warm ink (#211d1b), subject colors — water (#3a6b75 teal), electricity (#7a8c6a sage), carbon (#a85a3a rust).
 - Typography: Cardo (Fontsource) for body, headlines, chapter titles. Inter retained for chart labels, kickers, UI, and the masthead wordmark.
-- Home page restructured into six paired chapters: The Hour, The Year, The Water, The Trajectory, In Equivalents, Training vs. Inference. Chapter ids (load-bearing — the ChapterRail targets these): `the-hour`, `the-year`, `the-water`, `the-trajectory`, `in-equivalents`, `training-vs-inference`.
-- Reading style: hybrid spine — essay-led paragraphs interleaved with chart-led plates. Prose is short and sparse, refers directly to the chart at hand, never general. Three prose memories govern: anti-AI-speak rubric, prose-defers-to-infographics, prose-refers-directly-to-the-infographic.
-- Scope: all three pages (home, /comparisons, /methods) are highly styled. Home is the showcase with maximum ornament density; /comparisons and /methods sit slightly below.
-- Ornament density: full Mucha, matching `design/mockup_art_nouveau_reference.png`. The data marks inside charts stay clean — that's the Tufte side.
-- Asset pipeline: hybrid. Complex botanicals (masthead strip, frame side accents, footer roundels, cartouche frame) live in `/public/ornaments/` as PNGs generated via ChatGPT with the reference mockup attached. Simple ornaments (subject markers, rail dots, divider motifs, cartouche flourishes) stay hand-coded.
+- Six paired chapters with load-bearing ids: `the-hour`, `the-year`, `the-water`, `the-trajectory`, `in-equivalents`, `training-vs-inference`. The ChapterRail targets these.
+- Asset pipeline hybrid (PNGs for botanicals in `/public/ornaments/`, simple ornaments hand-coded).
 
 **Phase progress:**
 
-- Phase 0 (cleanup) — done.
-- Phase 1 (design tokens) — done.
-- Phase 1.5 (hero direction check) — done.
-- Phase 2a (SubjectMarker + OrganicFrame) — done.
-- Phase 2b (SectionDividers) — done. Four motifs: wheat, vine, water, carbon.
-- Phase 2c (NumericCartouche) — done.
-- Phase 2d (ChapterRail) — done 2026-05-22. Six-dot reading-progress widget, right margin, hidden below 980px. Mounted in `index.astro` only.
-- Phase 2e.1 (ornate frame + cartouche variants) — done 2026-05-22. `OrganicFrame` gained `sideLeft` / `sideRight` boolean props; `NumericCartouche` gained `ornate` boolean prop locked to 3:2 aspect with vertical value/unit stack.
-- Phase 2e.2 (ChapterTitle component) — done 2026-05-22. Roman-numeral kicker, Cardo display title with terracotta dropcap via `::first-letter`, ornament rule with diamond accent, optional sage-italic headline.
-- Phase 2e.3 (masthead botanical strip) — done 2026-05-22. `Layout.astro` masthead now: centered uppercase wordmark above `/ornaments/masthead-strip.png` running full page width; `.site-mast` rewritten in `global.css` with mobile-friendly wrap (0.82rem mobile / 1.05rem desktop).
-- Phase 2e.4 (footer composition) — done 2026-05-22. `Layout.astro` gained `<footer class="site-footer">` block: three italic close lines (`All figures are ranges. / All ranges are sourced. / All sources are checked weekly.`), CTA block (View all comparisons → /comparisons + Read the methodology → /methods), two roundels flanking a tagline rule (`Argue from the same place.`), small credit line linking to the GitHub repo. Sticky-footer body flex applied so the footer doesn't float on short pages.
-- Phase 3 — ready. Unblocked by Phase 2e completion.
+- Phase 0–2e — done (see git history). Components shipped: OrganicFrame, SubjectMarker, SectionDivider, NumericCartouche, ChapterRail, ChapterTitle, Layout masthead + footer, dev/ornaments QA page.
+- Phase 3 (six-chapter shell on index.astro) — done 2026-05-25. SectionDivider + ChapterTitle + intro paragraph + ornate-framed plate per chapter. RangeVsPoint as no-chapter preamble. Existing thesis paragraph kept as closing coda. ChapterRail mounted.
+- Phase 4a (AnnualTwh + WaterBracket) — done 2026-05-25. Mucha palette, `headroom` opt-in on `niceCeiling`, water-bracket 18px pair gaps, global CSS rule stripping standalone `.infographic-card` chrome when nested in `.organic-frame`.
+- Phase 4b (DcTrajectory + AiShareTrajectory) — done 2026-05-25. Sage projection band, DC historical line split into confidence-aware segments (early medium: faint 1.75px / 55% opacity; recent medium-high+: bold 3px) sharing 2022 vertex. Band fill-opacity bumped 0.16 → 0.22.
+- Phase 4c (WattScalePrimer + HouseholdEquivalents) — done 2026-05-25. Mucha palette, rung-0 force-wrap with " for " secondary break point.
+- Phase 4d (RangeVsPoint + TrainingVsInference) — done 2026-05-25. Mucha palette, `wrapCaption()` helper, numeric "8.4–27.2 Mt" label above the narrow inference bar.
+- Phase 4d TDZ hotfix — done 2026-05-25. Moved `wrapCaption()` const declarations before the geometry block in both files so `footerRuleY`'s reference to `captionLine2H` no longer fires in the temporal dead zone.
+- Phase 3.5 (six substeps) — shipped to working tree 2026-05-28. New components: `ChapterPlate.astro` (30/70 magazine-spread wrapping OrganicFrame with sideLeft+sideRight; annotation column with serif small-caps kicker + ornate NumericCartouche + brief italic + SubjectMarker; chart canvas in right slot; stacks below 720px). `Interlude.astro` (3-column mid-chapter pause: cartouche / italic / cartouche; stacks below 720px). `ChapterTitle.astro` refactored (Cardo small-caps kicker, no terracotta dropcap, plain hairline rule with no diamond). Masthead initially capped at 40/52px via object-fit cover — superseded in 3.6a after visible cropping. Scoped `background: white` stripped to transparent in all 8 `Infographic*.astro`. `Layout.astro` footer rewritten with approved 3-line close ("A shared starting point / Numbers everyone can see / Sources everyone can check") and new tagline ("Sustainable futures require informed choices"). Dev/ornaments QA page extended with ChapterPlate + Interlude render blocks.
+- Phase 3.6 (three substeps) — shipped to working tree 2026-05-28, after David surfaced a masthead crop regression and a design-critique pass on four screenshots. (a) Masthead CSS reverted: `width: 100% / height: auto` on mobile, `width: auto / max-height: 80px` centered on desktop — strip never cropped, interim until asset regen lands a wider source AR. (b) Global `.organic-frame .infographic-card` override bumped with `!important` on every chrome property because Astro's scoped specificity was beating it. The 8 chart components now strip border / shadow / padding cleanly when nested in OrganicFrame. (c) `HourlyImpactHero.astro` stripped of its internal OrganicFrame wrapper — was creating a frame-inside-frame bug visible in screenshot 3 (two corner SubjectMarkers stacked, two sets of rounded corners). Now inherits its frame from the parent.
 
-**Phase 3 setup (prose draft already approved for chapter 1):**
+### Mid-Phase-4 design critique → Reading C plan (2026-05-25)
 
-In the previous chat David approved a register direction for the home page prose: short sentences, no preamble, refer directly to the chart, no general statements. The "The Hour" headline and intro paragraph were drafted and signed off:
+David viewed the Vercel deploy and flagged six issues. Five were tactical fixes; one (issue 5: "first things the viewer sees should be several striking comparisons at a glance") raised the architectural question. After re-examining `design/mockup_art_nouveau_reference.png` together, the pattern wasn't pure Reading A (essay-led, tight) or pure Reading B (dashboard hero) — it was **Reading C: magazine-spread chapters**. Each chapter integrates a chart + numeric cartouches + (sometimes) a second chart in one asymmetric ornate layout. The chapter spine stays; each chapter just gets denser.
 
-- Sage-italic headline (sits between SectionDivider and chapter intro): *One hour, one person: where most claims wander furthest from the data.*
-- Intro paragraph (sits between chapter headline and the HourlyImpactHero): Most arguments about AI start at this scale. The comparisons rarely hold up. Driving is the clean one.
+**Architectural moves (Phase 3.5 + 4-redo + 3-redo):**
 
-Chapters 2–6 still need headline + intro drafts at the same density. RangeVsPoint sits before The Hour as a no-chapter preamble; the existing thesis paragraph stays as a closing coda after Training vs. Inference.
+1. **New component `ChapterPlate.astro`.** Wraps `OrganicFrame` with `sideLeft sideRight` and a 30/70 flex layout. Left slot: annotation block (small-caps kicker + ornate `NumericCartouche` + brief italic + `SubjectMarker`). Right slot: chart SVG. Collapses to stacked layout below ~720px.
+2. **New component `Interlude.astro`.** 3-column mid-section: two `NumericCartouches` flanking centered italic prose. Used inside chapters IV (Trajectory) and V (Equivalents) between Plate 1 and Plate 2.
+3. **ChapterTitle refactor.** Serif kicker (Cardo small caps, not Inter); remove the `::first-letter` terracotta dropcap; remove the diamond on `.chapter-rule::before`. The visible duplicate-diamond bug appears only on carbon chapters (SectionDivider's carbon motif is itself a diamond + chapter-rule had its own diamond accent).
+4. **Masthead height cap** ~80–110 px in `Layout.astro` / `global.css`. Currently unconstrained vertically and dominating first-paint viewport.
+5. **Infographic-card scoped white background → transparent** in each Infographic component. The Phase 4a global override `.organic-frame .infographic-card { background: transparent }` loses specificity to the scoped style; the white covers the ornate frame's botanical.
+6. **SVG-baked kicker / title / unit-caption removed** from every Infographic component. The chart canvas starts at the axis area; source line + verified stamp stay baked. The annotation column carries the editorial signage on the rendered page. Right-click-save loses the kicker/title but keeps the data + sources — accepted trade.
+7. **Side botanicals on both sides** (`sideLeft` + `sideRight`) of every plate. Tighten frame padding so the chart canvas isn't squeezed.
+8. **RangeVsPoint relocates** from above-the-fold preamble to a small slimmer "How to read this site" element above the site footer.
+9. **Footer rewrite.** Tagline → "Sustainable futures require informed choices." Three-line italic close replaced (drafts approved, below). Drop the "All X are Y" anaphora that flagged as borderline AI-speak in the rubric.
 
-**Remaining phases (post Phase 3):**
+**Approved editorial drafts (2026-05-25) — pre-locked, do not re-derive:**
 
-- 4a — `InfographicAnnualTwh` + `InfographicWaterBracket` redesign. Right-edge-touching bar fix on water bracket; U.S./global pair affordance. Plate frame uses the ornate variant.
-- 4b — `InfographicDcTrajectory` + `InfographicAiShareTrajectory` redesign. Sage projection band, stroke modulation on historical line, decision on irregular-anchor-year jumpiness. Ornate frame.
-- 4c — `InfographicHouseholdEquivalents` + `InfographicWattScalePrimer` redesign. Fix rung-0 / rung-1 overlap on watt-scale. Ornate frame.
-- 4d — `InfographicRangeVsPoint` + `InfographicTrainingVsInference` redesign. Truncated caption fix + numeric label adjacent to narrow inference bar. Ornate frame.
-- 5 — `/comparisons` herbarium rebuild. Comparison cards as richly-ornamented herbarium plates. Slightly below home density.
-- 6 — `/methods` rebuild (2,058 lines / 88.6K). Bash heredoc with sentinel-anchored replaces required. High styling at lower per-section density.
-- 7 — Mobile adaptive pass. Walk every component at narrow viewport.
-- 8 — Prose sweep + Unicode restoration + design critique. Sweep all site copy against the three prose memories; restore Unicode in `figures.json` where ASCII fallbacks remain; do the holistic design critique deferred per the "build all, critique once" preference.
+Per-plate annotation blocks. Each plate's left column: kicker → ornate `NumericCartouche` (value + unit + caption) → brief italic.
 
-**Components in place (all Phase 2 work):**
+| # | Chapter | Kicker | Cartouche value · unit | Cartouche caption | Brief italic |
+|---|---|---|---|---|---|
+| 1 | I · The Hour | ONE HOUR, COMPARED | 14–18 · kg / hr | CO₂ FROM ORDINARY DRIVING | *Hundreds of times an hour of gaming. Thousands of times an hour of chat.* |
+| 2 | II · The Year | AI'S YEAR, IN CONTEXT | 30–80 · TWh | AI IN DATA CENTERS, 2024 | *Even at the top of its range, the shortest bar on the chart.* |
+| 3 | III · The Water | WHERE THE LINE FALLS | 500–700 · Bgal / yr | GLOBAL DC WATER, COUNTING POWER | *Direct cooling alone is an order of magnitude smaller. Counting the power plants brings AI near U.S. golf.* |
+| 4 | IV · The Trajectory (DC) | THE LINE THAT BENT | 830–1,350 · TWh by 2030 | DATA CENTERS, IEA RANGE | *Flat through 2018, then bent. Heading for double to triple by 2030.* |
+| 5 | IV · The Trajectory (AI) | AI'S SHARE OF THE LINE | 200–400 · TWh by 2030 | AI'S SLICE, IEA RANGE | *From 65 in 2024 to three or six times that by 2030.* |
+| 6 | V · In Equivalents (Watt) | WHAT A TWh MEANS | 85,000 · homes | ONE TWh, FOR A YEAR | *AI in 2024 sits at thirty to eighty of these. U.S. residential at 1,550.* |
+| 7 | V · In Equivalents (HH) | ELECTRICITY, IN HOMES | 39M · U.S. homes | GLOBAL DATA CENTERS, 2024 | *AI's slice inside that bar: 2.5 to 7 million households.* |
+| 8 | VI · Training vs. Inference | TRAINING vs. INFERENCE | 8.4–27.2 · Mt CO₂ | ANNUAL AI INFERENCE, 2024 | *One round of training. One year of every prompt anyone ever sent.* |
 
-- `src/components/OrganicFrame.astro` — thin warm-ink border, asymmetric rounded corners, optional SubjectMarker corner. Ornate variant via `sideLeft` / `sideRight` props loads `/ornaments/frame-side-{left,right}.png`.
-- `src/components/SubjectMarker.astro` — small filled motif in corner: water droplet (teal), electricity lightning bolt (sage), carbon diamond (rust).
-- `src/components/SectionDivider.astro` — chapter divider with four motif options (wheat / vine / water / carbon).
-- `src/components/NumericCartouche.astro` — headline-figure treatment. Ornate variant via `ornate` prop loads `/ornaments/cartouche-frame.png` at locked 3:2 aspect with vertical value/unit stack.
-- `src/components/ChapterRail.astro` — six-dot reading-progress widget for the right margin of the home page (Phase 2d).
-- `src/components/ChapterTitle.astro` — chapter-opening header: kicker + Cardo display title with `::first-letter` dropcap + ornament rule + optional sage-italic headline (Phase 2e.2).
-- `src/layouts/Layout.astro` — site shell with masthead (wordmark + botanical strip) and footer (close lines + CTA + roundels + tagline + credit).
-- `src/pages/dev/ornaments.astro` — internal QA page with render blocks for every primitive plus a six-section scroll dummy for the ChapterRail.
+Interlude (Chapter IV, between DcTrajectory and AiShareTrajectory):
+
+- Left cartouche: **485** · *TWh* — DATA CENTERS, 2025
+- Centered italic: *The line bent because data centers got bigger. They got bigger because of AI.*
+- Right cartouche: **300** · *TWh* — AI BY 2030, CENTRAL CASE
+
+Interlude (Chapter V, between WattScalePrimer and HouseholdEquivalents):
+
+- Left cartouche: **1** · *kWh* — A MICROWAVE FOR AN HOUR
+- Centered italic: *From microwave-hour to grid total — and the same math both ways.*
+- Right cartouche: **70–113M** · *homes* — GLOBAL DC, 2030 PROJECTIONS
+
+Footer 3-line close (option A, approved):
+
+- *A shared starting point.*
+- *Numbers everyone can see.*
+- *Sources everyone can check.*
+
+Bottom tagline: **Sustainable futures require informed choices.** (replaces "Argue from the same place.")
+
+The chapter intros from Phase 3 (one per chapter, 2–4 short sentences each) stay in `index.astro` above each plate; the annotation italic adds *new* specific detail rather than restating the intro. Captured in memory as [[feedback_layered_prose_redundancy]].
+
+### Design critique from live deploy screenshots (2026-05-28)
+
+David ran the dev server on the post-3.5 state, captured four screenshots (3 from home, 1 from /comparisons), and asked for an expert-design / Internet-is-Beautiful critique. Findings, in severity order:
+
+**Fixed in Phase 3.6:**
+
+- *Masthead vertical cropping.* 3.5d's `object-fit: cover` lopped the top and bottom off the botanical strip. Reverted in 3.6a to non-cropping CSS.
+- *Inner chart card chrome leaking through ornate frame.* 3.5e's scoped `background: white → transparent` fix didn't touch border / shadow / padding / border-radius — and Astro's scoped selector specificity beats the global `.organic-frame .infographic-card` override. Fixed in 3.6b with `!important` on the override.
+- *Frame-inside-frame on HourlyImpactHero.* The component wrapped itself in OrganicFrame internally while `index.astro` also wrapped it externally. Two corner SubjectMarkers visible. Fixed in 3.6b by removing the internal wrapper.
+
+**Pending — Phase 3.6c (David runs image-gen):**
+
+- *Side-ornament PNGs have transparency-indicator checkerboard baked into the pixels.* Both `frame-side-left.png` and `frame-side-right.png` show a gray-and-white checkerboard behind the botanical on every plate. The image-gen tool that produced the assets exported the editor's transparency indicator as actual pixels rather than as alpha. Fix: regenerate with explicit true-alpha-channel prompts (below).
+- *Masthead-strip.png aspect ratio.* Current 3546×443 (8:1) is too tall when rendered full-width on desktop (150px @ 1200px viewport). Target ~16:1 (3200×200 or similar) so full-width display naturally lands inside the ~80px height cap without CSS cropping. Once the new asset is in, CSS can revert to plain `width: 100%; height: auto` at all breakpoints.
+
+**Pending — Phase 3.7 (rhythm compression):**
+
+- Vertical rhythm too loose. Between masthead and first frame, between frame and section divider, between divider and chapter title — each gap looks considered alone but stacks into a page that pauses at every step. Compress between-section margins ~25-30% globally before 3-redo lands so the new layout reads as composed rather than padded.
+
+**Pending — Phase 3-redo:**
+
+- *RangeVsPoint primer is the literal first frame on the home page.* Wrong hero. A pedagogical primer can't carry the imprint moment — the first chart someone sees should be the most arresting comparison on the site. 3-redo relocates the primer to a slimmer "How to read this" element above the footer.
+- *Chapter intro prose trips the prose-specificity rule almost word-for-word.* Current Chapter I intro: "Most arguments about AI start at this scale." The [[prose-refers-directly-to-the-infographic]] memory cites a near-identical example as the antipattern. All six chapter intros need rewriting in the 3-redo prose sweep to point at chart specifics, not at the discourse.
+- */comparisons page is visually a different site.* No side botanicals, no ornate frame, plain card. Phase 5 work closes the cohesion gap.
+
+**Standing — minor, debatable:**
+
+- SubjectMarker tucked inside the rounded corner of the ornate frame can look pinched on heavier markers (water droplet, sage leaf). Position could shift to above-and-outside the curve. Defer unless it bothers David at scale.
+
+### Asset regeneration prompts (Phase 3.6c — pending David's image-gen tool)
+
+Three assets need regeneration. David runs his image-gen tool with each prompt and saves to the named filename in `/public/ornaments/`, overwriting the existing file. Verify alpha is real before deploying — open the generated PNG in a viewer with a transparency-indicator toggle (Windows Photos, IrfanView). With the indicator OFF, real-alpha PNGs show the botanical against a solid color; bad-alpha PNGs still show checkerboard.
+
+***`masthead-strip.png`*** — current 3546×443 (8:1) is too tall for full-width desktop display. Target a wider source AR so the natural height when scaled to width is appropriate.
+
+> A horizontal Art Nouveau botanical banner in the style of Alphonse Mucha, drawn as a continuous wide frieze with no central focal point. Wheat sheaves, ivory-orange California poppies in bloom, slender green-sage leaves and curling tendrils, intertwined and repeating across the full width. Muted antique palette: soft rust-orange poppies (#a85a3a), sage-green foliage (#7a8c6a), warm ink line work (#211d1b). Hand-drawn ink-and-watercolor feel, not flat vector. Source resolution at least 3200 pixels wide by 200 pixels tall (16:1 aspect ratio). Transparent background with true alpha channel — no checkerboard pattern, no white fill, no canvas color. PNG-32 with alpha. The botanical elements should sit on absolute transparency so the page's ivory paper color shows through behind them when placed on a webpage.
+
+***`frame-side-left.png`*** — composition is fine; re-export with real alpha.
+
+> A tall vertical Art Nouveau botanical ornament in the style of Mucha — wheat stalks and curling sage-green leaves rising along the left edge of a page, drawn as a slender column to be placed inside the left margin of a framed illustration. Hand-drawn ink-and-watercolor feel, warm ink line work (#211d1b), sage-green foliage (#7a8c6a), occasional small rust-orange floral accent (#a85a3a). Aspect ratio approximately 1:6 (tall and narrow). Source resolution at least 400 pixels wide by 2400 pixels tall. Transparent background with true alpha channel — no checkerboard pattern, no white fill, no canvas color. PNG-32 with alpha. Only the botanical elements should be visible; the rest must be fully transparent.
+
+***`frame-side-right.png`*** — same fix as left, complementary composition.
+
+> A tall vertical Art Nouveau botanical ornament in the style of Mucha — California poppies in bloom and curling sage-green leaves cascading down the right edge of a page, drawn as a slender column to be placed inside the right margin of a framed illustration. Compositionally complements but does not mirror the left-side wheat-and-leaves ornament. Hand-drawn ink-and-watercolor feel, warm ink line work (#211d1b), rust-orange poppies (#a85a3a), sage-green foliage (#7a8c6a). Aspect ratio approximately 1:6 (tall and narrow). Source resolution at least 400 pixels wide by 2400 pixels tall. Transparent background with true alpha channel — no checkerboard pattern, no white fill, no canvas color. PNG-32 with alpha. Only the botanical elements should be visible; the rest must be fully transparent.
+
+### Claude Design (Anthropic Labs product) — considered, declined for this phase
+
+David asked 2026-05-28 whether to hand the project (or part of it) over to Claude Design (Anthropic Labs research preview, launched April 17 2026, Opus 4.7 under the hood, bundled into Pro/Max/Team/Enterprise with its own metered weekly allowance). Assessment: not for this phase of this project. The design vocabulary is already locked (palette, type, ornament library, asymmetric plate pattern, approved annotation drafts). Remaining work is code editing on top of those decisions — Claude Design's output would still need translating back into Astro components, and chat already has bash mount + file tools. Most plausible future trigger: Phase 5 herbarium card design exploration, where the visual vocabulary still needs invention. Pro covers a session or two before throttling for that one-shot use. Full assessment with sources in the chat that asked the question.
+
+**Next-batch ordering (start here in the fresh chat):**
+
+- **Phase 3.6c (David, async).** Run the three asset regen prompts above in image-gen tool. Save over existing files in `/public/ornaments/`. Verify side-ornament checkerboard is gone (transparency-aware viewer). Once new masthead strip is in, revert masthead CSS to plain `width: 100%; height: auto` at all breakpoints.
+- **Phase 3.7 (next code work).** Rhythm compression. Global CSS pass tightening between-section margins ~25-30% — chapter-title margins, organic-frame margins, section-divider spacing. Small, contained, deploys independently of the larger 4-redo / 3-redo work.
+- **Phase 4-redo.** For each Infographic: remove SVG-baked kicker / title / unit-caption. Source line + verified stamp stay baked. The annotation column carries the editorial signage on the rendered page. Verify chart still reads at narrower right-column width (~70% of plate).
+- **Phase 3-redo.** Rewrite `index.astro` to wrap each chart in `ChapterPlate` with the approved annotation drafts. Drop in `Interlude`s between paired plates in chapters IV and V. Relocate RangeVsPoint from hero to footer-adjacent primer. Rewrite all six chapter intros to drop abstract-opener antipatterns. Note: 4-redo and 3-redo can be batched as one atomic visible change if preferred — they pair naturally, and shipping 4-redo alone leaves the home page in a transient "naked charts" state.
+- **Phase 5+ unchanged conceptually.** /comparisons herbarium inherits the asymmetric-plate vocabulary; /methods, mobile, prose sweep all queue after.
+
+**Components in place:**
+
+- `src/components/OrganicFrame.astro` — restrained + ornate (sideLeft/sideRight) variants.
+- `src/components/SubjectMarker.astro` — water droplet (teal), electricity bolt (sage), carbon diamond (rust).
+- `src/components/SectionDivider.astro` — four motifs (wheat / vine / water / carbon).
+- `src/components/NumericCartouche.astro` — restrained + ornate (3:2 locked) variants.
+- `src/components/ChapterRail.astro` — six-dot reading-progress widget; mounted in index.astro only; hidden below 980px.
+- `src/components/ChapterTitle.astro` — refactored 2026-05-28: Cardo small-caps kicker, no dropcap, plain hairline rule (no diamond).
+- `src/components/ChapterPlate.astro` — Phase 3.5a. 30/70 magazine-spread layout wrapping OrganicFrame with sideLeft+sideRight. Annotation column on the left, chart canvas in right slot.
+- `src/components/Interlude.astro` — Phase 3.5b. 3-column mid-chapter pause: cartouche / italic / cartouche.
+- `src/layouts/Layout.astro` — masthead capped 2026-05-28 (interim CSS pending Phase 3.6c asset regen); footer rewritten with the approved 3-line close and new tagline.
+- All eight `Infographic*.astro` — tokenized to Mucha palette in Phase 4a–d. Scoped `background: white` stripped to transparent in Phase 3.5e. **Still pending SVG-header strip per Phase 4-redo.**
+- `src/components/HourlyImpactHero.astro` — internal OrganicFrame wrapper removed in Phase 3.6b (was double-framing inside `index.astro`). Inherits frame from parent.
+- `src/pages/dev/ornaments.astro` — QA page; will need new render blocks for `ChapterPlate` + `Interlude` when those land.
 
 **Runtime assets in `/public/ornaments/`:**
 
-- `masthead-strip.png` — wheat + poppies + leaves, page-wide horizontal strip.
-- `frame-side-left.png` — wheat-and-leaves climbing vertical motif.
-- `frame-side-right.png` — floral spray climbing vertical motif.
-- `cartouche-frame.png` — ornate Art Nouveau border with transparent interior, 3:2 native aspect.
-- `footer-roundel-earth.png` — earth globe in Art Nouveau medallion.
-- `footer-roundel-landscape.png` — landscape vignette in matching medallion.
-
-All ~1.5–2 MB each; Phase 8 will compress or vectorize before launch.
+- `masthead-strip.png`, `frame-side-left.png`, `frame-side-right.png`, `cartouche-frame.png`, `footer-roundel-earth.png`, `footer-roundel-landscape.png`. All ~1.5–2 MB each; Phase 8 compresses or vectorizes before launch.
 
 **Design references:**
 
-- `design/mockup_art_nouveau_reference.png` — the ChatGPT-generated mockup David picked as the design destination. Provides the ornament density and chapter title treatment.
-- `design/README.md` — describes what's in the mockup and where the runtime assets live (`/public/ornaments/`).
-- `design/assets/` — superseded by `/public/ornaments/`; the empty directory may persist locally and can be deleted.
+- `design/mockup_art_nouveau_reference.png` — the design destination. Reading C revision was anchored on re-reading this with David.
+- `design/README.md` — describes the mockup and asset locations.
 
-**QA page:** `/dev/ornaments` renders every primitive in isolation: restrained and ornate variants of OrganicFrame, restrained and ornate variants of NumericCartouche, the four SectionDividers in chapter order, all six ChapterTitle treatments, plus the ChapterRail with a six-section scroll dummy. Masthead and footer render on every page via `Layout.astro`.
+**QA page:** `/dev/ornaments` renders every primitive in isolation. Phase 3.5 will add `ChapterPlate` + `Interlude` render blocks.
 
-**Design decisions confirmed during Phases 1–2e:**
+**Design decisions worth carrying forward:**
 
-- Corner ornament must be informational, not just decorative (SubjectMarker earned the corner; CornerCurl was retired).
-- Stroke weights for botanical motifs must be ~2px or thicker for sage and teal to hold against ivory paper.
-- ChapterRail mounts only on the home page; the other pages aren't chaptered.
-- Asset pipeline is hybrid: complex botanicals as imported PNG assets, simple ornaments hand-coded. Six PNGs generated by David via ChatGPT in May 2026 with the reference mockup attached.
-- Ornate cartouche locks to 3:2 aspect (the asset's native ratio) with value/unit stacked vertically inside. `object-fit: fill` with variable content width stretches the corner embellishments visibly — ruled out.
-- Prose discipline (Phase 3 onward): short sentences, no preamble, refer directly to the chart, no general statements. Three memories govern.
-- Footer's three-line close uses parallel anaphora ("All X are Y"); flagged as a borderline tier-2 AI-speak risk but earns its place as a mantra/oath structure rather than default architecture.
+- Corner ornament must be informational (SubjectMarker earned the corner; CornerCurl retired in Phase 1.5).
+- Botanical strokes ~2px or thicker for sage and teal to hold against ivory.
+- ChapterRail mounts only on the home page.
+- Ornate cartouche locks to 3:2 (asset's native ratio).
+- Prose discipline: short sentences, no preamble, refer directly to the chart. Three prose memories govern: anti-AI-speak rubric, prose-defers-to-infographics, prose-refers-directly-to-the-infographic. Plus the new layered-prose-redundancy memory.
+- The "All X are Y" parallel-anaphora structure in the old footer close is RETIRED per Reading C — leaned on the "honest" virtue-claim pattern flagged in the rubric.
 
 ## Where we are
 

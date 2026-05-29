@@ -1,5 +1,4 @@
 ---
-import OrganicFrame from "./OrganicFrame.astro";
 import RangeBar from "./RangeBar.astro";
 import SourceLine from "./SourceLine.astro";
 import figuresData from "../data/figures.json";
@@ -16,35 +15,33 @@ const headlineSentence =
   "An hour of driving emits roughly a thousand times the CO₂ of an hour of AI chat.";
 ---
 
-<OrganicFrame subject="carbon">
-  <figure class="hourly-hero">
-    <header>
-      <p class="kicker">{data.kicker}</p>
-      <h2 class="hero-title">{data.title}</h2>
-      <p class="at-a-glance">{headlineSentence}</p>
-    </header>
+<figure class="hourly-hero">
+  <header>
+    <p class="kicker">{data.kicker}</p>
+    <h2 class="hero-title">{data.title}</h2>
+    <p class="at-a-glance">{headlineSentence}</p>
+  </header>
 
-    <div class="chart-block">
-      <p class="unit-caption">Grams of CO₂ equivalent per hour</p>
-      <RangeBar figures={allFigures} />
-    </div>
+  <div class="chart-block">
+    <p class="unit-caption">Grams of CO₂ equivalent per hour</p>
+    <RangeBar figures={allFigures} />
+  </div>
 
-    <div class="chart-block">
-      <p class="unit-caption">
-        Same activities, driving omitted so the others are readable
-      </p>
-      <RangeBar figures={smallFigures} />
-    </div>
+  <div class="chart-block">
+    <p class="unit-caption">
+      Same activities, driving omitted so the others are readable
+    </p>
+    <RangeBar figures={smallFigures} />
+  </div>
 
-    <figcaption>{data.summary}</figcaption>
+  <figcaption>{data.summary}</figcaption>
 
-    <SourceLine
-      sources={data.sources}
-      lastVerified={data.last_verified}
-      methodsAnchor="hourly-hero"
-    />
-  </figure>
-</OrganicFrame>
+  <SourceLine
+    sources={data.sources}
+    lastVerified={data.last_verified}
+    methodsAnchor="hourly-hero"
+  />
+</figure>
 
 <style>
   .hourly-hero {
