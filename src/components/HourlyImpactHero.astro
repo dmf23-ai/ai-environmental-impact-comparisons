@@ -11,30 +11,16 @@ const smallFigures = allFigures.filter(
   (f: { value_high?: number; value?: number }) =>
     (f.value_high ?? f.value ?? 0) < 1000
 );
-const headlineSentence =
-  "An hour of driving emits roughly a thousand times the CO₂ of an hour of AI chat.";
 ---
 
 <figure class="hourly-hero">
-  <header>
-    <p class="kicker">{data.kicker}</p>
-    <h2 class="hero-title">{data.title}</h2>
-    <p class="at-a-glance">{headlineSentence}</p>
-  </header>
-
   <div class="chart-block">
-    <p class="unit-caption">Grams of CO₂ equivalent per hour</p>
     <RangeBar figures={allFigures} />
   </div>
 
   <div class="chart-block">
-    <p class="unit-caption">
-      Same activities, driving omitted so the others are readable
-    </p>
     <RangeBar figures={smallFigures} />
   </div>
-
-  <figcaption>{data.summary}</figcaption>
 
   <SourceLine
     sources={data.sources}

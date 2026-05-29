@@ -68,16 +68,27 @@ const { subject, sideLeft = false, sideRight = false } = Astro.props;
     top: 4%;
     height: 92%;
     width: auto;
+    max-width: 4.5rem;
+    object-fit: contain;
+    object-position: center top;
     pointer-events: none;
     user-select: none;
     z-index: 0;
     display: block;
+    opacity: 0.95;
   }
   .frame-side-left {
-    left: 0.5rem;
+    left: 0.4rem;
+    object-position: left top;
   }
   .frame-side-right {
-    right: 0.5rem;
+    right: 0.4rem;
+    object-position: right top;
+  }
+  @media (min-width: 720px) {
+    .frame-side {
+      max-width: 6rem;
+    }
   }
 
   .frame-content {
