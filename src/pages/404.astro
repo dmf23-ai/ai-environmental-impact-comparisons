@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SubjectMarker from "../components/SubjectMarker.astro";
+
+const title = "Page not found · AI Environmental Impact";
+const description =
+  "The requested page does not exist on this site.";
+---
+
+<Layout title={title} description={description}>
+  <div class="not-found">
+    <div class="not-found-marker" aria-hidden="true">
+      <SubjectMarker subject="carbon" size={44} />
+    </div>
+    <p class="not-found-eyebrow">404</p>
+    <h1 class="not-found-title">No page at this address.</h1>
+    <p class="not-found-italic">
+      Mistyped URL, or a page that has moved.
+    </p>
+    <p class="not-found-actions">
+      <a class="not-found-primary" href="/">Return home</a>
+      <span class="not-found-sep" aria-hidden="true">·</span>
+      <a class="not-found-secondary" href="/comparisons"
+        >View all comparisons</a
+      >
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .not-found {
+    max-width: 36rem;
+    margin: var(--space-7) auto var(--space-8);
+    text-align: center;
+  }
+  .not-found-marker {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-4);
+  }
+  .not-found-eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 var(--space-2);
+  }
+  .not-found-title {
+    margin: 0 0 var(--space-3);
+    font-size: 1.85rem;
+    line-height: 1.2;
+  }
+  .not-found-italic {
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: 0 0 var(--space-6);
+    font-size: 1.05rem;
+  }
+  .not-found-actions {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .not-found-primary {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  .not-found-primary:hover {
+    opacity: 0.75;
+  }
+  .not-found-secondary {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .not-found-secondary:hover {
+    color: var(--accent);
+  }
+  .not-found-sep {
+    color: var(--ink-soft);
+    margin: 0 0.5em;
+  }
+
+  @media (min-width: 720px) {
+    .not-found {
+      margin-top: var(--space-8);
+    }
+    .not-found-title {
+      font-size: 2.2rem;
+    }
+  }
+</style>
