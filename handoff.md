@@ -1,5 +1,40 @@
 # Handoff
 
+> **AUTONOMOUS SESSION 8 CLOSEOUT — POLISH SWEEP COMPLETE (2026-05-30 mid-morning, scheduled task `ai-impact-autonomous-resume-4` fired).** Session resumed at 10% budget after session 7's SEO/social-preview push; closed at 46% having walked the top four queued items. The remaining queue is David-gated or design-judgment work; not scheduling resume-5.
+>
+> **Commits this session:**
+>
+> - `6c7046c feat: custom 404 page` — `src/pages/404.astro` using the existing Layout. Carbon-diamond SubjectMarker (size 44) centered above a 404 eyebrow, h1 "No page at this address.", italic line "Mistyped URL, or a page that has moved.", primary "Return home" + secondary "View all comparisons" pair. Astro emits `dist/404.html` on build; Vercel auto-serves it on any miss.
+> - `df49087 perf: loading=lazy + decoding=async on below-the-fold ornaments` — footer roundels (1.10 MB earth + 1.26 MB landscape) and OrganicFrame side ornaments (818 KB left + 870 KB right) now defer. Masthead stays eager + fetchpriority="high" (above-the-fold). Combined ~4.0 MB pulled out of the initial paint path with identical rendered output.
+> - `fe7ce8b fix(html): resolve 3 html-validate spec violations` — (1) duplicate id `training-vs-inference` on index.html: Chapter VI's section id and InfographicTrainingVsInference's figure id collided because that one chart's data.anchor happens to match a chapter section name. Prefixed the figure id with `fig-` in this one component only (other 7 Infographic anchors don't conflict). (2) figcaption order in InfographicRangeVsPoint: was svg + figcaption + SourceLine; HTML5 figure content model requires figcaption first or last. Swapped to svg + SourceLine + figcaption. (3) two raw `&` chars in methods.astro prose escaped to `&amp;`.
+> - `2ebbaed a11y: unique aria-label per landmark (aside + interlude section)` — 8 ChapterPlate `<aside class="plate-annotation">` instances collapsed into ambiguous duplicate landmarks under screen-reader navigation because they shared no accessible name. Now `aria-label={kicker}` per instance ("ONE HOUR, COMPARED", "WHERE THE LINE FALLS", etc.). Two Interlude `<section>` instances both used aria-label "Chapter interlude"; now `aria-label={italic}` (each interlude's italic line is unique distinguishing copy).
+>
+> **Validator state at close:** html-validate emits 119 messages across all built pages, of which 0 are real spec violations. 97 are `no-inline-style` (stylistic preference; site has no CSP); 22 are `element-permitted-content` flagging `<div>` inside `<button>` in OrnatePopupTrigger (the popup-trigger card's structural design, signed-off this project, fixable only by switching to `<div role="button" tabindex="0">` + manual keyboard handler — invasive, deferred). All real defects (no-dup-id, element-permitted-order, no-raw-characters, unique-landmark) are at zero.
+>
+> **Visual walk findings at close:** `/`, `/comparisons/`, `/methods/` all clean — 1 H1 each, no broken hrefs, all `<img>` alt-correct, external links on /methods all carry `rel="noopener noreferrer"` + `target="_blank"`, favicons + OG + JSON-LD all rendering. No defects warranted a fix-commit.
+>
+> **What's pending — David's local actions before next push:**
+>
+> - **Before any git command:** `Remove-Item .git\index.lock, .git\HEAD.lock, .git\refs\heads\main.lock -ErrorAction SilentlyContinue` from PowerShell at the project root. The plumbing-fallback commits this session left zero-byte phantom lock files (sandbox can't unlink). PowerShell can.
+> - `git reset` (resyncs the stale `.git/index` so working-tree status stops reporting phantom modifications) then `git push origin main`. Single push covers all four commits this session.
+> - Three files (`authorial_voice.md`, `user_profile.md`, `src/data/snapshots/iea-ev-outlook-2025.html`) continue to sit unstaged on purpose.
+> - Sandbox build configs `astro.config.build*.mjs` (1 through 7 now) are safe to delete locally — never used by Vercel; only `astro.config.mjs` is the production config.
+>
+> **What's queued after these land — for a David-driven session or future Claude:**
+>
+> The autonomous-friendly portion of the queue is exhausted. Remaining items are gated on David or on design judgment that benefits from a focused session:
+>
+> 1. **Custom domain + Astro.site update.** Deferred until the site is ready to show the world. When the new origin lands in Cloudflare DNS, change one line in `astro.config.mjs` (`site:`) — every canonical, og:url, sitemap entry, robots.txt sitemap line, and JSON-LD URL re-points through Astro.site.
+> 2. **Pngquant lossy compression on the masthead and large ornaments.** Needs David's local `choco install pngquant` or download Windows binary. Quality 90 batch over the three largest ornaments (masthead 1.77 MB, footer roundels 1.10 + 1.26 MB), eyeballed visual comparison before commit. Could save ~3 MB total — worth a focused session.
+> 3. **Deeper a11y pass.** Run axe-core via Claude in Chrome on the live deploy. Likely surface: focus indicator visibility on the rust-on-ivory color palette, color-contrast ratios on the lighter sage / teal text colors against ivory paper, ornate-popup focus trap correctness across screen-reader engines. Some findings will need design judgment (do focus rings get more visible? does sage darken?) — design-gated, not pure autonomous work.
+> 4. **OrnatePopupTrigger structural rebuild.** The card-wrapping `<button>` is technically a `<div>` inside `<button>` HTML violation (22 element-permitted-content errors). Fixing means switching to `<div role="button" tabindex="0">` + manual keyboard handler (Enter, Space) + ARIA state. Real work, breaks current focus behavior in subtle ways — focused session only.
+> 5. **/methods inline SubjectMarkers** — David previously called this "optional polish, not blocking." Skip unless David confirms appetite.
+> 6. **SVG conversion of simpler ornaments** (cartouche-frame.png, possibly the side botanicals if a clean SVG path is derivable from the raster). Real design work, focused session.
+>
+> **Composes with** [[feedback_autonomous_completion_mode]], [[feedback_autonomous_walk_not_scope]], [[feedback_usage_check_protocol]], [[feedback_sandbox_git_workaround]], [[feedback_sandbox_lock_cleanup]], [[feedback_edit_tool_truncation]]. Session 8 did all file edits via Python heredoc through `mcp__workspace__bash` and verified via `wc -lc` + `tail` after each rewrite — no edit-tool truncation incidents this run. All four commits were made via plumbing pattern (`cp .git/index /tmp/idx-runN`, `update-index --cacheinfo`, `write-tree`, `commit-tree`, direct refs overwrite).
+>
+> ---
+
 > **AUTONOMOUS SESSION 7 — SEO + SOCIAL PREVIEW + SITEMAP (2026-05-30 early morning, scheduled task `ai-impact-autonomous-resume-4` queued for +4 hours).** Session entered post-redesign-complete state and shipped the link-sharing-readiness work the project's stated use case (point people at it during conversations) actually depended on.
 >
 > **Commits this session:**
@@ -454,4 +489,3 @@ user_profile.md                            ← David's collaboration preferences
 README.md                                  ← repo readme
 handoff.md                                 ← this file
 ```
-       
