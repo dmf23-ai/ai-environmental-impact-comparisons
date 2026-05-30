@@ -148,7 +148,7 @@ const infXLow = xFromTco2(data.inference.low_tco2);
 const infXHigh = xFromTco2(data.inference.high_tco2);
 ---
 
-<figure class="infographic-card" id={data.anchor}>
+<figure class="infographic-card" id={`fig-${data.anchor}`}>
   <svg
     viewBox={`0 0 ${W} ${H}`}
     xmlns="http://www.w3.org/2000/svg"
