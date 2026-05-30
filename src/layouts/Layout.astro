@@ -58,6 +58,26 @@ const siteName = "AI Environmental Impact Comparisons";
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={absoluteOgImage} />
     <meta name="twitter:image:alt" content="AI Environmental Impact · Comparisons — side-by-side context for AI's energy and water use" />
+
+    {/* JSON-LD structured data — surfaces in Google sitelinks and rich results.
+        WebPage carries the per-page details; isPartOf points at the parent
+        WebSite so Google can group the pages under one entity. */}
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: title,
+        url: canonicalUrl,
+        description: description ?? undefined,
+        inLanguage: "en",
+        isPartOf: {
+          "@type": "WebSite",
+          name: siteName,
+          url: siteUrl.toString(),
+        },
+      })}
+    />
   </head>
   <body>
     <header class="site-mast">
