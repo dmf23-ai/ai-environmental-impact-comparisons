@@ -63,7 +63,7 @@ const axisLabelY = headerH + barsHeight + 22;
 const footerRuleY = axisLabelY + 28;
 const sourceLineY = footerRuleY + 22;
 const verifiedLineY = sourceLineY + 22;
-const H = verifiedLineY + 18;
+const H = footerRuleY;
 
 // Short source attribution baked into the SVG. The full clickable list lives
 // in the SourceLine HTML below the svg.
@@ -202,40 +202,11 @@ const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georg
     >
       {fmt(maxVal)}
     </text>
-
-    {/* Footer — separator, short source line, verified stamp */}
-    <line
-      x1={padX}
-      y1={footerRuleY}
-      x2={W - padX}
-      y2={footerRuleY}
-      stroke="#ddd2bd"
-      stroke-width="1"
-    />
-    <text
-      x={padX}
-      y={sourceLineY}
-      font-family={FONT_SANS}
-      font-size="12"
-      fill="#4a3f3a"
-    >
-      {sourceShort}
-    </text>
-    <text
-      x={padX}
-      y={verifiedLineY}
-      font-family={FONT_SANS}
-      font-size="11"
-      fill="#8a7f78"
-    >
-      {verifiedStamp}
-    </text>
   </svg>
   <SourceLine
     sources={data.sources}
     lastVerified={data.last_verified}
-    methodsAnchor={data.anchor}
-  />
+    methodsAnchor={data.anchor} shortText={sourceShort} />
 </figure>
 
 <style>

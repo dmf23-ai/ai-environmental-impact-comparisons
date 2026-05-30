@@ -22,7 +22,7 @@ const description =
   "Numbers, ranges, and sources for what AI's environmental impact actually is — and what it isn't — measured against other ways we use water and electricity.";
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} wide>
   <h1 class="sr-only">{title}</h1>
 
   <ChapterRail />
@@ -43,7 +43,7 @@ const description =
       kicker="ONE HOUR, COMPARED"
       value="14–18"
       unit="kg / hr"
-      caption="CO₂ FROM ORDINARY DRIVING"
+      caption="CO₂ from ordinary driving"
       italic="Hundreds of times an hour of gaming. Thousands of times an hour of chat."
       popupId="hour-driving"
     >
@@ -67,7 +67,7 @@ const description =
       kicker="AI'S YEAR, IN CONTEXT"
       value="30–80"
       unit="TWh"
-      caption="AI IN DATA CENTERS, 2024"
+      caption="AI in data centers, 2024"
       italic="Even at the top of its range, the shortest bar on the chart."
       popupId="year-ai"
     >
@@ -91,7 +91,7 @@ const description =
       kicker="WHERE THE LINE FALLS"
       value="500–700"
       unit="Bgal / yr"
-      caption="GLOBAL DC WATER, COUNTING POWER"
+      caption="Global DC water, counting power"
       italic="Direct cooling alone is an order of magnitude smaller. Counting the power plants brings AI near U.S. golf."
       popupId="water-counting"
     >
@@ -115,7 +115,7 @@ const description =
       kicker="THE LINE THAT BENT"
       value="830–1,350"
       unit="TWh by 2030"
-      caption="DATA CENTERS, IEA RANGE"
+      caption="Data centers, IEA range"
       italic="Flat through 2018, then bent. Heading for double to triple by 2030."
       popupId="trajectory-dc"
     >
@@ -125,19 +125,19 @@ const description =
       leftSubject="electricity"
       leftValue="485"
       leftUnit="TWh"
-      leftCaption="DATA CENTERS, 2025"
+      leftCaption="Data centers, 2025"
       italic="The line bent because data centers got bigger. They got bigger because of AI."
       rightSubject="electricity"
       rightValue="300"
       rightUnit="TWh"
-      rightCaption="AI BY 2030, CENTRAL CASE"
+      rightCaption="AI by 2030, central case"
     />
     <ChapterPlate
       subject="electricity"
       kicker="AI'S SHARE OF THE LINE"
       value="200–400"
       unit="TWh by 2030"
-      caption="AI'S SLICE, IEA RANGE"
+      caption="AI's slice, IEA range"
       italic="From 65 in 2024 to three or six times that by 2030."
       popupId="trajectory-ai"
     >
@@ -161,7 +161,7 @@ const description =
       kicker="WHAT A TWh MEANS"
       value="85,000"
       unit="homes"
-      caption="ONE TWh, FOR A YEAR"
+      caption="One TWh, for a year"
       italic="AI in 2024 sits at thirty to eighty of these. U.S. residential at 1,550."
       popupId="equiv-watt"
     >
@@ -171,19 +171,19 @@ const description =
       leftSubject="electricity"
       leftValue="1"
       leftUnit="kWh"
-      leftCaption="A MICROWAVE FOR AN HOUR"
+      leftCaption="A microwave for an hour"
       italic="From microwave-hour to grid total — and the same math both ways."
       rightSubject="electricity"
       rightValue="70–113M"
       rightUnit="homes"
-      rightCaption="GLOBAL DC, 2030 PROJECTIONS"
+      rightCaption="Global DC, 2030 projections"
     />
     <ChapterPlate
       subject="electricity"
       kicker="ELECTRICITY, IN HOMES"
       value="39M"
       unit="U.S. homes"
-      caption="GLOBAL DATA CENTERS, 2024"
+      caption="Global data centers, 2024"
       italic="AI's slice inside that bar: 2.5 to 7 million households."
       popupId="equiv-hh"
     >
@@ -207,7 +207,7 @@ const description =
       kicker="TRAINING vs. INFERENCE"
       value="8.4–27.2"
       unit="Mt CO₂"
-      caption="ANNUAL AI INFERENCE, 2024"
+      caption="Annual AI inference, 2024"
       italic="One round of training. One year of every prompt anyone ever sent."
       popupId="training-inference"
     >

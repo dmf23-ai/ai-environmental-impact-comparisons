@@ -7,46 +7,55 @@ interface Props {
   sources: Source[];
   lastVerified: string;
   methodsAnchor?: string;
+  /**
+   * Optional short attribution text shown in place of the long linked
+   * source list. When provided, only this compact line is rendered
+   * (e.g. "Sources: IEA, LBNL, EIA, Cambridge CCAF.") plus the verified
+   * stamp and the "how this was calculated" link. The full clickable
+   * source names live on /methods for now (eventually the link will open
+   * an in-page popup).
+   */
+  shortText?: string;
 }
-const { sources, lastVerified, methodsAnchor } = Astro.props;
+const { sources, lastVerified, methodsAnchor, shortText } = Astro.props;
 ---
 
 <footer class="source-line">
-  <p class="sources">
-    <span class="prefix">Sources:</span>
-    {
-      sources.map((s, i) => (
+  {shortText ? (
+    <p class="sources">{shortText}</p>
+  ) : (
+    <p class="sources">
+      <span class="prefix">Sources:</span>
+      {sources.map((s, i) => (
         <>
           <a href={s.url} target="_blank" rel="noopener noreferrer">
             {s.name}
           </a>
           {i < sources.length - 1 ? "; " : "."}
         </>
-      ))
-    }
-  </p>
+      ))}
+    </p>
+  )}
   <p class="verified">Last verified: <time datetime={lastVerified}>{lastVerified}</time></p>
-  {
-    methodsAnchor && (
-      <p class="methods-link">
-        <a href={`/methods#${methodsAnchor}`}>How this was calculated →</a>
-      </p>
-    )
-  }
+  {methodsAnchor && (
+    <p class="methods-link">
+      <a href={`/methods#${methodsAnchor}`}>How this was calculated →</a>
+    </p>
+  )}
 </footer>
 
 <style>
   .source-line {
     border-top: 1px solid var(--rule);
-    padding-top: 0.85rem;
-    margin-top: 1.75rem;
-    font-size: 0.85rem;
+    padding-top: 0.7rem;
+    margin-top: 1.4rem;
+    font-size: 0.78rem;
     color: var(--ink-soft);
   }
   .sources,
   .verified,
   .methods-link {
-    margin: 0 0 0.3rem;
+    margin: 0 0 0.25rem;
     line-height: 1.5;
   }
   .prefix {
@@ -63,6 +72,6 @@ const { sources, lastVerified, methodsAnchor } = Astro.props;
     text-decoration-color: currentColor;
   }
   .methods-link {
-    margin-top: 0.55rem;
+    margin-top: 0.45rem;
   }
 </style>

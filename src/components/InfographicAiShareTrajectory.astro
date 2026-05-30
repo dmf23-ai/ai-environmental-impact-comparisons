@@ -58,7 +58,7 @@ const xAxisLabelY = plotBottom + 22;
 const footerRuleY = xAxisLabelY + 28;
 const sourceLineY = footerRuleY + 22;
 const verifiedLineY = sourceLineY + 22;
-const H = verifiedLineY + 18;
+const H = footerRuleY;
 
 const FONT_SANS = "'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif";
 const FONT_SERIF = "'Source Serif 4 Variable', Charter, 'Iowan Old Style', Georgia, serif";
@@ -256,36 +256,8 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
         </text>
       </g>
     ))}
-
-    {/* Footer */}
-    <line
-      x1={padX}
-      y1={footerRuleY}
-      x2={W - padX}
-      y2={footerRuleY}
-      stroke={RULE}
-      stroke-width="1"
-    />
-    <text
-      x={padX}
-      y={sourceLineY}
-      font-family={FONT_SANS}
-      font-size="12"
-      fill={MID}
-    >
-      {sourceShort}
-    </text>
-    <text
-      x={padX}
-      y={verifiedLineY}
-      font-family={FONT_SANS}
-      font-size="11"
-      fill={DIM}
-    >
-      {verifiedStamp}
-    </text>
   </svg>
-  <SourceLine sources={data.sources} lastVerified={data.last_verified} methodsAnchor={data.anchor} />
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} methodsAnchor={data.anchor} shortText={sourceShort} />
 </figure>
 
 <style>
