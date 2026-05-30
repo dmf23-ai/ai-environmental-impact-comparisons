@@ -1,5 +1,41 @@
 # Handoff
 
+> **AUTONOMOUS SESSION 7 — SEO + SOCIAL PREVIEW + SITEMAP (2026-05-30 early morning, scheduled task `ai-impact-autonomous-resume-4` queued for +4 hours).** Session entered post-redesign-complete state and shipped the link-sharing-readiness work the project's stated use case (point people at it during conversations) actually depended on.
+>
+> **Commits this session:**
+>
+> - `99d6c8d fix(cartouche)` — `NumericCartouche.astro` ornate value/unit switched to clamp(cqi)-sized + `white-space: nowrap`. Wrap was the actual defect, not absolute font size: at the ~140px-wide annotation column on desktop, "14–18" at 43.2px wrapped at the en-dash and pushed the figure past the 3:2 frame's bottom border.
+> - `c224e1b chore(handoff)` — run-6 closeout block, now retired below by this session-7 block.
+> - `7a7de69 assets: masthead-strip RGBA` — alpha-keyed in the sandbox from ChatGPT's RGB output (per-pixel distance-from-white → linear alpha ramp). Stops fighting ChatGPT's RGB-only PNG encoder and just post-processes its output.
+> - `9dc92aa chore(ornaments): lossless PNG optimization via oxipng` — 5.99 MB → 5.79 MB across 5 of 6 ornaments. frame-side-left excluded (unusual chunk layout, non-pixel-identical re-encode; reverted).
+> - `6ccc2c5 chore(handoff): Mucha redesign complete` — explicit marker that the scoped redesign is done.
+> - `d7ea97f feat(seo): OG/Twitter meta tags, favicon, OG card, canonical URLs` — `public/og-card.png` (1200×630 generated via PIL + Cardo TTF extracted from Fontsource WOFF2), favicon/apple-touch-icon (rust diamond on ivory), Layout.astro head expanded with canonical / OG / Twitter / theme-color / favicon links. `astro.config.mjs` sets `site:` to the Vercel URL so Astro.site resolves and per-page canonical/og:url thread through automatically.
+> - `d34b339 feat(seo): sitemap.xml, robots.txt, JSON-LD WebPage schema` — Astro endpoints at `src/pages/sitemap.xml.ts` and `src/pages/robots.txt.ts` (both use Astro.site), JSON-LD WebPage schema with `isPartOf` linking to the parent WebSite in Layout.astro head.
+>
+> **What's pending — David's local actions before the next scheduled run fires:**
+>
+> - Nothing blocking. All commits pushed and verified live this session. OG card render confirmed by David. The scheduled run can pick up cleanly without a David action between sessions.
+> - When the custom domain lands (deferred until the site is ready to show the world): update one line in `astro.config.mjs` — change `site:` to the new origin. Every canonical, og:url, sitemap entry, robots.txt sitemap line, and JSON-LD URL re-points automatically through Astro.site.
+> - Sandbox build configs left on disk (`astro.config.build.mjs`, `astro.config.build2.mjs`, `astro.config.build3.mjs`) are safe to delete locally — none are used by Vercel; only `astro.config.mjs` is the production config.
+> - Three files (`authorial_voice.md`, `user_profile.md`, `src/data/snapshots/iea-ev-outlook-2025.html`) continue to sit unstaged on purpose.
+>
+> **What's queued for session 8 (next-Claude's call):**
+>
+> Ordered roughly by autonomous-friendliness:
+>
+> 1. **Custom 404 page** — `src/pages/404.astro` using the existing Layout. Short branded message ("This page doesn't exist — back to home"), masthead and footer intact. Vocabulary-on, contained, no design judgment beyond friendly copy. Highest-leverage next pick.
+> 2. **Final visual walk + polish sweep** — fresh-eyes walk of `/`, `/comparisons/`, `/methods/`, and view-source on each. Surface any leftover defects that didn't catch this session: dead links, missing alt text, focus indicators, mismatched footer/header rhythm, etc. Bundle small fixes into one commit.
+> 3. **Performance/Lighthouse audit via Claude in Chrome** — DevTools Performance tab or Lighthouse run on the live deploy. Identify real (not theoretical) load-time bottlenecks. Likely candidates: the 1.7 MB masthead is `fetchpriority="high"` and blocks first paint; the side-ornament PNGs sum to ~1.7 MB; cumulative font loading. Report findings; defer fixes to a focused session if invasive.
+> 4. **HTML validation pass** — `npx html-validate dist/**/*.html` or equivalent. Surface any malformed markup the build didn't catch.
+> 5. **Accessibility pass deeper than aria-haspopup** — axe-core via Claude in Chrome, or manual checks on tab order / focus indicators / color contrast / SR semantics for the comparison plates. Bundle clean wins.
+> 6. **Pngquant lossy compression** — needs David's local install (`choco install pngquant` or download Windows binary, then a quality=90 batch over the three largest ornaments with eyeballed visual comparison). David-gated; cannot run from sandbox autonomously. Mention in handoff if budget runs out before something else lands.
+> 7. **/methods inline SubjectMarkers** — color-code the 24 H2s by water/electricity/carbon. Design judgment call David previously called "optional polish, not blocking." Skip in autonomous mode unless David confirms.
+> 8. **Pngquant lossy / SVG conversion of simpler ornaments** — further compression beyond lossless. Lossy is risky for botanical alpha edges; SVG conversion is real design work. Both for focused future sessions.
+>
+> **Composes with [[feedback_autonomous_completion_mode]], [[feedback_autonomous_walk_not_scope]], [[feedback_usage_check_protocol]], [[feedback_sandbox_git_workaround]], [[feedback_sandbox_lock_cleanup]], [[feedback_edit_tool_truncation]].** Session 7 hit the Edit-tool-truncation pattern twice (handoff.md tail lost during the run-6 closeout edit; Layout.astro tail lost during JSON-LD addition) — both recovered via `git show HEAD:path` splice. Reinforces "Python heredoc rewrite, then bash mount verification" as the right pattern for any non-trivial file change.
+>
+> ---
+
 > **MUCHA REDESIGN COMPLETE (2026-05-29 evening).** The masthead RGBA conversion landed in `7a7de69 assets: masthead-strip RGBA — alpha-keyed from RGB output` after David ran the in-sandbox alpha-keying pipeline on the RGB output ChatGPT produced (alpha derived from per-pixel distance-from-white: `dist <= 5 -> alpha=0`, `dist >= 30 -> alpha=255`, linear ramp between for anti-aliased edges). Live deploy verified visually — botanical sits on ivory paper with no bounding rectangle. Followed by `9dc92aa chore(ornaments): lossless PNG optimization via oxipng` shaving 203 KB across five of six ornaments (frame-side-left excluded; its source has an unusual chunk layout oxipng can't re-encode pixel-identically). Total ornament weight: 6.30 MB pre-redesign-close → 5.79 MB now. All ornaments are RGBA with real alpha.
 >
 > **What's still deferred:** further compression beyond lossless. The five lossless-optimized ornaments hit a plateau at oxipng level=6 (zopfli pass timed out in sandbox); meaningful additional savings would require either pngquant lossy quantization at quality=90+ (carries small risk of botanical-edge degradation and should be eyeballed before commit) or SVG-conversion of the simpler ornaments (cartouche-frame and the side-botanicals are plausible candidates if a clean SVG path can be derived from the raster). Both belong to a focused future session, not autonomous mode.
