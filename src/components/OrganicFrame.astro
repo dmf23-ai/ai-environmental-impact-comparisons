@@ -30,6 +30,8 @@ const { subject, sideLeft = false, sideRight = false } = Astro.props;
       src="/ornaments/frame-side-left.png"
       alt=""
       aria-hidden="true"
+      loading="lazy"
+      decoding="async"
     />
   )}
   {sideRight && (
@@ -38,6 +40,8 @@ const { subject, sideLeft = false, sideRight = false } = Astro.props;
       src="/ornaments/frame-side-right.png"
       alt=""
       aria-hidden="true"
+      loading="lazy"
+      decoding="async"
     />
   )}
   <div class="frame-content">
