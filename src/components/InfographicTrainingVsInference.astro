@@ -40,7 +40,7 @@ if (!data) throw new Error("training-vs-inference missing from figures.json");
 // chart's horizontal extent at font-size 14. Prefer punctuation breaks
 // ("; ", ". ", ", ") in the middle half of the string; fall back to the
 // nearest space. Single line returns empty line2.
-function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
+function wrapCaption(text: string, maxFirstLine = 55): [string, string] {
   if (text.length <= maxFirstLine) return [text, ""];
   const lo = Math.floor(text.length / 4);
   const hi = Math.floor((text.length * 3) / 4);
@@ -62,7 +62,7 @@ function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
   return [text.slice(0, split), text.slice(split + 1)];
 }
 const [captionLine1, captionLine2] = wrapCaption(data.caption);
-const captionLine2H = captionLine2 ? 18 : 0;
+const captionLine2H = captionLine2 ? 26 : 0;
 
 // Format an inference range in megatons with one decimal, for a numeric
 // label rendered next to the narrow inference bar (which is only ~29 px
@@ -180,7 +180,7 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
       const dotX = xFromTco2(evt.tco2);
       return (
         <g>
-          <text x={labelLeft} y={labelY} font-family={FONT_SANS} font-size="14" fill={INK}>
+          <text x={labelLeft} y={labelY} font-family={FONT_SANS} font-size="21" fill={INK}>
             {evt.model} · {evt.year}
           </text>
           <circle cx={dotX} cy={dotY} r={dotR} fill={ACCENT} />
@@ -192,7 +192,7 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
     <line x1={chartLeft} y1={separatorY} x2={chartRight} y2={separatorY} stroke={RULE} stroke-width="1" />
 
     {/* Inference row */}
-    <text x={labelLeft} y={infRowLabelY} font-family={FONT_SANS} font-size="14" fill={INK}>
+    <text x={labelLeft} y={infRowLabelY} font-family={FONT_SANS} font-size="21" fill={INK}>
       {data.inference.label}
     </text>
     <rect
@@ -209,7 +209,7 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
       x={(infXLow + infXHigh) / 2}
       y={infRowBarCenterY - barH / 2 - 4}
       font-family={FONT_SANS}
-      font-size="11"
+      font-size="16"
       font-weight="600"
       fill={INK}
       text-anchor="middle"
@@ -224,7 +224,7 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
       return (
         <g>
           <line x1={x} y1={axisLineY} x2={x} y2={axisLineY + 4} stroke={DIM} stroke-width="1" opacity="0.5" />
-          <text x={x} y={tickLabelY} font-family={FONT_SANS} font-size="11" fill={MID} text-anchor="middle">
+          <text x={x} y={tickLabelY} font-family={FONT_SANS} font-size="16" fill={MID} text-anchor="middle">
             {decadeLabel(exp)}
           </text>
         </g>
@@ -233,11 +233,11 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
 
     {/* Caption — editorial sentence baked into the SVG, soft-wrapped to
         two lines when long enough. */}
-    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="21" fill={INK} font-style="italic">
       {captionLine1}
     </text>
     {captionLine2 && (
-      <text x={padX} y={captionY + 18} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+      <text x={padX} y={captionY + 26} font-family={FONT_SERIF} font-size="21" fill={INK} font-style="italic">
         {captionLine2}
       </text>
     )}

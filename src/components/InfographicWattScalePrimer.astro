@@ -215,7 +215,7 @@ const pointR = 7;
     <rect width={W} height={H} fill="#f4ede0" />
 
     {/* PANEL 1 — orders of magnitude */}
-    <text x={padX} y={sectionLabel1Y} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+    <text x={padX} y={sectionLabel1Y} font-family={FONT_SANS} font-size="16" fill={DIM} letter-spacing="1.2" font-weight="500">
       ORDERS OF MAGNITUDE
     </text>
 
@@ -226,7 +226,7 @@ const pointR = 7;
           x={r.x}
           y={refLine1Y}
           font-family={FONT_SERIF}
-          font-size="12"
+          font-size="17.5"
           font-style="italic"
           fill={INK}
           text-anchor={r.textAnchor}
@@ -238,7 +238,7 @@ const pointR = 7;
             x={r.x}
             y={refLine2Y}
             font-family={FONT_SERIF}
-            font-size="12"
+            font-size="17.5"
             font-style="italic"
             fill={INK}
             text-anchor={r.textAnchor}
@@ -258,7 +258,7 @@ const pointR = 7;
           x={r.x}
           y={unitLabelY}
           font-family={FONT_SANS}
-          font-size="13"
+          font-size="19"
           font-weight="600"
           fill={INK}
           text-anchor={textAnchor}
@@ -291,14 +291,14 @@ const pointR = 7;
     ))}
 
     {/* PANEL 2 — site anchors */}
-    <text x={padX} y={sectionLabel2Y} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+    <text x={padX} y={sectionLabel2Y} font-family={FONT_SANS} font-size="16" fill={DIM} letter-spacing="1.2" font-weight="500">
       ON THIS SITE
     </text>
 
     {/* Anchor row 1 (range) */}
     {anchors[0] && anchors[0].kind === "range" && (
       <g>
-        <text x={padX} y={anchor1Y + 4} font-family={FONT_SANS} font-size="12" fill={INK} font-weight="500">
+        <text x={padX} y={anchor1Y + 4} font-family={FONT_SANS} font-size="17.5" fill={INK} font-weight="500">
           {anchors[0].label} · {anchors[0].valueText}
         </text>
         <rect
@@ -315,7 +315,7 @@ const pointR = 7;
     {/* Anchor rows 2 and 3 (points) */}
     {anchors[1] && anchors[1].kind === "point" && (
       <g>
-        <text x={padX} y={anchor2Y + 4} font-family={FONT_SANS} font-size="12" fill={INK} font-weight="500">
+        <text x={padX} y={anchor2Y + 4} font-family={FONT_SANS} font-size="17.5" fill={INK} font-weight="500">
           {anchors[1].label} · {anchors[1].valueText}
         </text>
         <circle cx={anchors[1].x} cy={anchor2Y} r={pointR} fill={ACCENT} />
@@ -323,7 +323,7 @@ const pointR = 7;
     )}
     {anchors[2] && anchors[2].kind === "point" && (
       <g>
-        <text x={padX} y={anchor3Y + 4} font-family={FONT_SANS} font-size="12" fill={INK} font-weight="500">
+        <text x={padX} y={anchor3Y + 4} font-family={FONT_SANS} font-size="17.5" fill={INK} font-weight="500">
           {anchors[2].label} · {anchors[2].valueText}
         </text>
         <circle cx={anchors[2].x} cy={anchor3Y} r={pointR} fill={ACCENT} />
@@ -343,15 +343,15 @@ const pointR = 7;
         opacity="0.35"
       />
     ))}
-    <text x={chartLeft} y={anchorAxisLabelY} font-family={FONT_SANS} font-size="11" fill={DIM}>
+    <text x={chartLeft} y={anchorAxisLabelY} font-family={FONT_SANS} font-size="16" fill={DIM}>
       1 kWh
     </text>
-    <text x={chartRight} y={anchorAxisLabelY} font-family={FONT_SANS} font-size="11" fill={DIM} text-anchor="end">
+    <text x={chartRight} y={anchorAxisLabelY} font-family={FONT_SANS} font-size="16" fill={DIM} text-anchor="end">
       10,000 TWh
     </text>
 
     {/* Caption — editorial sentence baked into the SVG */}
-    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="21" fill={INK} font-style="italic">
       {data.caption}
     </text>
 

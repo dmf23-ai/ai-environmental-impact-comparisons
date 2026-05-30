@@ -34,7 +34,7 @@ if (!data) throw new Error("range-vs-point-primer missing from figures.json");
 // chart's horizontal extent at font-size 14. Prefer punctuation breaks
 // ("; ", ". ", ", ") in the middle half of the string; fall back to the
 // nearest space. Single line returns empty line2.
-function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
+function wrapCaption(text: string, maxFirstLine = 55): [string, string] {
   if (text.length <= maxFirstLine) return [text, ""];
   const lo = Math.floor(text.length / 4);
   const hi = Math.floor((text.length * 3) / 4);
@@ -56,7 +56,7 @@ function wrapCaption(text: string, maxFirstLine = 90): [string, string] {
   return [text.slice(0, split), text.slice(split + 1)];
 }
 const [captionLine1, captionLine2] = wrapCaption(data.caption);
-const captionLine2H = captionLine2 ? 18 : 0;
+const captionLine2H = captionLine2 ? 26 : 0;
 
 // SVG geometry — matches the other infographics for visual continuity.
 const W = 720;
@@ -146,10 +146,10 @@ const RULE = "#ddd2bd";
     />
 
     {/* Scale 1 — single point */}
-    <text x={chartLeft} y={scale1HeaderY} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+    <text x={chartLeft} y={scale1HeaderY} font-family={FONT_SANS} font-size="16" fill={DIM} letter-spacing="1.2" font-weight="500">
       AS A SINGLE NUMBER
     </text>
-    <text x={chartRight} y={scale1HeaderY} font-family={FONT_SANS} font-size="13" fill={INK} font-weight="500" text-anchor="end">
+    <text x={chartRight} y={scale1HeaderY} font-family={FONT_SANS} font-size="19" fill={INK} font-weight="500" text-anchor="end">
       {valueText1}
     </text>
     {/* Subtle baseline rule for context */}
@@ -158,10 +158,10 @@ const RULE = "#ddd2bd";
     <circle cx={xCentral} cy={scale1PlotY} r={dotR} fill={ACCENT} />
 
     {/* Scale 2 — range */}
-    <text x={chartLeft} y={scale2HeaderY} font-family={FONT_SANS} font-size="11" fill={DIM} letter-spacing="1.2" font-weight="500">
+    <text x={chartLeft} y={scale2HeaderY} font-family={FONT_SANS} font-size="16" fill={DIM} letter-spacing="1.2" font-weight="500">
       AS A RANGE
     </text>
-    <text x={chartRight} y={scale2HeaderY} font-family={FONT_SANS} font-size="13" fill={INK} font-weight="500" text-anchor="end">
+    <text x={chartRight} y={scale2HeaderY} font-family={FONT_SANS} font-size="19" fill={INK} font-weight="500" text-anchor="end">
       {valueText2}
     </text>
     {/* Range bar */}
@@ -186,20 +186,20 @@ const RULE = "#ddd2bd";
 
     {/* Shared axis */}
     <line x1={chartLeft} y1={axisLineY} x2={chartRight} y2={axisLineY} stroke={RULE} stroke-width="1" />
-    <text x={chartLeft} y={axisLabelY} font-family={FONT_SANS} font-size="12" fill={MID}>
+    <text x={chartLeft} y={axisLabelY} font-family={FONT_SANS} font-size="17.5" fill={MID}>
       0
     </text>
-    <text x={chartRight} y={axisLabelY} font-family={FONT_SANS} font-size="12" fill={MID} text-anchor="end">
+    <text x={chartRight} y={axisLabelY} font-family={FONT_SANS} font-size="17.5" fill={MID} text-anchor="end">
       {maxVal} TWh
     </text>
 
     {/* Caption — editorial sentence baked into the SVG so the saved image
         carries the rule. Soft-wrapped to two lines when long enough. */}
-    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+    <text x={padX} y={captionY} font-family={FONT_SERIF} font-size="21" fill={INK} font-style="italic">
       {captionLine1}
     </text>
     {captionLine2 && (
-      <text x={padX} y={captionY + 18} font-family={FONT_SERIF} font-size="14" fill={INK} font-style="italic">
+      <text x={padX} y={captionY + 26} font-family={FONT_SERIF} font-size="21" fill={INK} font-style="italic">
         {captionLine2}
       </text>
     )}
