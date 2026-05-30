@@ -6,8 +6,23 @@ interface Props {
   title: string;
   description?: string;
   wide?: boolean;
+  /**
+   * Per-page social-share image. Path relative to the deployed site
+   * (e.g. "/og-card.png"). Defaults to the site-wide card. Pages that
+   * want their own preview (e.g. /comparisons with a specific framing)
+   * can override.
+   */
+  ogImage?: string;
 }
-const { title, description, wide = false } = Astro.props;
+const { title, description, wide = false, ogImage = "/og-card.png" } = Astro.props;
+
+// Astro.site is set in astro.config.mjs. When deploying to a custom domain,
+// updating Astro.site there automatically threads through every absolute URL
+// on the page — no Layout.astro change needed.
+const siteUrl = Astro.site ?? new URL("https://ai-environmental-impact-comparisons.vercel.app");
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const absoluteOgImage = new URL(ogImage, siteUrl).toString();
+const siteName = "AI Environmental Impact Comparisons";
 ---
 
 <!doctype html>
@@ -15,8 +30,34 @@ const { title, description, wide = false } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {description && <meta name="description" content={description} />}
     <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* Favicons */}
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f4ede0" />
+
+    {/* Open Graph — used by Slack, iMessage, Discord, LinkedIn, etc. */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="AI Environmental Impact · Comparisons — side-by-side context for AI's energy and water use" />
+
+    {/* Twitter / X */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={absoluteOgImage} />
+    <meta name="twitter:image:alt" content="AI Environmental Impact · Comparisons — side-by-side context for AI's energy and water use" />
   </head>
   <body>
     <header class="site-mast">
