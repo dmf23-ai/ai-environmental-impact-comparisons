@@ -1,5 +1,17 @@
 # Handoff
 
+> **CARRY-OVER NOTE (2026-05-30 afternoon) — Chart SVG text-size sweep.** David surfaced this after deploying the lossy-quantization commit and reading Chapter II on desktop: every Infographic chart's internal text (axis labels, bar labels, value annotations) renders 15-20% smaller than designed because the Reading-C plate layout puts each chart into a ~580px-wide right column while every Infographic's SVG keeps viewBox W=720. The SVG scales down on render and so does its text: 14px baked labels render at ~11-12px visual pixels, against Cardo body at 18px. The charts are the site's primary deliverable; this is the highest-leverage open item.
+>
+> **Approach.** Audit all 8 `Infographic*.astro` components for `<text font-size="...">` declarations. Two viable fixes:
+>  1. Bump baked font-sizes ~30-40% (e.g. 14 → 18 or 19 for axis/bar labels, 11 → 14 for verified stamps). Per-chart eyeballing needed because some bar labels are tight against bars.
+>  2. Reduce the SVG viewBox W (e.g. W=720 → W=560), so the SVG renders at closer to 1:1 in the new ~580px column and existing baked sizes hit their intended visual scale. Less invasive to internal layout math but moves coord-space for every annotation.
+>
+> Option 1 is more surgical; Option 2 is more uniform. The /comparisons page plates use ComparisonPlate which may have a different chart-column width; check whether the same fix applies there or whether ComparisonPlate's chart canvas is already wide enough to render the SVG at 1:1.
+>
+> **Composes with** [[feedback_prose_deference]] — the chart IS the primary content, prose just connects. If the chart text is too small to read, the prose can't compensate. **And** [[feedback_critique_after_structure]] — this is the kind of design-fallout issue that surfaces only after the structural Reading-C work landed; a focused session works through all 8 charts in one pass rather than fixing one chart in isolation.
+>
+> ---
+
 > **AUTONOMOUS SESSION 8 CLOSEOUT — POLISH SWEEP COMPLETE (2026-05-30 mid-morning, scheduled task `ai-impact-autonomous-resume-4` fired).** Session resumed at 10% budget after session 7's SEO/social-preview push; closed at 46% having walked the top four queued items. The remaining queue is David-gated or design-judgment work; not scheduling resume-5.
 >
 > **Commits this session:**
