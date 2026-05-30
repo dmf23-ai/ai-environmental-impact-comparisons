@@ -2,30 +2,48 @@
 interface Source {
   name: string;
   url: string;
+  /** Short label rendered in the compact source line (e.g. "IEA", "LBNL"). */
+  abbrev?: string;
 }
 interface Props {
   sources: Source[];
   lastVerified: string;
   methodsAnchor?: string;
   /**
-   * Optional short attribution text shown in place of the long linked
-   * source list. When provided, only this compact line is rendered
-   * (e.g. "Sources: IEA, LBNL, EIA, Cambridge CCAF.") plus the verified
-   * stamp and the "how this was calculated" link. The full clickable
-   * source names live on /methods for now (eventually the link will open
-   * an in-page popup).
+   * When true, render the compact one-line attribution: every source as
+   * its `abbrev` (or the first word of its `name`), wrapped in a link to
+   * the source URL. Full clickable names live on /methods. The "How this
+   * was calculated →" link below routes there until it becomes a popup.
    */
-  shortText?: string;
+  compact?: boolean;
 }
-const { sources, lastVerified, methodsAnchor, shortText } = Astro.props;
+const { sources, lastVerified, methodsAnchor, compact = false } = Astro.props;
+
+function shortLabel(s: Source): string {
+  if (s.abbrev) return s.abbrev;
+  // Fallback: take part before em dash; else the first few words
+  const dashIdx = s.name.indexOf(" — ");
+  if (dashIdx > 0) return s.name.slice(0, dashIdx);
+  return s.name.split(",")[0].split(":")[0];
+}
 ---
 
 <footer class="source-line">
-  {shortText ? (
-    <p class="sources">{shortText}</p>
+  {compact ? (
+    <p class="sources">
+      <span class="prefix">Sources:</span>{" "}
+      {sources.map((s, i) => (
+        <>
+          <a href={s.url} target="_blank" rel="noopener noreferrer">
+            {shortLabel(s)}
+          </a>
+          {i < sources.length - 1 ? ", " : "."}
+        </>
+      ))}
+    </p>
   ) : (
     <p class="sources">
-      <span class="prefix">Sources:</span>
+      <span class="prefix">Sources:</span>{" "}
       {sources.map((s, i) => (
         <>
           <a href={s.url} target="_blank" rel="noopener noreferrer">

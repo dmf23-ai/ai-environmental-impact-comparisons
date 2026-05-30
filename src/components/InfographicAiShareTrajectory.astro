@@ -163,7 +163,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
         />
         <text
           x={xFor(p.year) + 10}
-          y={yFor(p.value) - 8}
+          y={yFor(p.value) - 18}
           font-family={FONT_SANS}
           font-size="16"
           fill={INK}
@@ -173,7 +173,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
         </text>
         <text
           x={xFor(p.year) + 10}
-          y={yFor(p.value) + 6}
+          y={yFor(p.value) + 16}
           font-family={FONT_SANS}
           font-size="15"
           fill={DIM}
@@ -257,7 +257,7 @@ const verifiedStamp = `Last verified ${data.last_verified} · ai-environmental-i
       </g>
     ))}
   </svg>
-  <SourceLine sources={data.sources} lastVerified={data.last_verified} methodsAnchor={data.anchor} shortText={sourceShort} />
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} methodsAnchor={data.anchor} compact />
 </figure>
 
 <style>

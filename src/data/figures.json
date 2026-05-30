@@ -38,19 +38,23 @@
     "sources": [
       {
         "name": "U.S. EPA - Greenhouse Gas Emissions from a Typical Passenger Vehicle",
-        "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle"
+        "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle",
+        "abbrev": "U.S. EPA"
       },
       {
         "name": "Epoch AI - How much energy does ChatGPT use?",
-        "url": "https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use"
+        "url": "https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use",
+        "abbrev": "Epoch AI"
       },
       {
         "name": "Carbon Trust - Carbon impact of video streaming",
-        "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming"
+        "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming",
+        "abbrev": "Carbon Trust"
       },
       {
         "name": "Lawrence Berkeley National Laboratory - Taming the Energy Use of Gaming Computers",
-        "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+        "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers",
+        "abbrev": "LBNL"
       }
     ],
     "last_verified": "2026-05-16"
@@ -100,15 +104,18 @@
       "sources": [
         {
           "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
-          "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf"
+          "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf",
+          "abbrev": "GCSAA"
         },
         {
           "name": "R&A — Global Golf Participation Report 2024",
-          "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf"
+          "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf",
+          "abbrev": "R&A"
         },
         {
           "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
-          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf"
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf",
+          "abbrev": "LBNL"
         }
       ],
       "last_verified": "2026-05-02"
@@ -135,11 +142,13 @@
       "sources": [
         {
           "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
-          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers",
+          "abbrev": "LBNL"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -166,15 +175,18 @@
       "sources": [
         {
           "name": "IEA — The carbon footprint of streaming video: fact-checking the headlines",
-          "url": "https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines"
+          "url": "https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines",
+          "abbrev": "IEA"
         },
         {
           "name": "Carbon Trust — Carbon impact of video streaming",
-          "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming"
+          "url": "https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming",
+          "abbrev": "Carbon Trust"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -200,11 +212,13 @@
       "sources": [
         {
           "name": "EPA — Inventory of U.S. Greenhouse Gas Emissions and Sinks",
-          "url": "https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks"
+          "url": "https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks",
+          "abbrev": "EPA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -238,11 +252,13 @@
       "sources": [
         {
           "name": "EPA WaterSense — Outdoors / Statistics & Facts",
-          "url": "https://www.epa.gov/watersense/outdoors"
+          "url": "https://www.epa.gov/watersense/outdoors",
+          "abbrev": "EPA WaterSense"
         },
         {
           "name": "Lawrence Berkeley National Laboratory — 2024 U.S. Data Center Energy Usage Report",
-          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf"
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf",
+          "abbrev": "LBNL"
         }
       ],
       "last_verified": "2026-05-16"
@@ -268,11 +284,13 @@
       "sources": [
         {
           "name": "EIA — Use of Electricity / Electric Power Annual",
-          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php",
+          "abbrev": "EIA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -298,11 +316,13 @@
       "sources": [
         {
           "name": "IEA — Aviation",
-          "url": "https://www.iea.org/energy-system/transport/aviation"
+          "url": "https://www.iea.org/energy-system/transport/aviation",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -333,15 +353,18 @@
       "sources": [
         {
           "name": "IEA — Cement",
-          "url": "https://www.iea.org/energy-system/industry/cement"
+          "url": "https://www.iea.org/energy-system/industry/cement",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Iron and Steel",
-          "url": "https://www.iea.org/energy-system/industry/steel"
+          "url": "https://www.iea.org/energy-system/industry/steel",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -367,11 +390,13 @@
       "sources": [
         {
           "name": "UN FAO — Tackling Climate Change Through Livestock",
-          "url": "https://www.fao.org/4/i3437e/i3437e.pdf"
+          "url": "https://www.fao.org/4/i3437e/i3437e.pdf",
+          "abbrev": "UN FAO"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -397,11 +422,13 @@
       "sources": [
         {
           "name": "EIA — Residential Energy Consumption Survey (RECS), 2020",
-          "url": "https://www.eia.gov/consumption/residential/"
+          "url": "https://www.eia.gov/consumption/residential/",
+          "abbrev": "EIA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -427,11 +454,13 @@
       "sources": [
         {
           "name": "IEA — Global EV Outlook 2025: Outlook for Energy Demand",
-          "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand"
+          "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-03"
@@ -458,15 +487,18 @@
       "sources": [
         {
           "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
-          "url": "https://ccaf.io/cbnsi/cbeci"
+          "url": "https://ccaf.io/cbnsi/cbeci",
+          "abbrev": "Cambridge CCAF"
         },
         {
           "name": "Digiconomist — Bitcoin Energy Consumption Index",
-          "url": "https://digiconomist.net/bitcoin-energy-consumption"
+          "url": "https://digiconomist.net/bitcoin-energy-consumption",
+          "abbrev": "Digiconomist"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -492,11 +524,13 @@
       "sources": [
         {
           "name": "EPA — National Emissions from Lawn and Garden Equipment (Banks)",
-          "url": "https://www.epa.gov/sites/default/files/2015-09/documents/banks.pdf"
+          "url": "https://www.epa.gov/sites/default/files/2015-09/documents/banks.pdf",
+          "abbrev": "EPA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -522,11 +556,13 @@
       "sources": [
         {
           "name": "U.S. Department of Energy / EIA — 2008 holiday lighting estimate (cited via Center for Global Development)",
-          "url": "https://www.cgdev.org/blog/us-holiday-lights-use-more-electricity-el-salvador-does-year"
+          "url": "https://www.cgdev.org/blog/us-holiday-lights-use-more-electricity-el-salvador-does-year",
+          "abbrev": "U.S. Department of Energy / EIA"
         },
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-16"
@@ -579,23 +615,28 @@
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         },
         {
           "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
-          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers",
+          "abbrev": "LBNL"
         },
         {
           "name": "IEA — Global EV Outlook 2025: Outlook for Energy Demand",
-          "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand"
+          "url": "https://www.iea.org/reports/global-ev-outlook-2025/outlook-for-energy-demand",
+          "abbrev": "IEA"
         },
         {
           "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
-          "url": "https://ccaf.io/cbnsi/cbeci"
+          "url": "https://ccaf.io/cbnsi/cbeci",
+          "abbrev": "Cambridge CCAF"
         },
         {
           "name": "EIA — Use of Electricity / Electric Power Annual",
-          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php",
+          "abbrev": "EIA"
         }
       ],
       "last_verified": "2026-05-03"
@@ -645,15 +686,18 @@
       "sources": [
         {
           "name": "GCSAA Golf Course Environmental Profile (Phase 4) — Water Use & Management Practices",
-          "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf"
+          "url": "https://www.gcsaa.org/docs/default-source/what-we-do/gcep-phase-4-water-report.pdf",
+          "abbrev": "GCSAA"
         },
         {
           "name": "R&A — Global Golf Participation Report 2024",
-          "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf"
+          "url": "https://assets.randa.org/c42c7bf4-dca7-00ea-4f2e-373223f80f76/53c40191-17dc-4a7b-8767-b9f582d6607c/The%20R&A%20Global%20Golf%20Participation%202024.pdf",
+          "abbrev": "R&A"
         },
         {
           "name": "Lawrence Berkeley National Laboratory — 2024 United States Data Center Energy Usage Report",
-          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf"
+          "url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report.pdf",
+          "abbrev": "LBNL"
         }
       ],
       "last_verified": "2026-05-02"
@@ -734,19 +778,23 @@
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
-          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Data centre electricity use surged in 2025 (April 2026)",
-          "url": "https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions"
+          "url": "https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions",
+          "abbrev": "IEA"
         },
         {
           "name": "Goldman Sachs — AI to drive 165% increase in data center power demand by 2030",
-          "url": "https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030"
+          "url": "https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030",
+          "abbrev": "Goldman Sachs"
         }
       ],
       "last_verified": "2026-05-03"
@@ -807,11 +855,13 @@
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
-          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-04"
@@ -867,27 +917,33 @@
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
-          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+          "abbrev": "IEA"
         },
         {
           "name": "Goldman Sachs — AI to drive 165% increase in data center power demand by 2030",
-          "url": "https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030"
+          "url": "https://www.goldmansachs.com/insights/articles/ai-to-drive-165-increase-in-data-center-power-demand-by-2030",
+          "abbrev": "Goldman Sachs"
         },
         {
           "name": "EIA — Use of Electricity / Electric Power Annual",
-          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php",
+          "abbrev": "EIA"
         },
         {
           "name": "Cambridge Centre for Alternative Finance — Bitcoin Electricity Consumption Index (CBECI)",
-          "url": "https://ccaf.io/cbnsi/cbeci"
+          "url": "https://ccaf.io/cbnsi/cbeci",
+          "abbrev": "Cambridge CCAF"
         },
         {
           "name": "Lawrence Berkeley National Laboratory — Taming the Energy Use of Gaming Computers",
-          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers"
+          "url": "https://datacenters.lbl.gov/publications/taming-energy-use-gaming-computers",
+          "abbrev": "LBNL"
         }
       ],
       "last_verified": "2026-05-03"
@@ -910,15 +966,18 @@
       "sources": [
         {
           "name": "IEA — Energy and AI: Energy Demand from AI",
-          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai"
+          "url": "https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai",
+          "abbrev": "IEA"
         },
         {
           "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
-          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+          "abbrev": "IEA"
         },
         {
           "name": "U.S. EPA — Greenhouse Gas Emissions from a Typical Passenger Vehicle",
-          "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle"
+          "url": "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle",
+          "abbrev": "U.S. EPA"
         }
       ],
       "last_verified": "2026-05-04"
@@ -972,16 +1031,18 @@
       ],
       "axis_min_twh": 1e-09,
       "axis_max_twh": 10000,
-      "caption": "Each rung is a thousand times the one before.",
+      "caption": "Each step is a thousand times the one before.",
       "summary": "The site's headline figures live between 30 and 1,550 TWh — clustered near the right edge of this scale. AI in 2024 (30–80 TWh) sits closer to a single TWh than to the global data-center total. The data-center total (460 TWh) and U.S. residential electricity (1,550 TWh) close out the right end.",
       "sources": [
         {
           "name": "EIA — Use of Electricity / Electric Power Annual",
-          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php"
+          "url": "https://www.eia.gov/energyexplained/electricity/use-of-electricity.php",
+          "abbrev": "EIA"
         },
         {
           "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
-          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-07"
@@ -1026,32 +1087,38 @@
       },
       "x_min_tco2": 0.1,
       "x_max_tco2": 100000000,
-      "caption": "Dots are individual training events; the bar is one year of all AI inference combined. The x-axis steps by ten.",
+      "caption": "Each dot is one model's training; the bar is a year of every AI prompt. The bar runs roughly a thousand times the heaviest training event.",
       "summary": "Five published training emissions sit between 0.65 and 6,300 tCO₂ each. A single year of all AI inference sits between 8 and 27 million tCO₂ — roughly 1,300 to 4,000 times the largest training event on the chart. The 'but training is huge' framing stops working at 2024 scale.",
       "sources": [
         {
           "name": "Strubell et al. 2019 — Energy and Policy Considerations for Deep Learning in NLP",
-          "url": "https://arxiv.org/abs/1906.02243"
+          "url": "https://arxiv.org/abs/1906.02243",
+          "abbrev": "Strubell 2019"
         },
         {
           "name": "Patterson et al. 2022 — Carbon Emissions and Large Neural Network Training",
-          "url": "https://arxiv.org/abs/2104.10350"
+          "url": "https://arxiv.org/abs/2104.10350",
+          "abbrev": "Patterson 2022"
         },
         {
           "name": "BigScience — Estimating the Carbon Footprint of BLOOM",
-          "url": "https://arxiv.org/abs/2211.02001"
+          "url": "https://arxiv.org/abs/2211.02001",
+          "abbrev": "BigScience"
         },
         {
           "name": "Meta — Llama 2: Open Foundation and Fine-Tuned Chat Models",
-          "url": "https://arxiv.org/abs/2307.09288"
+          "url": "https://arxiv.org/abs/2307.09288",
+          "abbrev": "Meta"
         },
         {
           "name": "Meta — The Llama 3 Herd of Models",
-          "url": "https://arxiv.org/abs/2407.21783"
+          "url": "https://arxiv.org/abs/2407.21783",
+          "abbrev": "Meta"
         },
         {
           "name": "IEA — Key Questions on Energy and AI (April 2026 update)",
-          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary"
+          "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+          "abbrev": "IEA"
         }
       ],
       "last_verified": "2026-05-07"

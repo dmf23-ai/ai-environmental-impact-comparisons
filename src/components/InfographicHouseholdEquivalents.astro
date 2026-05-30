@@ -48,7 +48,7 @@ const barH = 18;
 
 // Extra vertical breathing room around the ACTUAL/PROJECTED hairline so the
 // labels don't crowd the adjacent bar labels.
-const boundaryGap = 26;
+const boundaryGap = 64;
 
 // TWh -> millions of households at the data file's per-household constant.
 const TWH_TO_MWH = 1_000_000;
@@ -315,7 +315,7 @@ const RULE = "#ddd2bd";
       {fmtHH(maxVal)}
     </text>
   </svg>
-  <SourceLine sources={data.sources} lastVerified={data.last_verified} methodsAnchor={data.anchor} shortText={sourceShort} />
+  <SourceLine sources={data.sources} lastVerified={data.last_verified} methodsAnchor={data.anchor} compact />
 </figure>
 
 <style>

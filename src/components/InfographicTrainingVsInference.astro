@@ -119,7 +119,7 @@ const infRowBarCenterY = infRowTop + dotOffset;
 const axisLineY = infRowTop + rowPitch + 4;
 const tickLabelY = axisLineY + 16;
 
-const captionY = tickLabelY + 26;
+const captionY = tickLabelY + 44;
 const footerRuleY = captionY + 22 + captionLine2H;
 const sourceLineY = footerRuleY + 22;
 const verifiedLineY = sourceLineY + 22;
@@ -245,7 +245,7 @@ const infXHigh = xFromTco2(data.inference.high_tco2);
   <SourceLine
     sources={data.sources}
     lastVerified={data.last_verified}
-    methodsAnchor={data.anchor} shortText={sourceShort} />
+    methodsAnchor={data.anchor} compact />
 </figure>
 
 <style>
