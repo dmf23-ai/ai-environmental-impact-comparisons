@@ -1,5 +1,20 @@
 # Handoff
 
+> **MUCHA REDESIGN COMPLETE (2026-05-29 evening).** The masthead RGBA conversion landed in `7a7de69 assets: masthead-strip RGBA — alpha-keyed from RGB output` after David ran the in-sandbox alpha-keying pipeline on the RGB output ChatGPT produced (alpha derived from per-pixel distance-from-white: `dist <= 5 -> alpha=0`, `dist >= 30 -> alpha=255`, linear ramp between for anti-aliased edges). Live deploy verified visually — botanical sits on ivory paper with no bounding rectangle. Followed by `9dc92aa chore(ornaments): lossless PNG optimization via oxipng` shaving 203 KB across five of six ornaments (frame-side-left excluded; its source has an unusual chunk layout oxipng can't re-encode pixel-identically). Total ornament weight: 6.30 MB pre-redesign-close → 5.79 MB now. All ornaments are RGBA with real alpha.
+>
+> **What's still deferred:** further compression beyond lossless. The five lossless-optimized ornaments hit a plateau at oxipng level=6 (zopfli pass timed out in sandbox); meaningful additional savings would require either pngquant lossy quantization at quality=90+ (carries small risk of botanical-edge degradation and should be eyeballed before commit) or SVG-conversion of the simpler ornaments (cartouche-frame and the side-botanicals are plausible candidates if a clean SVG path can be derived from the raster). Both belong to a focused future session, not autonomous mode.
+>
+> **What's pending — David's local actions:**
+>
+> - **Before any git command:** `Remove-Item .git\index.lock, .git\HEAD.lock, .git\refs\heads\main.lock -ErrorAction SilentlyContinue`. Zero-byte phantom `.git/index.lock` is still present from sandbox commits.
+> - **`git reset` then `git push origin main`.** The reset resyncs the stale `.git/index` so the 5 optimized PNGs stop showing as `MM` in status. Push covers `9dc92aa` (lossless optimization) plus this handoff update commit.
+> - `astro.config.build.mjs` (sandbox build config) remains safe to delete locally — not used by Vercel.
+> - Three files (`authorial_voice.md`, `user_profile.md`, `src/data/snapshots/iea-ev-outlook-2025.html`) continue to sit unstaged on purpose.
+>
+> The redesign as scoped is done: ornate Art Nouveau imprint with click-to-expand popups, six paired chapters, asymmetric magazine-spread plates, interludes, ornate cartouches, side botanicals, masthead and footer botanicals, /comparisons redesign in the same vocabulary, accessibility (aria-haspopup + aria-expanded + aria-modal), prose audits clean, all ornaments alpha-correct. Phase 8 PNG compression and Phase 9+ work (custom domain, /methods polish, mobile pass beyond what's in) queue for future focused sessions.
+>
+> ---
+
 > **AUTONOMOUS RUN 4 — ACCESSIBILITY + POLISH (2026-05-29).** David flagged that stopping at 41% session use after the figcaption fix was too narrow a read of autonomous mode — finishing the scoped task ≠ project complete; the queued-phase list still had real work. Resumed and finished the genuinely-actionable items.
 >
 > **Commit (this run):** to follow — `fb59351`. Single push needed: `git push origin main` after the commit lands.
