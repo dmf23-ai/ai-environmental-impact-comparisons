@@ -30,7 +30,7 @@ const { subject, kicker, value, unit, caption, italic, popupId } = Astro.props;
 
 <OrganicFrame sideLeft sideRight>
   <div class="plate">
-    <aside class="plate-annotation">
+    <aside class="plate-annotation" aria-label={kicker}>
       <p class="plate-kicker">{kicker}</p>
       {popupId ? (
         <OrnatePopupTrigger popupId={popupId} as="cartouche" label={`Open detail for ${kicker}`}>
