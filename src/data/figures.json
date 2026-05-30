@@ -660,24 +660,24 @@
           "confidence": "medium-high"
         },
         {
-          "label": "Global data centers — including electricity-generation water, 2025",
+          "label": "Global data centers — with power-plant water, 2025",
           "value_low": 500,
           "value_high": 700,
           "confidence": "low-medium"
         },
         {
-          "label": "U.S. data centers — including electricity-generation water, 2023",
+          "label": "U.S. data centers — with power-plant water, 2023",
           "value": 211,
           "confidence": "high"
         },
         {
-          "label": "Global data centers — direct cooling only, 2025",
+          "label": "Global data centers — cooling only, 2025",
           "value_low": 45,
           "value_high": 90,
           "confidence": "medium-low"
         },
         {
-          "label": "U.S. data centers — direct cooling only, 2023",
+          "label": "U.S. data centers — cooling only, 2023",
           "value": 17,
           "confidence": "high"
         }
