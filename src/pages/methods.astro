@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import SourceLine from "../components/SourceLine.astro";
 import figuresData from "../data/figures.json";
+import SubjectMarker from "../components/SubjectMarker.astro";
 
 const title = "How the figures were calculated — AI Environmental Impact";
 const description =
@@ -51,7 +52,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="hourly-hero">
     <p class="display-where">Home page hero</p>
-    <h2>Per-hour CO₂ comparison</h2>
+    <h2 class="method-h2-with-marker">Per-hour CO₂ comparison<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       The hourly hero shows five activities arranged by grams of CO₂
@@ -220,7 +221,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
   </section>
   <section class="method-section" id="annual-twh">
     <p class="display-where">Home page infographic</p>
-    <h2>How big is AI, really?</h2>
+    <h2 class="method-h2-with-marker">How big is AI, really?<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       The annual-TWh chart shows six categories of global electricity use
@@ -339,7 +340,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="water-bracket">
     <p class="display-where">Home page infographic</p>
-    <h2>Are AI data centers thirstier than golf courses?</h2>
+    <h2 class="method-h2-with-marker">Are AI data centers thirstier than golf courses?<SubjectMarker subject="water" size={24} /></h2>
 
     <p>
       The water-bracket chart sets four data-center bars (two boundaries
@@ -456,7 +457,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="dc-trajectory">
     <p class="display-where">Home page infographic</p>
-    <h2>Data-center electricity, 2017 to 2030</h2>
+    <h2 class="method-h2-with-marker">Data-center electricity, 2017 to 2030<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       The trajectory chart plots global data-center electricity in
@@ -572,7 +573,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="ai-share-trajectory">
     <p class="display-where">Home page infographic</p>
-    <h2>AI's slice of data-center electricity</h2>
+    <h2 class="method-h2-with-marker">AI's slice of data-center electricity<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This chart plots AI workloads inside global data centers from
@@ -679,7 +680,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="household-equivalents">
     <p class="display-where">Home page infographic</p>
-    <h2>Data-center electricity, in household-years</h2>
+    <h2 class="method-h2-with-marker">Data-center electricity, in household-years<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This chart converts terawatt-hours into a unit most readers have
@@ -808,7 +809,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="watt-scale-primer">
     <p class="display-where">Home page infographic</p>
-    <h2>The watt-scale primer</h2>
+    <h2 class="method-h2-with-marker">The watt-scale primer<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       The site's headline figures run from a fraction of a TWh to a
@@ -907,7 +908,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="training-vs-inference">
     <p class="display-where">Home page infographic</p>
-    <h2>Where AI's carbon actually goes</h2>
+    <h2 class="method-h2-with-marker">Where AI's carbon actually goes<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       Public arguments about AI emissions often fixate on training. A
@@ -1058,7 +1059,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="water-residential-outdoor">
     <p class="display-where">Comparison card</p>
-    <h2>Water: U.S. residential outdoor use vs. AI data centers</h2>
+    <h2 class="method-h2-with-marker">Water: U.S. residential outdoor use vs. AI data centers<SubjectMarker subject="water" size={24} /></h2>
 
     <p>
       This card sets U.S. residential outdoor water use — lawns,
@@ -1157,7 +1158,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="water-vs-golf">
     <p class="display-where">Comparison card</p>
-    <h2>Water: AI data centers vs. U.S. golf courses</h2>
+    <h2 class="method-h2-with-marker">Water: AI data centers vs. U.S. golf courses<SubjectMarker subject="water" size={24} /></h2>
 
     <p>
       This card sets U.S. golf-course irrigation against the water that
@@ -1196,7 +1197,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-us-households">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: U.S. residential vs. global data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: U.S. residential vs. global data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets U.S. residential electricity consumption against
@@ -1233,7 +1234,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-ac">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: U.S. residential air conditioning vs. global data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: U.S. residential air conditioning vs. global data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets U.S. residential air conditioning against the
@@ -1314,7 +1315,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-holiday-lights">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: U.S. holiday lighting vs. global data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: U.S. holiday lighting vs. global data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets U.S. December holiday lighting against the global
@@ -1400,7 +1401,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-gaming">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: Global video gaming vs. data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: Global video gaming vs. data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets the global video-gaming ecosystem — consoles, PCs,
@@ -1437,7 +1438,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-streaming">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: Global video streaming vs. data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: Global video streaming vs. data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets the global video-streaming layer — Netflix, YouTube,
@@ -1495,7 +1496,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-bitcoin">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: Bitcoin mining vs. data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: Bitcoin mining vs. data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets Bitcoin's mining electricity against every data
@@ -1534,7 +1535,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="electricity-ev-charging">
     <p class="display-where">Comparison card</p>
-    <h2>Electricity: Global EV charging vs. data centers</h2>
+    <h2 class="method-h2-with-marker">Electricity: Global EV charging vs. data centers<SubjectMarker subject="electricity" size={24} /></h2>
 
     <p>
       This card sets electricity drawn by the world's electric vehicles
@@ -1572,7 +1573,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="co2-driving-vs-datacenters">
     <p class="display-where">Comparison card</p>
-    <h2>CO₂: U.S. driving vs. global data centers</h2>
+    <h2 class="method-h2-with-marker">CO₂: U.S. driving vs. global data centers<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       This card sets U.S. on-road transportation against the global
@@ -1673,7 +1674,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="co2-aviation">
     <p class="display-where">Comparison card</p>
-    <h2>CO₂: Global commercial aviation vs. data centers</h2>
+    <h2 class="method-h2-with-marker">CO₂: Global commercial aviation vs. data centers<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       This card sets global commercial aviation against the global
@@ -1754,7 +1755,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="co2-cement-steel">
     <p class="display-where">Comparison card</p>
-    <h2>CO₂: Global cement and steel vs. data centers</h2>
+    <h2 class="method-h2-with-marker">CO₂: Global cement and steel vs. data centers<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       This card sets two of the world's largest industrial emitters —
@@ -1844,7 +1845,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="co2-cattle">
     <p class="display-where">Comparison card</p>
-    <h2>CO₂: Global cattle (beef and dairy) vs. data centers</h2>
+    <h2 class="method-h2-with-marker">CO₂: Global cattle (beef and dairy) vs. data centers<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       This card sets the world's cattle herd — beef and dairy
@@ -1924,7 +1925,7 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
 
   <section class="method-section" id="co2-lawn-equipment">
     <p class="display-where">Comparison card</p>
-    <h2>Emissions: U.S. gas-powered lawn equipment vs. data centers</h2>
+    <h2 class="method-h2-with-marker">Emissions: U.S. gas-powered lawn equipment vs. data centers<SubjectMarker subject="carbon" size={24} /></h2>
 
     <p>
       This card sets U.S. gas-powered lawn and garden equipment —
@@ -2054,5 +2055,18 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
     .method-section h2 {
       font-size: 1.7rem;
     }
+  }
+
+  /* Subject-color marker placed inline at the right end of each
+     method-section heading, matching the home page's chapter-plate
+     visual vocabulary. */
+  .method-h2-with-marker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+  .method-h2-with-marker :global(.subject-marker) {
+    flex-shrink: 0;
   }
 </style>
