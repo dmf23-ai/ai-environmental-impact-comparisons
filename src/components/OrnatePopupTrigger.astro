@@ -6,6 +6,14 @@
 // For triggers whose visible text should look like prose (no button chrome),
 // pass `as="prose"` for an underlined inline button.
 //
+// Implementation note: this element is <div role="button"> rather than
+// <button> because the slotted children include block-level elements
+// (ChapterPlate's annotation column, ComparisonPlate's full card body).
+// The HTML spec forbids block content inside <button>; html-validate
+// flagged 22 such violations across home + comparisons. The OrnatePopup
+// controller adds a keydown handler so Enter and Space activate the
+// trigger exactly as they would on a native button.
+//
 // Example:
 //   <OrnatePopupTrigger popupId="how-the-hour-was-computed" as="cartouche">
 //     <NumericCartouche … />
@@ -20,8 +28,9 @@ interface Props {
 const { popupId, as = "bare", label } = Astro.props;
 ---
 
-<button
-  type="button"
+<div
+  role="button"
+  tabindex="0"
   class:list={["ornate-popup-trigger", `ornate-popup-trigger-${as}`]}
   data-popup-trigger={popupId}
   aria-haspopup="dialog"
@@ -29,4 +38,4 @@ const { popupId, as = "bare", label } = Astro.props;
   aria-label={label}
 >
   <slot />
-</button>
+</div>

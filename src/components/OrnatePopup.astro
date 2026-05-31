@@ -107,6 +107,23 @@
         }
       }
 
+      // Wire triggers — keyboard (Enter / Space) for role="button" divs.
+      // Native <button> elements would fire click on Enter and Space, but
+      // <div role="button"> doesn't; we add the equivalent here.
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+        var target = e.target;
+        if (!(target instanceof Element)) return;
+        var trigger = target.closest("[data-popup-trigger]");
+        if (!trigger || dialog.contains(trigger)) return;
+        // Skip native interactive elements — only handle role="button" divs.
+        if (trigger.tagName === "BUTTON" || trigger.tagName === "A") return;
+        e.preventDefault();
+        var id = trigger.getAttribute("data-popup-trigger");
+        var r = trigger.getBoundingClientRect();
+        openFor(id, r.left + r.width / 2, r.top + r.height / 2, trigger);
+      });
+
       // Wire triggers
       document.addEventListener("click", function (e) {
         var target = e.target;
