@@ -3,20 +3,98 @@
 // content attributes the OrnatePopup controller expects. The first heading
 // should carry id="popup-title-{popupId}" so aria-labelledby resolves.
 //
+// When `sources` is passed, the wrapper auto-renders a Sources section
+// at the bottom of the template with each source as a clickable link
+// using its full name. Pass `methodsAnchor` to also surface a
+// "Read full methodology on /methods →" deep-dive link below the sources.
+// This keeps the editorial summary prose in the popup but adds the
+// canonical source list the chart's footer points to.
+//
 // Example:
-//   <OrnatePopupContent popupId="how-the-hour-was-computed">
+//   <OrnatePopupContent popupId="year-ai" sources={data.sources} methodsAnchor="annual-twh">
 //     <p class="popup-kicker">Methodology</p>
-//     <h2 id="popup-title-how-the-hour-was-computed">The hour, in carbon</h2>
-//     <p>…detail…</p>
+//     <h2 id="popup-title-year-ai">AI's electricity, 2024</h2>
+//     <p>…summary prose…</p>
 //   </OrnatePopupContent>
 
+interface Source {
+  name: string;
+  url: string;
+  abbrev?: string;
+}
 interface Props {
   popupId: string;
+  sources?: Source[];
+  methodsAnchor?: string;
 }
 
-const { popupId } = Astro.props;
+const { popupId, sources, methodsAnchor } = Astro.props;
 ---
 
 <template data-popup-content={popupId}>
   <slot />
+  {sources && sources.length > 0 && (
+    <footer class="popup-source-list">
+      <p class="popup-source-heading">Sources</p>
+      <ul>
+        {sources.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener noreferrer">
+              {s.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+      {methodsAnchor && (
+        <p class="popup-methods-deeplink">
+          <a href={`/methods#${methodsAnchor}`}>Read full methodology on /methods →</a>
+        </p>
+      )}
+    </footer>
+  )}
 </template>
+
+<style is:global>
+  .popup-source-list {
+    margin-top: 1.5rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .popup-source-heading {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+  }
+  .popup-source-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .popup-source-list li {
+    margin: 0 0 0.4rem;
+    line-height: 1.5;
+  }
+  .popup-source-list a {
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.25);
+    text-underline-offset: 2px;
+  }
+  .popup-source-list a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+  .popup-methods-deeplink {
+    margin: 0.75rem 0 0;
+    font-style: italic;
+  }
+  .popup-methods-deeplink a {
+    color: var(--accent);
+  }
+</style>

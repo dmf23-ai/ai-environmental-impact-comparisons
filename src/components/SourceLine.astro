@@ -1,4 +1,6 @@
 ---
+import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+
 interface Source {
   name: string;
   url: string;
@@ -10,18 +12,24 @@ interface Props {
   lastVerified: string;
   methodsAnchor?: string;
   /**
+   * When set, the "How this was calculated →" link opens the named
+   * OrnatePopup template in-page instead of navigating to /methods. The
+   * /methods anchor is still rendered as a fallback link inside the popup
+   * for the deep-dive prose. Provide the existing per-chart popup id
+   * (e.g. "year-ai", "water-counting", "training-inference").
+   */
+  methodsPopupId?: string;
+  /**
    * When true, render the compact one-line attribution: every source as
-   * its `abbrev` (or the first word of its `name`), wrapped in a link to
-   * the source URL. Full clickable names live on /methods. The "How this
-   * was calculated →" link below routes there until it becomes a popup.
+   * its `abbrev` (or first word of its `name`), wrapped in a link to the
+   * source URL.
    */
   compact?: boolean;
 }
-const { sources, lastVerified, methodsAnchor, compact = false } = Astro.props;
+const { sources, lastVerified, methodsAnchor, methodsPopupId, compact = false } = Astro.props;
 
 function shortLabel(s: Source): string {
   if (s.abbrev) return s.abbrev;
-  // Fallback: take part before em dash; else the first few words
   const dashIdx = s.name.indexOf(" — ");
   if (dashIdx > 0) return s.name.slice(0, dashIdx);
   return s.name.split(",")[0].split(":")[0];
@@ -55,11 +63,17 @@ function shortLabel(s: Source): string {
     </p>
   )}
   <p class="verified">Last verified: <time datetime={lastVerified}>{lastVerified}</time></p>
-  {methodsAnchor && (
-    <p class="methods-link">
+  {methodsPopupId ? (
+    <div class="methods-link">
+      <OrnatePopupTrigger popupId={methodsPopupId} as="prose" label="How this was calculated">
+        How this was calculated →
+      </OrnatePopupTrigger>
+    </div>
+  ) : methodsAnchor ? (
+    <div class="methods-link">
       <a href={`/methods#${methodsAnchor}`}>How this was calculated →</a>
-    </p>
-  )}
+    </div>
+  ) : null}
 </footer>
 
 <style>
@@ -91,5 +105,15 @@ function shortLabel(s: Source): string {
   }
   .methods-link {
     margin-top: 0.45rem;
+  }
+  /* The popup trigger inside the methods-link line should read as plain
+     text with our soft underline, matching the other source-line links. */
+  .methods-link :global(.ornate-popup-trigger-prose) {
+    color: var(--ink-soft);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  .methods-link :global(.ornate-popup-trigger-prose:hover) {
+    color: var(--accent);
+    border-bottom-color: currentColor;
   }
 </style>

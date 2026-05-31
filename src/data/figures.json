@@ -57,7 +57,8 @@
         "abbrev": "LBNL"
       }
     ],
-    "last_verified": "2026-05-16"
+    "last_verified": "2026-05-16",
+    "methods_popup_id": "hour-driving"
   },
   "comparisons": [
     {
@@ -639,7 +640,8 @@
           "abbrev": "EIA"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-03",
+      "methods_popup_id": "year-ai"
     },
     {
       "id": "water-bracket",
@@ -700,7 +702,8 @@
           "abbrev": "LBNL"
         }
       ],
-      "last_verified": "2026-05-02"
+      "last_verified": "2026-05-02",
+      "methods_popup_id": "water-counting"
     },
     {
       "id": "dc-trajectory",
@@ -797,7 +800,8 @@
           "abbrev": "Goldman Sachs"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-03",
+      "methods_popup_id": "trajectory-dc"
     },
     {
       "id": "ai-share-trajectory",
@@ -864,7 +868,8 @@
           "abbrev": "IEA"
         }
       ],
-      "last_verified": "2026-05-04"
+      "last_verified": "2026-05-04",
+      "methods_popup_id": "trajectory-ai"
     },
     {
       "id": "household-equivalents",
@@ -946,7 +951,8 @@
           "abbrev": "LBNL"
         }
       ],
-      "last_verified": "2026-05-03"
+      "last_verified": "2026-05-03",
+      "methods_popup_id": "equiv-hh"
     },
     {
       "id": "range-vs-point-primer",
@@ -1045,7 +1051,8 @@
           "abbrev": "IEA"
         }
       ],
-      "last_verified": "2026-05-07"
+      "last_verified": "2026-05-07",
+      "methods_popup_id": "equiv-watt"
     },
     {
       "id": "training-vs-inference",
@@ -1121,7 +1128,8 @@
           "abbrev": "IEA"
         }
       ],
-      "last_verified": "2026-05-07"
+      "last_verified": "2026-05-07",
+      "methods_popup_id": "training-inference"
     }
   ]
 }

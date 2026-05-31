@@ -16,6 +16,26 @@ import InfographicAiShareTrajectory from "../components/InfographicAiShareTrajec
 import InfographicHouseholdEquivalents from "../components/InfographicHouseholdEquivalents.astro";
 import InfographicWattScalePrimer from "../components/InfographicWattScalePrimer.astro";
 import InfographicTrainingVsInference from "../components/InfographicTrainingVsInference.astro";
+import figuresData from "../data/figures.json";
+
+// Map popup id -> { sources, methodsAnchor } so each OrnatePopupContent
+// can render its auto-built clickable source list at the bottom. The
+// popup id values match data.methods_popup_id in figures.json.
+const popupLookup: Record<string, { sources: any[]; methodsAnchor: string }> = {};
+for (const ig of (figuresData as any).infographics) {
+  if (ig.methods_popup_id) {
+    popupLookup[ig.methods_popup_id] = {
+      sources: ig.sources,
+      methodsAnchor: ig.anchor,
+    };
+  }
+}
+if ((figuresData as any).hourly_impact?.methods_popup_id) {
+  popupLookup[(figuresData as any).hourly_impact.methods_popup_id] = {
+    sources: (figuresData as any).hourly_impact.sources,
+    methodsAnchor: "hourly-hero",
+  };
+}
 
 const title = "AI Environmental Impact Comparisons";
 const description =
@@ -231,7 +251,7 @@ const description =
        Popup content templates
        ============================================================ -->
 
-  <OrnatePopupContent popupId="hour-driving">
+  <OrnatePopupContent popupId="hour-driving" sources={popupLookup["hour-driving"]?.sources} methodsAnchor={popupLookup["hour-driving"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-hour-driving">Driving an hour, in carbon</h2>
     <p>
@@ -244,13 +264,9 @@ const description =
       and grid mix. The driving bar is, on the low end, three orders of
       magnitude larger.
     </p>
-    <p class="popup-sources">
-      Sources: EPA fuel-economy and emissions factors; IEA Energy and AI.
-      <a class="popup-methods-link" href="/methods#hourly-hero">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="year-ai">
+  <OrnatePopupContent popupId="year-ai" sources={popupLookup["year-ai"]?.sources} methodsAnchor={popupLookup["year-ai"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-year-ai">AI's electricity, 2024</h2>
     <p>
@@ -263,14 +279,9 @@ const description =
       stack that contains it is the second-shortest. U.S. residential is the
       reference bar — about 1,550 TWh.
     </p>
-    <p class="popup-sources">
-      Sources: IEA Energy and AI; LBNL data-center report; Goldman Sachs DC
-      outlook; EIA.
-      <a class="popup-methods-link" href="/methods#annual-twh">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="water-counting">
+  <OrnatePopupContent popupId="water-counting" sources={popupLookup["water-counting"]?.sources} methodsAnchor={popupLookup["water-counting"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-water-counting">Counting the power plants</h2>
     <p>
@@ -282,14 +293,9 @@ const description =
       The bracket on the chart shows both lines. Where you draw the boundary
       changes whether AI sits well below U.S. golf or roughly alongside it.
     </p>
-    <p class="popup-sources">
-      Sources: LBNL; IEA Energy and AI; EIA water-use estimates; GCSAA;
-      R&amp;A Global Golf Participation.
-      <a class="popup-methods-link" href="/methods#water-bracket">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="trajectory-dc">
+  <OrnatePopupContent popupId="trajectory-dc" sources={popupLookup["trajectory-dc"]?.sources} methodsAnchor={popupLookup["trajectory-dc"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-trajectory-dc">Data centers, IEA range</h2>
     <p>
@@ -302,14 +308,9 @@ const description =
       cooling improvements, and inference demand — all of which span wide
       ranges.
     </p>
-    <p class="popup-sources">
-      Sources: IEA Energy and AI; IEA Key Questions on Energy and AI (2026);
-      Goldman Sachs.
-      <a class="popup-methods-link" href="/methods#dc-trajectory">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="trajectory-ai">
+  <OrnatePopupContent popupId="trajectory-ai" sources={popupLookup["trajectory-ai"]?.sources} methodsAnchor={popupLookup["trajectory-ai"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-trajectory-ai">AI inside the line</h2>
     <p>
@@ -321,13 +322,9 @@ const description =
       The 2025 projection sits near 100 TWh. From there the fan opens fast
       and stays open through 2030.
     </p>
-    <p class="popup-sources">
-      Sources: IEA Energy and AI; IEA Key Questions on Energy and AI (2026).
-      <a class="popup-methods-link" href="/methods#ai-share-trajectory">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="equiv-watt">
+  <OrnatePopupContent popupId="equiv-watt" sources={popupLookup["equiv-watt"]?.sources} methodsAnchor={popupLookup["equiv-watt"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-equiv-watt">One terawatt-hour, translated</h2>
     <p>
@@ -340,13 +337,9 @@ const description =
       terawatt-hours. AI in 2024 sits at thirty to eighty of these. U.S.
       residential at 1,550.
     </p>
-    <p class="popup-sources">
-      Sources: EIA RECS; EIA Use of Electricity; IEA Energy and AI.
-      <a class="popup-methods-link" href="/methods#watt-scale-primer">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="equiv-hh">
+  <OrnatePopupContent popupId="equiv-hh" sources={popupLookup["equiv-hh"]?.sources} methodsAnchor={popupLookup["equiv-hh"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-equiv-hh">Global data centers, in households</h2>
     <p>
@@ -359,13 +352,9 @@ const description =
       the same axis. The conversion uses the same per-home figure as the
       primer: 11,700 kWh per home per year.
     </p>
-    <p class="popup-sources">
-      Sources: IEA Energy and AI; EIA RECS.
-      <a class="popup-methods-link" href="/methods#household-equivalents">How this was calculated →</a>
-    </p>
   </OrnatePopupContent>
 
-  <OrnatePopupContent popupId="training-inference">
+  <OrnatePopupContent popupId="training-inference" sources={popupLookup["training-inference"]?.sources} methodsAnchor={popupLookup["training-inference"]?.methodsAnchor}>
     <p class="popup-kicker">Methodology</p>
     <h2 id="popup-title-training-inference">A year of inference, in carbon</h2>
     <p>
@@ -377,11 +366,6 @@ const description =
       The five training-event dots — GPT-3 through Gemini Ultra — span four
       orders of magnitude beneath the bar. Most of AI's carbon shows up
       after the model ships.
-    </p>
-    <p class="popup-sources">
-      Sources: IEA Energy and AI; Cambridge CCAF; academic carbon-accounting
-      literature.
-      <a class="popup-methods-link" href="/methods#training-vs-inference">How this was calculated →</a>
     </p>
   </OrnatePopupContent>
 </Layout>
