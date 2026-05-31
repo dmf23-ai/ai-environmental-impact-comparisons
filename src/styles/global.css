@@ -17,17 +17,17 @@
   /* Color — ivory paper, warm ink, restrained botanical accents */
   --ink: #211d1b;
   --ink-soft: #4a3f3a;
-  --ink-faint: #8a7f78;
+  --ink-faint: #6a625a;
   --paper: #f4ede0;
   --paper-soft: #ebe2cf;
   --rule: #ddd2bd;
-  --accent: #a85a3a;
-  --accent-soft: rgba(168, 90, 58, 0.85);
+  --accent: #9a4f30;
+  --accent-soft: rgba(154, 79, 48, 0.85);
 
   /* Subject colors — tie charts to their topic without explicit labels */
   --subject-water: #3a6b75;        /* muted teal */
   --subject-electricity: #7a8c6a;  /* sage green */
-  --subject-carbon: #a85a3a;       /* terracotta/rust (same as default accent) */
+  --subject-carbon: #9a4f30;       /* terracotta/rust (same as default accent) */
 
   /* Typography — Cardo for body and display, Inter for chart labels and UI */
   --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont,
@@ -309,7 +309,7 @@ p {
 
 a {
   color: var(--accent);
-  text-decoration-color: rgba(168, 90, 58, 0.4);
+  text-decoration-color: rgba(154, 79, 48, 0.4);
   text-underline-offset: 2px;
 }
 a:hover {
@@ -496,10 +496,13 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
   justify-content: center;
   font-family: var(--font-sans);
 }
-.ornate-popup-close:hover,
+.ornate-popup-close:hover {
+  background: var(--paper-soft);
+}
 .ornate-popup-close:focus-visible {
   background: var(--paper-soft);
-  outline: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .ornate-popup-content {
@@ -572,6 +575,17 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
   outline-offset: 3px;
   border-radius: 4px;
 }
+/* Generic keyboard-focus indicator for any interactive element that
+   doesn't supply a more specific :focus-visible style. Uses the site's
+   warm-rust accent at AA-compliant contrast, with a small offset so the
+   ring sits visibly around the target rather than touching it. */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
 .ornate-popup-trigger-cartouche {
   display: block;
   width: 100%;
@@ -596,7 +610,7 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
   line-height: inherit;
 }
 .ornate-popup-trigger-prose:hover {
-  background: rgba(168, 90, 58, 0.06);
+  background: rgba(154, 79, 48, 0.06);
 }
 
 /* Mobile — popup goes near-full-bleed */
