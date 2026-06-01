@@ -29,3 +29,26 @@ Thumbs.db
 # verifier
 .verify-summary.json
 .pr-body.md
+
+# Claude autonomous-mode runtime artifacts (scripts ARE committed)
+.claude/github-pat.txt
+.claude/status.md
+.claude/work-log.jsonl
+.claude/halt
+.claude/screenshots/
+.claude/last-push-timestamp
+.claude/work-tree/
+
+# Sandbox-only astro build configs (Claude creates these during builds in /tmp)
+astro.config.a11y*.mjs
+astro.config.build*.mjs
+astro.config.buildf*.mjs
+astro.config.bumpcheck.mjs
+astro.config.dm.mjs
+astro.config.fbf.mjs
+astro.config.fbf*.mjs
+astro.config.pop2.mjs
+astro.config.popups.mjs
+astro.config.pr.mjs
+astro.config.pr2.mjs
+astro.config.r*.mjs

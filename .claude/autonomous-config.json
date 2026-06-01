@@ -1,0 +1,45 @@
+{
+  "_comment": "Tunable thresholds for Claude autonomous-mode. Safe to edit by hand between sessions.",
+  "repo": "dmf23-ai/ai-environmental-impact-comparisons",
+  "branch": "main",
+  "site_url": "https://ai-environmental-impact-comparisons.vercel.app",
+
+  "limits": {
+    "max_commits_per_session": 5,
+    "max_tool_calls_per_session": 80,
+    "max_commits_per_24h": 8,
+    "min_seconds_between_pushes": 90,
+    "usage_threshold_pct": 80,
+    "monthly_spend_throttle_pct": 60,
+    "monthly_spend_halt_pct": 85
+  },
+
+  "deploy_verification": {
+    "wait_seconds": 20,
+    "max_attempts": 6,
+    "check_paths": ["/", "/comparisons/", "/methods/"]
+  },
+
+  "memory": {
+    "consolidate_every_n_sessions": 10
+  },
+
+  "screenshots": {
+    "enabled": true,
+    "viewport_width": 1280,
+    "viewport_height": 900,
+    "regression_threshold_pct": 2.0,
+    "keep_days": 7
+  },
+
+  "judgment_call_defer_categories": [
+    "color palette token changes",
+    "new page sections or site structure",
+    "scope additions beyond existing queue",
+    "contested copy where multiple drafts feel equally valid",
+    "changes to authorial_voice.md or user_profile.md",
+    "custom domain decisions"
+  ],
+
+  "session_counter": 0
+}
