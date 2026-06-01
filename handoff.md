@@ -1,5 +1,32 @@
 # Handoff
 
+> **CARRY-OVER NOTE (2026-05-31 evening) — Home-page text revisions, approved.** David reviewed a table of rewrites for the home-page subheads, chapter intros, cartouche kickers, and several italic lines, and approved all proposals. The full table is captured outside the repo at `outputs/home-text-revisions.md` (do NOT need to re-derive — apply as written). This is the highest-priority next item: a single data + index.astro commit implementing every approved rewrite from that table.
+>
+> **Rewrites to apply** (location → proposed text):
+>
+> 1. **I.subhead** → `An hour of driving vs. an hour of AI chat — hundreds to thousands of times apart.`
+> 2. **I.intro** → `An hour of driving emits 14–18 kg of CO₂. An hour of AI chat sits between 5 grams and 50. The chart stacks every common hour-long activity on one axis so the gap reads at a glance.`
+> 3. **I.kicker** → `ONE HOUR OF DRIVING, IN CARBON`
+> 4. **II.intro** → `A bar chart of 2024 annual electricity, in terawatt-hours: AI workloads inside data centers, the full data-center stack, Bitcoin mining, EV charging, global gaming, and U.S. residential as the reference. AI is the shortest bar. U.S. residential is thirty times longer.`
+> 5. **II.kicker** → `AI'S 2024 ELECTRICITY`
+> 6. **III.intro** → `A bracketed bar chart of annual water use, in billions of U.S. gallons: U.S. and global golf courses, plus AI data centers shown two ways — cooling-tower water alone, then with the upstream power-plant water added in. The bracket shows how big the gap is.`
+> 7. **III.kicker** → `AI DATA CENTERS vs. GOLF, IN WATER`
+> 8. **IV.subhead** → `Data-center electricity from 2017 to 2030 — flat through 2018, then bent upward as AI scaled.`
+> 9. **IV.intro** → `Two paired line charts from 2017 to 2030, both in terawatt-hours. The first traces total global data-center electricity. The second is AI's share inside that line. Both bend upward after 2022; the IEA's 2030 ranges open into wide fans.`
+> 10. **IV-1.kicker** → `DATA CENTERS BY 2030`
+> 11. **IV-2.kicker** → `AI BY 2030`
+> 12. **IV-2.italic** → `From 65 TWh in 2024 to 200–400 TWh by 2030 — three to six times higher.`
+> 13. **V.intro** → `A primer first — what a terawatt-hour buys, walked from a single microwave-hour up to a thousand TWh. Then global data-center electricity recast as the number of U.S. households it would power for a year.`
+> 14. **V-1.italic** → `AI in 2024 used 30–80 TWh. U.S. residential: 1,550 TWh — the top rung.`
+> 15. **V.interlude.italic** → `Same axis, two ends: a microwave for an hour at the bottom, every data center on Earth by 2030 at the top.`
+> 16. **VI.intro** → `Five labeled dots, one per published training event (BERT, GPT-3, BLOOM, Llama 2, Llama 3), and one bar for a year of all AI inference combined. Same log scale, in tonnes of CO₂. The bar runs about a thousand times the heaviest training dot.`
+> 17. **VI.italic** → `One model's training run, once. A year of every AI prompt the world sent — a thousand times heavier.`
+> 18. **post.line** → `Every figure on this site is a range, not a single number. The primer below shows how a range gets drawn — what 'low' and 'high' mean, and why we leave the middle empty.`
+>
+> All other home-page strings David reviewed are unchanged. Items in `src/pages/index.astro` (kickers, intros, subheads, italics) + nothing in figures.json. Commit as one focused diff with the message `feat(home): text revisions — concretely name what each section shows`.
+>
+> ---
+
 > **SESSION 9 — CHART TEXT-SIZE SWEEP & VISUAL POLISH (2026-05-30, mid-day-and-evening, working with David).** Twelve commits over the day responding to David's running visual feedback on chart legibility and source presentation. Chart text-size sweep from the prior carry-over note is fully done.
 >
 > **Commits this session (oldest → newest):**
