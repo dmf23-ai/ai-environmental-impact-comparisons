@@ -1,3 +1,25 @@
+> **AUTONOMOUS RUN 4 — PAUSED CLOSE-OUT (2026-06-02 05:37 UTC).** Scheduled task `ai-impact-autonomous-4` fired on time. Pre-flight all green: no halt file, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at `ee0c674`, self-test ALL GREEN, no open pending questions (Q-01 and Q-02 both resolved last run — skip-link shipped as `ee491fb`, OrnatePopupTrigger queue item retired). STEP 0.4 usage check via Claude in Chrome: **100% used, resets in 3 hr 22 min** (Mon 4:00 AM local). 24h commit count from work-log is 5 of 8 cap — under cap, not the halt trigger this run.
+>
+> **Two close-out triggers fire:** paused-queue (autonomous-mode work is genuinely empty; only David-gated items remain — custom domain, anything new David adds) and usage threshold (100% >= 80%). Per protocol priority and the prior run's precedent, **paused wins** — rescheduling for 3h 27m from now (reset + 5min buffer) would produce a no-op session, so halt without next-run schedule is the correct stop signal. When David has new direction, manually rescheduling `ai-impact-autonomous-5` picks up identically from STEP 0.
+>
+> **Commits this session:** zero work commits (queue empty). Single closeout commit to follow touching only `handoff.md` (this block) + `.claude/work-log.jsonl` (run entry).
+>
+> **What's queued — same as prior closeout:**
+>
+> 1. **Custom domain + Astro.site update.** Single-line change to `astro.config.mjs` when David picks a domain.
+> 2. Anything new David decides to add.
+>
+> **Pending — David's local actions:**
+>
+> - `Remove-Item .git\index.lock, .git\HEAD.lock, .git\refs\heads\main.lock -ErrorAction SilentlyContinue` then `git reset` if the run-4 closeout commit phantom-modifies the index.
+> - No further autonomous tasks queued. When ready to revive autonomous mode for new work, reschedule manually.
+>
+> **Session budget at close:** 0 work commits (of 5 cap), ~13 tool calls (of 80 cap). Healthy on per-session limits.
+>
+> **Composes with** [[feedback_autonomous_completion_mode]], [[feedback_autonomous_walk_not_scope]] (the inverse: when the walked queue is genuinely empty across two consecutive runs, halting is correct), [[feedback_sandbox_git_workaround]], [[feedback_sandbox_lock_cleanup]].
+>
+> ---
+
 > **AUTONOMOUS RUN 3 — SECOND FIRING, PAUSED CLOSE-OUT (2026-06-02 05:28 UTC).** Scheduled task `ai-impact-autonomous-3` fired a second time (the first firing at 04:26Z opened the run; David's mid-session continuation and Q-01/Q-02 ack shipped four work commits + closeout `bb17842` before the same task entry triggered again). Pre-flight all green (no halt, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at `bb17842`, self-test ALL GREEN, no pending questions). STEP 0.4 usage check via Claude in Chrome: **100% used, resets in 3 hr 32 min** (Mon 4:00 AM local). 24h commit count is 8 of 8 cap (rolling window). Queue is empty for autonomous mode — only David-gated items remain (custom domain + anything new David adds).
 >
 > **Three close-out triggers fire simultaneously:** paused-queue, usage threshold, daily cap. Per protocol priority, **paused wins** because rescheduling produces no work to do. Halting without a next-run schedule. The pre-existing `ai-impact-autonomous-4` at 2026-06-02T05:35Z (~7 min from now) is still enabled and will fire its own no-op paused close-out independently — not cancelling from this session, matches the prior run's "cancellation in advance would be cleaner, but the run will close cleanly on its own" note.
