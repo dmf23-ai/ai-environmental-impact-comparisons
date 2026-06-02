@@ -80,6 +80,7 @@ const siteName = "AI Environmental Impact Comparisons";
     />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-mast">
       <a href="/" class="wordmark"
         >AI Environmental Impact <span class="dot">·</span> Comparisons</a
@@ -92,7 +93,7 @@ const siteName = "AI Environmental Impact Comparisons";
         fetchpriority="high"
       />
     </header>
-    <main class={wide ? "wide" : ""}>
+    <main id="main" class={wide ? "wide" : ""}>
       <slot />
     </main>
     <footer class="site-footer">

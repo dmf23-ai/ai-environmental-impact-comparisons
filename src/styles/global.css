@@ -586,6 +586,32 @@ button:focus-visible,
   outline-offset: 2px;
   border-radius: 3px;
 }
+
+/* Skip-to-main link — WCAG 2.4.1 "Bypass Blocks". Hidden offscreen until
+   it receives keyboard focus, at which point it slides into the top-left
+   corner. Rust-on-paper, reuses the generic focus-visible ring above. */
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.55rem 0.95rem;
+  background: var(--paper);
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  transform: translateY(-150%);
+  transition: transform 160ms ease-out;
+  z-index: 1000;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
 .ornate-popup-trigger-cartouche {
   display: block;
   width: 100%;
