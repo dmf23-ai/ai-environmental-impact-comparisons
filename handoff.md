@@ -1,3 +1,7 @@
+> **AUTONOMOUS RUN 1 — NO-OP, USAGE CAP (2026-06-02 03:03 UTC / 2026-06-01 20:03 PDT, scheduled task `ai-impact-autonomous-1` fired).** First autonomous run in the new chain. Pre-flight all green (no halt file, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at 01c32fe, self-test ALL GREEN, work-log.jsonl empty, no pending questions). Closed out at STEP 0.4 — claude.ai Plan-usage-limits panel reports **current session 100% used, resets in 57 min**. That trips the 80% `usage_threshold_pct` gate, which mandates close-out and resume after session-reset window + 5 min. Zero commits this session, zero pushes. Top-of-queue (home-page text revisions, 18 approved rewrites in `src/pages/index.astro`) is unchanged and still next. Next scheduled run targets 2026-06-02 04:05 UTC (21:05 PDT) — session reset (~04:00 UTC) plus the 5-min buffer the protocol calls for. Resume picks up from STEP 0 again; if usage clears, run 2 takes the text-revisions commit.
+>
+> ---
+
 # Handoff
 
 > **CARRY-OVER NOTE (2026-05-31 evening) — Home-page text revisions, approved.** David reviewed a table of rewrites for the home-page subheads, chapter intros, cartouche kickers, and several italic lines, and approved all proposals. The full table is captured outside the repo at `outputs/home-text-revisions.md` (do NOT need to re-derive — apply as written). This is the highest-priority next item: a single data + index.astro commit implementing every approved rewrite from that table.
