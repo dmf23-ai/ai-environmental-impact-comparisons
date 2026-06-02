@@ -1,3 +1,57 @@
+> **AUTONOMOUS RUN 3 — CONTINUATION (David walked-down authorization, 2026-06-02 04:35–04:50 UTC).** Mid-session David sent a follow-up: "proceed with in-place popup work, /methods polish, and ornament SVG conversion without any further input from me. Use your best judgment and assume I approve your recommendations for these specific items despite their having design elements." Stayed in autonomous mode, walked the three remaining queue items.
+>
+> **Findings on items 1 and 2 — both already shipped:**
+>
+> - **OrnatePopup → in-place "How this was calculated" popup.** Audited the live deploy. All 8 chart `SourceLine` instances render an `<OrnatePopupTrigger as="prose">` linked to per-chart popup ids via `data.methods_popup_id` (figures.json has the field on every chart that has a popup). `src/pages/index.astro` emits all 8 `<OrnatePopupContent>` templates with methodology prose, expanded source list (full names, clickable), and a "Read full methodology on /methods →" deep-dive link. Clicked one (`year-ai`) and confirmed it opens in-place. The infrastructure work David surfaced is fully done; the queue item can be retired.
+> - **/methods inline SubjectMarkers.** 22 of 23 H2s on /methods already carry `<SubjectMarker subject="…" size={24} />` with the correct subject classification (water / electricity / carbon). The one without a marker is "Why every figure here is a range" — the methodology meta-section, deliberately not tagged because it explains the range approach for all subjects rather than belonging to one. Already shipped in a prior session.
+>
+> **Item 3 — ornament SVG conversion, reframed and shipped as raster-resampling.**
+>
+> SVG conversion of the existing ornaments isn't viable: each PNG is a watercolor Mucha-style botanical illustration with brush-stroke character, color blending, and varied line weights. Autotrace would either (a) flatten the watercolor into solid shapes, losing the visual signature the redesign was built around, or (b) produce SVGs larger than the source PNGs (thousands of paths to approximate the brush detail).
+>
+> The next-best compression path was right-sizing each raster to roughly 2× its actual display dimensions (measured on the live deploy at 1920px viewport). Every ornament was oversized:
+>
+> - cartouche-frame.png:        184×123 display → source was 1536×1024 (8.3×); resampled to 480×320
+> - frame-side-left/right.png:  108×896 display → source 627×2508 (5.8×);  resampled to 256×1024
+> - footer-roundel-earth/landscape: 84×84 display → source 1254×1254 (15×); resampled to 256×256
+> - masthead-strip.png:         1278×80 display → source 5015×314 (3.9×);  resampled to 4096×256 (more conservative — above-the-fold, fetchpriority="high")
+>
+> Resampling pipeline: PIL LANCZOS downsample → FASTOCTREE 256-color palette quantize (matches the prior session-9 pngquant baseline). Visual spot-check on cartouche-frame + footer-roundel-earth confirmed watercolor character preserved.
+>
+> **Commit:** `a88998a perf(ornaments): right-size PNGs to 2x retina display dimensions — 1.16 MB → 414 KB (-64%)`. Touches only `public/ornaments/*.png` (6 files). Build gate green. Push first-attempt OK. Deploy verified live — natural sizes of all 6 imgs match the new dimensions; visual screenshots confirm masthead, cartouche, frame-sides, and footer roundels all render crisp.
+>
+> | file | before | after | save |
+> | --- | --- | --- | --- |
+> | cartouche-frame.png | 62 KB | 14 KB | -77% |
+> | footer-roundel-earth.png | 221 KB | 17 KB | -92% |
+> | footer-roundel-landscape.png | 237 KB | 18 KB | -92% |
+> | frame-side-left.png | 180 KB | 52 KB | -71% |
+> | frame-side-right.png | 194 KB | 56 KB | -71% |
+> | masthead-strip.png | 292 KB | 266 KB | -9% |
+> | **TOTAL** | **1188 KB** | **425 KB** | **-64%** |
+>
+> **Queue state after this run:**
+>
+> - In-place popup work: DONE (already shipped, confirmed live).
+> - /methods inline SubjectMarkers: DONE (22/23 H2s tagged, one intentionally untagged).
+> - Ornament weight reduction: DONE (right-sized raster path; SVG path retired as not viable).
+> - Q-01 (skip-link) and Q-02 (retire OrnatePopupTrigger structural rebuild) still open in pending-questions.md — neither is in scope of David's walk-down authorization, both still wait for explicit signoff.
+> - Custom domain + Astro.site update — still David-deferred until ready to share publicly.
+>
+> **Session budget at close:** 2 commits (of 5 cap: 723846e closeout + a88998a ornaments perf), ~65 tool calls (of 80 cap), claude.ai usage was 44% at session start — still well clear of the 80% gate. Healthy.
+>
+> **Pending — David's local actions before next push:**
+>
+> - `Remove-Item .git\index.lock, .git\HEAD.lock, .git\refs\heads\main.lock -ErrorAction SilentlyContinue` then `git reset` to resync the stale index.
+> - `astro.config.orn.mjs` sandbox build config safe to delete locally.
+> - The 6 ornament PNGs are now 64% lighter on disk — `git pull` will bring the optimized versions, then `git status` should be clean after the reset.
+>
+> **Next scheduled run:** ai-impact-autonomous-4 is still set for 2026-06-02T05:35Z. With items 1/2/3 of the queue now resolved, run-4's job is narrow: act on Q-01 or Q-02 if David has answered, else halt with "queue paused — David-gated items only" (the remaining true work is custom domain + any new direction).
+>
+> **Composes with** [[feedback_autonomous_completion_mode]], [[feedback_autonomous_walk_not_scope]] (queue items 1 + 2 were already done; finding that out and confirming live behavior is the right move rather than redoing them), [[feedback_sandbox_git_workaround]] (plumbing commit on the ornaments landed clean first try thanks to read-tree HEAD).
+>
+> ---
+
 > **AUTONOMOUS RUN 3 — DEEPER A11Y PASS, COLLECTION-ONLY (2026-06-02 04:30 UTC / 2026-06-01 21:30 PDT, scheduled task `ai-impact-autonomous-3` fired).** Session reset healthy (claude.ai reads 44% used, resets in 4 hr 38 min — well below the 80% gate). Pre-flight all green (no halt, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at `7f68307`, self-test ALL GREEN, no pending questions to act on). Top-of-queue was the deeper a11y pass — axe-core 4.10.0 injected via Claude in Chrome on the live deploy across `/`, `/comparisons/`, `/methods/`. **Zero serious or critical violations on any of the three pages.** The home page emits 144 `color-contrast` *incomplete* entries — all of which are "background contains an image node" (cartouche figure text, range-bar value labels, popup-trigger inner text), unverifiable by axe but with manually-computed foreground/background pairs that pass WCAG AA (rust `#9a4f30` on ivory `#f4ede0` = 5.01:1; ink `#211d1b` and ink-soft `#4a3f3a` well above AAA). `/comparisons/` and `/methods/` both clean of incompletes too.
 >
 > **Manual probes beyond axe** (collected for the findings file):
