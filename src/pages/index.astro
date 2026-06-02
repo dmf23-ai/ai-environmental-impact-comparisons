@@ -52,15 +52,16 @@ const description =
     <ChapterTitle
       number={1}
       title="The Hour"
-      headline="One hour, one person: where most claims wander furthest from the data."
+      headline="An hour of driving vs. an hour of AI chat — hundreds to thousands of times apart."
     />
     <p class="chapter-intro">
-      Driving an ordinary car for an hour. Sending prompts to AI for an hour.
-      The bars are not close.
+      An hour of driving emits 14–18 kg of CO₂. An hour of AI chat sits
+      between 5 grams and 50. The chart stacks every common hour-long
+      activity on one axis so the gap reads at a glance.
     </p>
     <ChapterPlate
       subject="carbon"
-      kicker="ONE HOUR, COMPARED"
+      kicker="ONE HOUR OF DRIVING, IN CARBON"
       value="14–18"
       unit="kg / hr"
       caption="CO₂ from ordinary driving"
@@ -79,12 +80,14 @@ const description =
       headline="Over a year, AI is still the shortest bar on the chart."
     />
     <p class="chapter-intro">
-      Bitcoin is larger. EV charging is larger. The data-center stack AI sits
-      inside runs six times the AI bar. U.S. homes run thirty.
+      A bar chart of 2024 annual electricity, in terawatt-hours: AI workloads
+      inside data centers, the full data-center stack, Bitcoin mining, EV
+      charging, global gaming, and U.S. residential as the reference. AI is
+      the shortest bar. U.S. residential is thirty times longer.
     </p>
     <ChapterPlate
       subject="electricity"
-      kicker="AI'S YEAR, IN CONTEXT"
+      kicker="AI'S 2024 ELECTRICITY"
       value="30–80"
       unit="TWh"
       caption="AI in data centers, 2024"
@@ -103,12 +106,14 @@ const description =
       headline="Direct cooling, or counting the power plants — the answer changes."
     />
     <p class="chapter-intro">
-      Lawns. Golf courses. The cooling towers AI runs through. The power
-      plants that feed them. Four scales of water on one axis.
+      A bracketed bar chart of annual water use, in billions of U.S. gallons:
+      U.S. and global golf courses, plus AI data centers shown two ways —
+      cooling-tower water alone, then with the upstream power-plant water
+      added in. The bracket shows how big the gap is.
     </p>
     <ChapterPlate
       subject="water"
-      kicker="WHERE THE LINE FALLS"
+      kicker="AI DATA CENTERS vs. GOLF, IN WATER"
       value="500–700"
       unit="Bgal / yr"
       caption="Global DC water, counting power"
@@ -124,15 +129,17 @@ const description =
     <ChapterTitle
       number={4}
       title="The Trajectory"
-      headline="The line was flat through 2018, then it bent."
+      headline="Data-center electricity from 2017 to 2030 — flat through 2018, then bent upward as AI scaled."
     />
     <p class="chapter-intro">
-      Two charts, one shape. The first traces every data center on Earth.
-      The second is AI's slice inside that line.
+      Two paired line charts from 2017 to 2030, both in terawatt-hours. The
+      first traces total global data-center electricity. The second is AI's
+      share inside that line. Both bend upward after 2022; the IEA's 2030
+      ranges open into wide fans.
     </p>
     <ChapterPlate
       subject="electricity"
-      kicker="THE LINE THAT BENT"
+      kicker="DATA CENTERS BY 2030"
       value="830–1,350"
       unit="TWh by 2030"
       caption="Data centers, IEA range"
@@ -154,11 +161,11 @@ const description =
     />
     <ChapterPlate
       subject="electricity"
-      kicker="AI'S SHARE OF THE LINE"
+      kicker="AI BY 2030"
       value="200–400"
       unit="TWh by 2030"
       caption="AI's slice, IEA range"
-      italic="From 65 in 2024 to three or six times that by 2030."
+      italic="From 65 TWh in 2024 to 200–400 TWh by 2030 — three to six times higher."
       popupId="trajectory-ai"
     >
       <InfographicAiShareTrajectory />
@@ -173,8 +180,10 @@ const description =
       headline="Translated into homes: 39 million in 2024, past 70 million by 2030."
     />
     <p class="chapter-intro">
-      One unit, two pictures. First the size of a terawatt-hour. Then global
-      data centers translated into households on the same scale.
+      A primer first — what a terawatt-hour buys, walked from a single
+      microwave-hour up to a thousand TWh. Then global data-center
+      electricity recast as the number of U.S. households it would power for
+      a year.
     </p>
     <ChapterPlate
       subject="electricity"
@@ -182,7 +191,7 @@ const description =
       value="85,000"
       unit="homes"
       caption="One TWh, for a year"
-      italic="AI in 2024 sits at thirty to eighty of these. U.S. residential at 1,550."
+      italic="AI in 2024 used 30–80 TWh. U.S. residential: 1,550 TWh — the top rung."
       popupId="equiv-watt"
     >
       <InfographicWattScalePrimer />
@@ -192,7 +201,7 @@ const description =
       leftValue="1"
       leftUnit="kWh"
       leftCaption="A microwave for an hour"
-      italic="From microwave-hour to grid total — and the same math both ways."
+      italic="Same axis, two ends: a microwave for an hour at the bottom, every data center on Earth by 2030 at the top."
       rightSubject="electricity"
       rightValue="70–113M"
       rightUnit="homes"
@@ -219,8 +228,10 @@ const description =
       headline="Five dots for training, one bar for inference — and the bar is bigger."
     />
     <p class="chapter-intro">
-      Five labeled dots for individual training runs. One bar for a year of
-      inference. The bar runs longer than the largest dot.
+      Five labeled dots, one per published training event (BERT, GPT-3,
+      BLOOM, Llama 2, Llama 3), and one bar for a year of all AI inference
+      combined. Same log scale, in tonnes of CO₂. The bar runs about a
+      thousand times the heaviest training dot.
     </p>
     <ChapterPlate
       subject="carbon"
@@ -228,7 +239,7 @@ const description =
       value="8.4–27.2"
       unit="Mt CO₂"
       caption="Annual AI inference, 2024"
-      italic="One round of training. One year of every prompt anyone ever sent."
+      italic="One model's training run, once. A year of every AI prompt the world sent — a thousand times heavier."
       popupId="training-inference"
     >
       <InfographicTrainingVsInference />
@@ -239,8 +250,9 @@ const description =
     <SectionDivider motif="wheat" />
     <p class="postscript-kicker">HOW TO READ THIS SITE</p>
     <p class="postscript-line">
-      Every figure on this site is a range. Where the range starts, where it
-      ends, and why — below.
+      Every figure on this site is a range, not a single number. The primer
+      below shows how a range gets drawn — what 'low' and 'high' mean, and
+      why we leave the middle empty.
     </p>
     <OrganicFrame sideLeft={true}>
       <InfographicRangeVsPoint />
