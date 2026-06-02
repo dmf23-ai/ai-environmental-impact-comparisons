@@ -1,3 +1,45 @@
+> **AUTONOMOUS RUN 3 — DEEPER A11Y PASS, COLLECTION-ONLY (2026-06-02 04:30 UTC / 2026-06-01 21:30 PDT, scheduled task `ai-impact-autonomous-3` fired).** Session reset healthy (claude.ai reads 44% used, resets in 4 hr 38 min — well below the 80% gate). Pre-flight all green (no halt, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at `7f68307`, self-test ALL GREEN, no pending questions to act on). Top-of-queue was the deeper a11y pass — axe-core 4.10.0 injected via Claude in Chrome on the live deploy across `/`, `/comparisons/`, `/methods/`. **Zero serious or critical violations on any of the three pages.** The home page emits 144 `color-contrast` *incomplete* entries — all of which are "background contains an image node" (cartouche figure text, range-bar value labels, popup-trigger inner text), unverifiable by axe but with manually-computed foreground/background pairs that pass WCAG AA (rust `#9a4f30` on ivory `#f4ede0` = 5.01:1; ink `#211d1b` and ink-soft `#4a3f3a` well above AAA). `/comparisons/` and `/methods/` both clean of incompletes too.
+>
+> **Manual probes beyond axe** (collected for the findings file):
+>
+> - **Focus indicators:** 7 `:focus-visible` rules wired site-wide, including the generic `a, button, [role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }` and a self-contrasting rail-dot box-shadow halo (`0 0 0 2px var(--paper), 0 0 0 3px var(--ink)`). Programmatic `.focus()` doesn't trigger `:focus-visible` — keyboard-only ring, working as designed.
+> - **OrnatePopupTrigger keyboard activation:** Every trigger is already `<div role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" aria-label="…">`. Synthetic Enter and Space keydown probes both open the `<dialog>` and toggle `aria-expanded`. **This invalidates queue item #2** — the structural rebuild ("`<div>` inside `<button>`" → "`<div role="button">`") has already shipped on the live deploy. Surfaced as Q-02 in pending-questions for David to retire from the queue.
+> - **Image alts:** `/` 34 imgs / 0 missing, `/comparisons/` 19 / 0, `/methods/` 5 / 0. All decorative (`alt=""` + `aria-hidden="true"` where appropriate).
+> - **Headings:** No level skips on any page. `/` H1 + 7 H2s; `/methods/` H1 + 24 H2s + nested H3s; `/comparisons/` H1 only.
+> - **External-link rel:** `/methods/` 67 external links, 0 missing `rel="noopener"`. Already verified in session 8; still clean.
+> - **`lang="en"`** on `<html>`, **`@media (prefers-reduced-motion: reduce)`** CSS rules present.
+>
+> Findings dumped to `.claude/a11y-findings-20260602T042628Z.md` (135 lines, untracked — local artifact). **Two safe-to-fix items surfaced to `.claude/pending-questions.md`** for David's signoff (both small enough to ship as single focused commits once acked):
+>
+> - **Q-01 — skip-to-main link.** Add `<a class="skip-link" href="#main">Skip to main content</a>` as first focusable element in `Layout.astro`, visually hidden until `:focus-visible`. WCAG 2.4.1 enhancement. ~15 lines CSS + 1 line markup. Site-wide via Layout.
+> - **Q-02 — retire queue item #2 (OrnatePopupTrigger structural rebuild).** Live deploy already conforms to the proposed pattern; the html-validate spec error has already been resolved. Asks David to retire from the queue and bump the remaining items.
+>
+> Nothing else from this audit warrants action. Tab/focus/popup/aria layer is clean. Image-alt layer is clean. Heading layer is clean. External-link rel layer is clean. Color-contrast layer is likely-passing but unverifiable through axe without a sampling pass.
+>
+> **Commits this session (single closeout commit, no source-code changes — collection-only audit):**
+>
+> - To be: `chore(handoff): autonomous run 3 closeout — a11y collection, 2 pending questions for David` — touches `handoff.md` (this block) + `.claude/pending-questions.md` (Q-01, Q-02) + `.claude/work-log.jsonl` (run 3 entry). No `src/` changes, no `public/` changes. Build gate still validated (Astro build into `/tmp/dist-a11y4/index.html`).
+>
+> **What's queued after Q-01 / Q-02 are answered** (text-revisions item already retired in run 2; OrnatePopupTrigger flagged for retirement via Q-02):
+>
+> 1. **OrnatePopup → in-place popup for "How this was calculated".** Currently routes to `/methods#anchor`. Plan David surfaced is to have the abbreviated source list link to an in-page popup with full source names + methodology. New work, not yet started. Likely a focused session.
+> 2. **/methods inline SubjectMarkers.** David previously called "optional polish, not blocking." Skip unless he confirms appetite.
+> 3. **Custom domain + Astro.site update.** David-deferred until ready to share publicly.
+> 4. **Further pngquant / SVG conversion of simpler ornaments.** Lossy already shipped (80% saved); SVG conversion of cartouche-frame / side botanicals is residual focused-session work.
+>
+> **Pending — David's local actions before next push:**
+>
+> - **Before any git command:** `Remove-Item .git\index.lock, .git\HEAD.lock, .git\refs\heads\main.lock -ErrorAction SilentlyContinue` from PowerShell at the project root. Sandbox plumbing-pattern commits leave zero-byte phantom lock files; PowerShell can delete them, sandbox cannot.
+> - `git reset` (resyncs the stale `.git/index` so `git status` stops reporting phantom modifications) then no push needed — this session's commit already landed via `push.sh`.
+> - Sandbox build configs `astro.config.*.mjs` (1–8 plus a11y[1–4]) safe to delete locally — never used by Vercel.
+> - Three files (`authorial_voice.md`, `user_profile.md`, `src/data/snapshots/iea-ev-outlook-2025.html`) continue to sit unstaged on purpose.
+>
+> **Session budget at close:** ~30 tool calls of 80 cap, 1 commit of 5 cap, claude.ai usage was 44% at session start (resets in ~4h 38m). Healthy. Per protocol's "Healthy + more work: schedule now + 1h" — `ai-impact-autonomous-4` queued for 2026-06-02T06:00:00Z (~30min before the session-reset tick, so the next run picks up either at a healthy usage % or trips the gate cleanly and reschedules).
+>
+> **Composes with** [[feedback_autonomous_completion_mode]], [[feedback_autonomous_walk_not_scope]], [[feedback_sandbox_git_workaround]], [[feedback_sandbox_lock_cleanup]], [[feedback_edit_tool_truncation]]. No prose work in this session, so the [[feedback_anti_ai_speak_rubric]] didn't carry weight; closeout block above is operational-not-published prose. The two pending-questions entries follow the rubric.
+>
+> ---
+
 > **AUTONOMOUS RUN 2 — HOME-PAGE TEXT REVISIONS SHIPPED (2026-06-02 04:05 UTC / 2026-06-01 21:05 PDT, scheduled task `ai-impact-autonomous-2` fired).** Session reset cleared (claude.ai reads 9%, resets in 4 hr 52 min). Pre-flight all green (no halt, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at `6adb87d`, self-test ALL GREEN, work-log 2 entries from prior no-ops, no pending questions). Top-of-queue (the 18 David-approved rewrites tabulated in the carry-over note below) implemented as a single focused commit `39c5868 feat(home): text revisions — concretely name what each section shows` touching only `src/pages/index.astro` (+37/-25 lines, 18 edits). Build gate green (Astro build into `/tmp/astro-dist-rev/index.html`). Push went through `./.claude/push.sh` first attempt. Deploy-verify via Claude in Chrome on https://ai-environmental-impact-comparisons.vercel.app/ confirmed all 18 rewrites live and visible (every new headline / intro / kicker / italic string fetched from `<main>` text); `/comparisons/` and `/methods/` returned correct h1s. The corresponding carry-over CARRY-OVER NOTE block below ("2026-05-31 evening — Home-page text revisions, approved") is now consumed and can be retired by future sessions.
 >
 > **Sandbox-git workaround note for the record:** first plumbing-commit attempt produced a corrupted tree (a 651-deletion commit `9d9724c`) because `cp .git/index` copied a stale index where most files registered as `D` (the same phantom-modifications artifact noted in prior session closes). Fix was to seed a fresh index via `GIT_INDEX_FILE=/tmp/idx-run2-fresh git read-tree HEAD` before `update-index --cacheinfo`, then `write-tree` → `commit-tree` → direct refs overwrite. Pattern landed clean on retry. Worth folding into [[feedback_sandbox_git_workaround]]: **always seed the plumbing index from HEAD via `read-tree`, do NOT `cp .git/index`**, because the on-disk index drifts when a previous session committed via the plumbing-pattern without resyncing.
