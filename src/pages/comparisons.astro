@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ComparisonPlate from "../components/ComparisonPlate.astro";
+import AtlasFilters from "../components/AtlasFilters.astro";
 import OrnatePopupContent from "../components/OrnatePopupContent.astro";
 import RangeBar from "../components/RangeBar.astro";
 import SourceLine from "../components/SourceLine.astro";
+import BotanicalFrieze from "../components/BotanicalFrieze.astro";
 import figuresData from "../data/figures.json";
-import { atlasOrder, byId } from "../lib/atlasMeta";
+import { atlasOrder } from "../lib/atlasMeta";
 
 const title = "Comparisons — Compared to What?";
 const description =
@@ -22,22 +24,52 @@ const hourly = {
   sources: hourlyRaw.sources, last_verified: hourlyRaw.last_verified,
 };
 function record(id: string) { return id === "hourly" ? hourly : cmpById[id]; }
+
+function spreadOf(figs: any[]): number {
+  const vals: number[] = [];
+  for (const f of figs) {
+    for (const v of [f.value, f.value_low, f.value_high]) {
+      if (typeof v === "number" && v > 0) vals.push(v);
+    }
+  }
+  if (vals.length < 2) return 1;
+  return Math.max(...vals) / Math.min(...vals);
+}
+
 const popupId = (id: string) => `atlas-${id}`;
 ---
 
 <Layout title={title} description={description} wide>
   <p class="back"><a href="/">← Home</a></p>
+
   <header class="cmp-head">
     <p class="eyebrow">The full archive</p>
-    <h1 class="cmp-title">The Atlas of Comparisons</h1>
-    <p class="cmp-sub">Every comparison on the site. Open a plate for its chart, sources, and method.</p>
+    <h1 class="cmp-title display">The Atlas of Comparisons</h1>
+    <p class="cmp-sub">
+      Every comparison on the site, gathered as one tray of engraved plates.
+      Filter by metric or scope, sort by what you want to see first, and open
+      any plate for its chart, sources, boundary, and method.
+    </p>
+    <BotanicalFrieze variant="small" class="cmp-frieze" />
   </header>
+
+  <AtlasFilters />
 
   <div class="atlas-grid">
     {atlasOrder.map((e) => {
       const c = record(e.id);
       return (
-        <div class="plate-cell">
+        <div
+          class="plate-cell"
+          id={e.id}
+          data-order={e.plate}
+          data-metric={e.metric}
+          data-scope={e.scope}
+          data-boundary={e.boundarySensitive ? "true" : "false"}
+          data-confidence={e.confidence}
+          data-spread={spreadOf(c.figures).toFixed(2)}
+          data-title={c.title}
+        >
           <ComparisonPlate
             plate={e.plate}
             title={c.title}
@@ -54,14 +86,22 @@ const popupId = (id: string) => `atlas-${id}`;
       );
     })}
   </div>
+  <p id="atlas-empty" class="atlas-empty" style="display:none">No plates match that filter.</p>
+
+  <p class="cmp-methodscta">
+    <a href="/methods">Read the full methodology ledger →</a>
+  </p>
 
   {atlasOrder.map((e) => {
     const c = record(e.id);
     return (
       <OrnatePopupContent popupId={popupId(e.id)}>
-        <p class="popup-kicker">Comparison</p>
+        <p class="popup-kicker">Comparison · Plate {String(e.plate).padStart(2, "0")}</p>
         <h2 id={`popup-title-atlas-${e.id}`}>{c.title}</h2>
         <p>{c.summary}</p>
+        {e.boundarySensitive && (
+          <p class="popup-boundary"><strong>Boundary note:</strong> the answer depends on where you draw the line — whether only direct use is counted, or the upstream water and power are included too.</p>
+        )}
         {c.unit_caption && <p class="popup-unit">{c.unit_caption}</p>}
         <RangeBar figures={c.figures} />
         <SourceLine sources={c.sources} lastVerified={c.last_verified} methodsAnchor={c.anchor} />
@@ -71,11 +111,11 @@ const popupId = (id: string) => `atlas-${id}`;
 </Layout>
 
 <style>
-  .cmp-head { text-align: center; margin: var(--space-4) 0 var(--space-7); }
+  .cmp-head { text-align: center; margin: var(--space-4) 0 var(--space-6); }
   .cmp-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2.1rem, 5.5vw, 3.2rem);
     line-height: 1.05;
     margin: var(--space-2) 0 var(--space-3);
     color: var(--ink);
@@ -84,15 +124,51 @@ const popupId = (id: string) => `atlas-${id}`;
     font-family: var(--font-serif);
     font-style: italic;
     color: var(--ink-soft);
-    font-size: 1.02rem;
+    font-size: 1.04rem;
+    line-height: 1.55;
     margin: 0 auto;
-    max-width: 30rem;
+    max-width: 34rem;
   }
+  .cmp-frieze { max-width: 30rem; margin: var(--space-5) auto 0; }
+
   .atlas-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
   @media (min-width: 560px) { .atlas-grid { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 900px) { .atlas-grid { grid-template-columns: 1fr 1fr 1fr; } }
-  .plate-cell { display: flex; }
+  .plate-cell { display: flex; scroll-margin-top: 2rem; }
   .plate-cell > :global(*) { width: 100%; }
+  /* Brief highlight when a plate is reached via /comparisons#id deep-link */
+  .plate-cell:target :global(.organic-frame) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 14px;
+  }
+
+  .atlas-empty {
+    text-align: center;
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: var(--space-6) 0;
+  }
+  .cmp-methodscta { text-align: center; margin: var(--space-8) 0 0; }
+  .cmp-methodscta a {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+  .cmp-methodscta a:hover { color: var(--ink); }
+
+  :global(.popup-boundary) {
+    font-size: 0.95rem !important;
+    background: rgba(154, 79, 48, 0.07);
+    border-left: 2px solid var(--accent);
+    padding: var(--space-2) var(--space-3);
+    margin: var(--space-3) 0 !important;
+  }
   :global(.popup-unit) {
     font-family: var(--font-serif);
     font-size: 0.72rem;

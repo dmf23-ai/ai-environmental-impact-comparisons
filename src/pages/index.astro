@@ -195,6 +195,7 @@ const fieldNotes = [
         )}
         {c.unit_caption && <p class="popup-unit">{c.unit_caption}</p>}
         <RangeBar figures={c.figures} />
+        <p class="popup-deeplink"><a href={`/comparisons#${e.id}`}>See this plate in the full archive →</a></p>
         <SourceLine sources={c.sources} lastVerified={c.last_verified} methodsAnchor={c.anchor} />
       </OrnatePopupContent>
     );
@@ -357,5 +358,16 @@ const fieldNotes = [
     letter-spacing: 0.16em;
     color: var(--ink-soft);
     margin: var(--space-3) 0 var(--space-1) !important;
+  }
+  :global(.popup-deeplink) {
+    margin: var(--space-4) 0 0 !important;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+  }
+  :global(.popup-deeplink a) {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
   }
 </style>

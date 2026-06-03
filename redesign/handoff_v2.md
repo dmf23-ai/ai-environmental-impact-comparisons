@@ -1,5 +1,8 @@
 # v2 Redesign — "Compared to What?" — Resume Doc
 
+**STATUS (2026-06-02): Phases 1–4 COMMITTED & PUSHED. Phase 5 CODE COMPLETE on disk, PENDING DAVID'S `npm run build` VERIFY before commit (sandbox builds blocked). Resume: confirm build, commit Phase 5, then Phase 6 + 7.**
+
+
 **Branch:** `v2-compared-to-what` (off `main`; main is the preserved pre-redesign state).
 **Plan (source of truth):** `redesign/compared_to_what_redesign_plan.md`
 **Reference mockup:** `redesign/homepage reference image.png` (Mockup 1, the interactive atlas).
@@ -35,7 +38,7 @@ Replace chapter-first `index.astro` with: Masthead → hero thesis → RangeKey 
 - Old `.wordmark`/`.masthead-strip` CSS in global.css is now unused (harmless; can prune in Phase 6).
 
 
-## DONE (written, pending David's build) — Phase 2 (homepage atlas-first)
+## DONE (committed & pushed) — Phase 2 (homepage atlas-first)
 New components: `Masthead` (wired into home now), `RangeKey` (horizontal legend), `FeaturedComparisonPlate` (water/golf hero: vignette + bespoke rust-golf/teal-DC chart + ornate stat cartouche + Open Detail), `PlateIllustration` (15 engraved SVG icons), `AtlasFilters` (engraved pills single-select + sort `<select>`, vanilla JS on `.atlas-grid .plate-cell[data-*]`). Rebuilt `ComparisonPlate` into the rich atlas card (plate number, metric/scope chips, illustration, takeaway, mini RangeBar, confidence, Open Detail). New `src/lib/atlasMeta.ts` = additive presentation metadata (order/metric/scope/boundary/confidence/illustration/takeaway) keyed by figures.json id + synthetic `hourly`. Rewrote `src/pages/index.astro`: Masthead -> hero thesis -> RangeKey -> Featured(water-golf) -> "The Atlas of Comparisons" + filters + 14-plate grid (plates 02-15, excl. featured) -> "Field Notes on Scale" (all 8 infographics in OrganicFrames, content preserved, full medallion/accordion treatment deferred to Phase 4) -> methods CTA -> per-plate detail popups (reuse OrnatePopup). Rewrote `src/pages/comparisons.astro` to the new ComparisonPlate (full re-skin/filters = Phase 5). figures.json untouched (read-only).
 
 ## SANDBOX BUILD NOW BLOCKED (important)
@@ -45,9 +48,32 @@ David's Windows `npm install` (Phase 1) replaced node_modules native binaries wi
 Phase 2 detail popups already wire chart+summary+boundary+sources+method per plate. Phase 3 remaining: deep-links to /comparisons anchors, confirm sort/filter UX, optional in-place expansion. Then Phase 4 (Field Notes medallions/accordions), Phase 5 (/comparisons filters + /methods TOC/#sources re-skin), Phase 6 (artwork polish: refine friezes/illustrations, prune dead .wordmark/.masthead-strip CSS), Phase 7 (QA + Mockup-1 visual checklist + a11y).
 
 
-## DONE (written, pending David's build) — Phase 3 + Phase 4
+## DONE (committed & pushed) — Phase 3 + Phase 4
 - Phase 3 (atlas interaction): its core requirement — each plate opens detail with chart, takeaway, boundary note, uncertainty, sources, methods link — was already delivered by Phase 2's per-plate OrnatePopup. Filters + sort live in AtlasFilters. REMAINING for Phase 5: per-plate deep-links to /comparisons#<anchor> (needs anchors added on /comparisons).
 - Phase 4 (Field Notes on Scale): replaced the stacked infographics with a 6-medallion row (`FieldNote.astro`, circular medallion + roman numeral + blurb, OrnatePopupTrigger). Each medallion blooms a popup with the lesson's FULL chart(s) + auto source list + methods deep-link: I=Hour (HourlyImpactHero), II=Year (annual-twh), III=Water (water-bracket), IV=Trajectory (dc-trajectory + ai-share), V=Equivalents (watt-scale + household), VI=Training (training-vs-inference). Added 4 icons to PlateIllustration (calendar, droplet, trend, chip). Popups widen to 50rem via `.ornate-popup-frame:has(.popup-wide)` in global.css. NOTE: range-vs-point-primer infographic dropped from homepage (RangeKey covers "how to read"; primer still on /methods). OrganicFrame/InfographicRangeVsPoint imports in index.astro are now unused-but-harmless.
 
 ## NEXT — Phase 5 (re-skin /comparisons + /methods), then 6 (artwork polish + prune dead .wordmark/.masthead-strip CSS + widen-popup chart QA), then 7 (QA + Mockup-1 checklist + a11y)
 /comparisons already uses the new ComparisonPlate (Phase 2); Phase 5 adds filters/sort (reuse AtlasFilters), per-plate anchors + deep-links, and re-skins /methods: table of contents, consolidated #sources section, anchors per figure/plate, boundary-note callouts, new typography. methods.astro is ~2072 lines — edit via python heredoc with sentinel anchors (Edit truncates).
+
+
+## DONE (on disk, awaiting build verify + commit) — Phase 5 (/comparisons + /methods re-skin)
+**/comparisons.astro** — rewritten to mirror the homepage atlas: `AtlasFilters` (pills + sort) added; each `.plate-cell` now carries the full `data-*` set (order/metric/scope/boundary/confidence/spread/title) so the shared filter/sort script works; **per-plate anchors** via `id={e.id}` + `scroll-margin-top` + a `:target` outline highlight; all 15 plates (incl. the featured water/golf as plate 01); popups unified with the homepage (kicker shows plate number, boundary-note block on boundary-sensitive plates); `#atlas-empty` element; display-face heading + small frieze; "Read the full methodology ledger →" CTA.
+**index.astro** — each atlas popup now carries a **deep-link** `See this plate in the full archive → /comparisons#<id>` (+ `.popup-deeplink` style). Rebuilt whole file via heredoc (Edit/Write truncated it mid-write — see below).
+**methods.astro** (now ~2354 lines) — re-skin via one python heredoc transformer (sentinel string replaces, each asserted to match exactly once):
+  1. **Table of contents** (`<nav id="contents">`) after the lede — grouped "Home-page displays" / "Comparison plates", decimal-leading-zero numbering, anchors to all 23 sections + a "Consolidated source list →" link.
+  2. **Consolidated `#sources` section** before `</Layout>` — built in frontmatter (`allSources`): dedupes 67 cited entries by URL → **30 unique**, alphabetized, numbered ledger, links open in new tab, "↑ Back to contents" link. Footer's pre-existing `/methods#sources` link now resolves.
+  3. **4 boundary-choice callouts** (`<aside class="boundary-note">`, teal left-rule) on water-bracket, dc-trajectory (actual-vs-projected), water-residential-outdoor, water-vs-golf — added AFTER each h2, no prose removed.
+  4. **Typography**: section h2 → `--font-display` (Cormorant), `scroll-margin-top` on sections, `.display-where` → Inter eyebrow; + TOC/ledger/boundary styles appended to `<style>`.
+
+### PRESERVATION VERIFIED (no data loss)
+- methods: 24 method-sections (23 original + #sources), **23 SourceLine intact**, all 23 TOC ids resolve to real sections, every section in TOC.
+- All 14 comparison `anchor`s (+ hourly-hero) still resolve to methods section ids → "How this was calculated →" links unbroken.
+- All 15 atlas ids present as `/comparisons` plate-cell ids → homepage deep-links resolve.
+- figures.json untouched (read-only). No numbers/sources/dates changed.
+
+### ⚠️ Edit/Write TRUNCATION hit again this session
+The Write tool truncated comparisons.astro at 102 lines mid-popup, and two Edits truncated index.astro tail mid-CSS-rule. Both rebuilt via `cat > file <<'EOF'` heredoc on the mount and re-verified (wc + tail + grep counts). **methods.astro was edited ONLY via python heredoc** for this reason. Reconfirms [[feedback_edit_tool_truncation]] — treat bash mount as ground truth; never trust Edit/Write tail on these files.
+
+## NEXT — Phase 6 (artwork polish + prune dead CSS) then Phase 7 (QA)
+- Phase 6: prune dead `.wordmark` (global.css ~L104–142) and `.masthead-strip` (no refs anywhere) — confirmed dead; `.topnav-wordmark` is the live one, leave it. Refine friezes/illustrations; widen-popup chart QA.
+- Phase 7: Mockup-1 visual checklist, mobile pass, keyboard/a11y, Lighthouse ≥95, final "no number changed" diff sweep.

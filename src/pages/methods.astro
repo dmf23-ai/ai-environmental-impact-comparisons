@@ -37,6 +37,61 @@ const gaming = findComparison("electricity-video-gaming-vs-datacenters");
 const streaming = findComparison("electricity-video-streaming-vs-datacenters");
 const evCharging = findComparison("electricity-ev-charging-vs-datacenters");
 const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
+
+// Consolidated source ledger — every source cited anywhere on the site,
+// de-duplicated by URL and sorted by name. Built from figures.json so the
+// #sources section stays in lockstep with the per-figure citations above.
+const allSourceMap = new Map<string, { name: string; url: string }>();
+const collectSources = (arr: any[]) => {
+  for (const src of arr ?? []) {
+    if (src && src.url && !allSourceMap.has(src.url)) {
+      allSourceMap.set(src.url, { name: src.name, url: src.url });
+    }
+  }
+};
+collectSources(hourlyHero.sources);
+for (const ig of (figuresData as any).infographics) collectSources(ig.sources);
+for (const c of (figuresData as any).comparisons) collectSources(c.sources);
+const allSources = Array.from(allSourceMap.values()).sort((a, b) =>
+  a.name.localeCompare(b.name)
+);
+
+// Table of contents — grouped to mirror where each figure appears on the site.
+const toc = [
+  {
+    group: "Home-page displays",
+    items: [
+      { id: "hourly-hero", label: "Per-hour CO\u2082 comparison" },
+      { id: "range-vs-point-primer", label: "Why every figure here is a range" },
+      { id: "annual-twh", label: "How big is AI, really?" },
+      { id: "water-bracket", label: "Data centers vs. golf courses (water)" },
+      { id: "dc-trajectory", label: "Data-center electricity, 2017\u20132030" },
+      { id: "ai-share-trajectory", label: "AI's slice of data-center electricity" },
+      { id: "household-equivalents", label: "Data-center electricity, in household-years" },
+      { id: "watt-scale-primer", label: "The watt-scale primer" },
+      { id: "training-vs-inference", label: "Where AI's carbon actually goes" },
+    ],
+  },
+  {
+    group: "Comparison plates",
+    items: [
+      { id: "water-residential-outdoor", label: "Water: residential outdoor use vs. data centers" },
+      { id: "water-vs-golf", label: "Water: data centers vs. U.S. golf courses" },
+      { id: "electricity-us-households", label: "Electricity: U.S. homes vs. data centers" },
+      { id: "electricity-ac", label: "Electricity: U.S. air conditioning vs. data centers" },
+      { id: "electricity-holiday-lights", label: "Electricity: U.S. holiday lighting vs. data centers" },
+      { id: "electricity-gaming", label: "Electricity: video gaming vs. data centers" },
+      { id: "electricity-streaming", label: "Electricity: video streaming vs. data centers" },
+      { id: "electricity-bitcoin", label: "Electricity: Bitcoin mining vs. data centers" },
+      { id: "electricity-ev-charging", label: "Electricity: EV charging vs. data centers" },
+      { id: "co2-driving-vs-datacenters", label: "CO\u2082: U.S. driving vs. data centers" },
+      { id: "co2-aviation", label: "CO\u2082: aviation vs. data centers" },
+      { id: "co2-cement-steel", label: "CO\u2082: cement & steel vs. data centers" },
+      { id: "co2-cattle", label: "CO\u2082: cattle vs. data centers" },
+      { id: "co2-lawn-equipment", label: "Emissions: gas lawn equipment vs. data centers" },
+    ],
+  },
+];
 ---
 
 <Layout title={title} description={description}>
@@ -49,6 +104,23 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
     wide error bars come from. The sources are cited at the bottom of each
     section, so this page can be read on its own without flipping between tabs.
   </p>
+
+  <nav class="method-toc" id="contents" aria-labelledby="toc-heading">
+    <p id="toc-heading" class="toc-heading eyebrow">Contents</p>
+    <div class="toc-cols">
+      {toc.map((g) => (
+        <div class="toc-group">
+          <p class="toc-group-title smallcaps">{g.group}</p>
+          <ol class="toc-list">
+            {g.items.map((it) => (
+              <li><a href={`#${it.id}`}>{it.label}</a></li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </div>
+    <p class="toc-sources-link"><a href="#sources">Consolidated source list &rarr;</a></p>
+  </nav>
 
   <section class="method-section" id="hourly-hero">
     <p class="display-where">Home page hero</p>
@@ -341,6 +413,11 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
   <section class="method-section" id="water-bracket">
     <p class="display-where">Home page infographic</p>
     <h2 class="method-h2-with-marker">Are AI data centers thirstier than golf courses?<SubjectMarker subject="water" size={24} /></h2>
+    <aside class="boundary-note" aria-label="Boundary choice">
+      <p class="boundary-note-label smallcaps">Boundary choice</p>
+      <p>Counting only direct cooling water, data centers sit far below golf. Add the water consumed generating their electricity and the two draw nearly even. The number you quote depends entirely on where that line is drawn.</p>
+    </aside>
+
 
     <p>
       The water-bracket chart sets four data-center bars (two boundaries
@@ -458,6 +535,11 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
   <section class="method-section" id="dc-trajectory">
     <p class="display-where">Home page infographic</p>
     <h2 class="method-h2-with-marker">Data-center electricity, 2017 to 2030<SubjectMarker subject="electricity" size={24} /></h2>
+    <aside class="boundary-note" aria-label="Boundary choice">
+      <p class="boundary-note-label smallcaps">Boundary choice</p>
+      <p>Everything left of 2025 on this line is measured; everything right of it is projected from agency scenarios. The two halves carry very different confidence and should be read as such.</p>
+    </aside>
+
 
     <p>
       The trajectory chart plots global data-center electricity in
@@ -1060,6 +1142,11 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
   <section class="method-section" id="water-residential-outdoor">
     <p class="display-where">Comparison card</p>
     <h2 class="method-h2-with-marker">Water: U.S. residential outdoor use vs. AI data centers<SubjectMarker subject="water" size={24} /></h2>
+    <aside class="boundary-note" aria-label="Boundary choice">
+      <p class="boundary-note-label smallcaps">Boundary choice</p>
+      <p>Direct cooling alone, or cooling plus the water behind the power that runs it. Residential outdoor use dwarfs the first boundary; the second narrows the gap but does not close it.</p>
+    </aside>
+
 
     <p>
       This card sets U.S. residential outdoor water use — lawns,
@@ -1159,6 +1246,11 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
   <section class="method-section" id="water-vs-golf">
     <p class="display-where">Comparison card</p>
     <h2 class="method-h2-with-marker">Water: AI data centers vs. U.S. golf courses<SubjectMarker subject="water" size={24} /></h2>
+    <aside class="boundary-note" aria-label="Boundary choice">
+      <p class="boundary-note-label smallcaps">Boundary choice</p>
+      <p>"AI uses less water than golf" is true under the direct-cooling boundary and false once power-generation water is counted. Both figures are real; the boundary is most of the argument.</p>
+    </aside>
+
 
     <p>
       This card sets U.S. golf-course irrigation against the water that
@@ -2011,6 +2103,25 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
     />
   </section>
 
+  <section class="method-section method-sources" id="sources">
+    <p class="display-where">Back matter</p>
+    <h2>Consolidated sources</h2>
+    <p>
+      Every source cited anywhere on the site, gathered in one place and
+      de-duplicated. Each per-figure section above carries its own short
+      source line; this is the full ledger, alphabetized. {allSources.length} sources
+      in all.
+    </p>
+    <ol class="source-ledger">
+      {allSources.map((src) => (
+        <li>
+          <a href={src.url} target="_blank" rel="noopener noreferrer">{src.name}</a>
+        </li>
+      ))}
+    </ol>
+    <p class="contents-backlink"><a href="#contents">&uarr; Back to contents</a></p>
+  </section>
+
 </Layout>
 
 <style>
@@ -2069,4 +2180,175 @@ const bitcoin = findComparison("electricity-bitcoin-vs-datacenters");
   .method-h2-with-marker :global(.subject-marker) {
     flex-shrink: 0;
   }
+
+  /* ---- v2 Botanical Ledger typography + back-matter navigation ---- */
+  .method-section {
+    scroll-margin-top: 1.5rem;
+  }
+  /* Display face for section headings, matching the atlas pages */
+  .method-section h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    line-height: 1.1;
+    font-size: 1.7rem;
+  }
+  @media (min-width: 720px) {
+    .method-section h2 {
+      font-size: 2rem;
+    }
+  }
+  .display-where {
+    font-family: var(--font-sans);
+    letter-spacing: 0.18em;
+  }
+
+  /* Table of contents */
+  .method-toc {
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    background: var(--paper-light);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    margin: var(--space-6) 0 var(--space-7);
+  }
+  .toc-heading {
+    margin: 0 0 var(--space-4);
+    text-align: center;
+  }
+  .toc-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  @media (min-width: 680px) {
+    .toc-cols { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+  }
+  .toc-group-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin: 0 0 var(--space-2);
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc;
+  }
+  .toc-list li {
+    counter-increment: toc;
+    margin: 0 0 var(--space-2);
+    line-height: 1.35;
+    padding-left: 1.9rem;
+    position: relative;
+  }
+  .toc-list li::before {
+    content: counter(toc, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+  .toc-list a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .toc-list a:hover {
+    color: var(--accent);
+    border-bottom-color: currentColor;
+  }
+  .toc-sources-link {
+    margin: var(--space-5) 0 0;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .toc-sources-link a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+
+  /* Boundary-choice callout */
+  .boundary-note {
+    background: rgba(58, 107, 117, 0.08);
+    border-left: 3px solid var(--subject-water);
+    border-radius: 0 8px 8px 0;
+    padding: var(--space-3) var(--space-4);
+    margin: 0 0 var(--space-5);
+  }
+  .boundary-note-label {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--subject-water);
+    margin: 0 0 var(--space-1);
+    font-weight: 600;
+  }
+  .boundary-note p:last-child {
+    margin: 0;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* Consolidated source ledger */
+  .method-sources h2 {
+    color: var(--ink);
+  }
+  .source-ledger {
+    list-style: none;
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    counter-reset: src;
+  }
+  .source-ledger li {
+    counter-increment: src;
+    position: relative;
+    padding-left: 2.4rem;
+    margin: 0 0 var(--space-3);
+    line-height: 1.45;
+    font-size: 0.92rem;
+  }
+  .source-ledger li::before {
+    content: counter(src);
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--accent);
+    width: 1.9rem;
+    text-align: right;
+  }
+  .source-ledger a {
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.25);
+    text-underline-offset: 2px;
+  }
+  .source-ledger a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+  .contents-backlink {
+    margin: var(--space-6) 0 0;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+  .contents-backlink a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .contents-backlink a:hover { text-decoration: underline; }
 </style>
