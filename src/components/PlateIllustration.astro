@@ -81,6 +81,25 @@ const sw = 2;
   {name === "clock" && (<g>
     <circle cx="24" cy="24" r="13" /><path d="M24 16 v8 l6 4" />
   </g>)}
+  {name === "calendar" && (<g>
+    <rect x="10" y="13" width="28" height="24" rx="2" /><line x1="10" y1="20" x2="38" y2="20" />
+    <line x1="17" y1="10" x2="17" y2="15" /><line x1="31" y1="10" x2="31" y2="15" />
+    <circle cx="18" cy="26" r="1.3" fill="currentColor" stroke="none" /><circle cx="24" cy="26" r="1.3" fill="currentColor" stroke="none" />
+    <circle cx="30" cy="26" r="1.3" fill="currentColor" stroke="none" /><circle cx="18" cy="31" r="1.3" fill="currentColor" stroke="none" /><circle cx="24" cy="31" r="1.3" fill="currentColor" stroke="none" />
+  </g>)}
+  {name === "droplet" && (<g>
+    <path d="M24 10 C 31 22, 34 27, 34 31 a10 10 0 0 1 -20 0 C 14 27, 17 22, 24 10 Z" />
+    <path d="M20 31 a4 4 0 0 0 4 4" stroke-width="1.6" />
+  </g>)}
+  {name === "trend" && (<g>
+    <path d="M10 36 V12 M10 36 H38" stroke-width="1.6" />
+    <path d="M13 31 L21 24 L26 28 L36 16" />
+    <path d="M31 16 h5 v5" stroke-width="1.6" />
+  </g>)}
+  {name === "chip" && (<g>
+    <rect x="15" y="15" width="18" height="18" rx="2" /><rect x="20" y="20" width="8" height="8" rx="1" />
+    <path d="M19 15 v-4 M24 15 v-4 M29 15 v-4 M19 33 v4 M24 33 v4 M29 33 v4 M15 19 h-4 M15 24 h-4 M15 29 h-4 M33 19 h4 M33 24 h4 M33 29 h4" stroke-width="1.5" />
+  </g>)}
 </svg>
 <style>
   .plate-illo { display: block; }

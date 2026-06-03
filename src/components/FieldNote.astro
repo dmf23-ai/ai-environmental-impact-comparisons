@@ -1,0 +1,88 @@
+---
+// FieldNote — a circular medallion for one of the six supporting lessons
+// ("Field Notes on Scale"). The whole medallion is an OrnatePopupTrigger that
+// blooms open the lesson's full chart(s), summary, and sources.
+import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+import PlateIllustration from "./PlateIllustration.astro";
+interface Props {
+  numeral: string;
+  title: string;
+  blurb: string;
+  illustration: string;
+  subject: "water" | "electricity" | "carbon";
+  popupId: string;
+}
+const { numeral, title, blurb, illustration, subject, popupId } = Astro.props;
+---
+<OrnatePopupTrigger popupId={popupId} as="card" label={`Open field note: ${title}`}>
+  <div class="fieldnote">
+    <span class="fn-medallion" style={`color: var(--subject-${subject})`}>
+      <span class="fn-ring" aria-hidden="true"></span>
+      <PlateIllustration name={illustration} size={40} />
+    </span>
+    <p class="fn-numeral smallcaps">{numeral}</p>
+    <h3 class="fn-title">{title}</h3>
+    <p class="fn-blurb">{blurb}</p>
+    <span class="fn-open">Open →</span>
+  </div>
+</OrnatePopupTrigger>
+<style>
+  .fieldnote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.2rem;
+    padding: var(--space-2);
+  }
+  .fn-medallion {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--paper-light);
+    border: 1px solid var(--ink-soft);
+    margin-bottom: var(--space-2);
+  }
+  .fn-ring {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    border: 1px solid var(--hairline);
+  }
+  .fn-numeral {
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin: 0;
+  }
+  .fn-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .fn-blurb {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+    margin: 0.15rem 0 0;
+    max-width: 15rem;
+  }
+  .fn-open {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: var(--space-2);
+  }
+</style>

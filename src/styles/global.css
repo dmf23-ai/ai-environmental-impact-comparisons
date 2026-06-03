@@ -763,3 +763,11 @@ hr.hairline,
   display: inline-block;
   font-variant-caps: normal;
 }
+
+/* Field-note popups carry full-width charts — widen the frame when present */
+.ornate-popup-frame:has(.popup-wide) {
+  width: min(50rem, calc(100vw - 24px));
+  max-height: min(86vh, 760px);
+}
+.popup-wide { margin-top: var(--space-3); }
+.popup-wide > * + * { margin-top: var(--space-5); }

@@ -9,6 +9,8 @@ import OrnatePopupContent from "../components/OrnatePopupContent.astro";
 import RangeBar from "../components/RangeBar.astro";
 import SourceLine from "../components/SourceLine.astro";
 import BotanicalFrieze from "../components/BotanicalFrieze.astro";
+import FieldNote from "../components/FieldNote.astro";
+import HourlyImpactHero from "../components/HourlyImpactHero.astro";
 
 import InfographicAnnualTwh from "../components/InfographicAnnualTwh.astro";
 import InfographicWaterBracket from "../components/InfographicWaterBracket.astro";
@@ -59,6 +61,24 @@ const gridEntries = atlasOrder.filter((e) => !e.featured);
 const featured = byId["water-dc-vs-golf"];
 const featuredRec = record(featured.id);
 const popupId = (id: string) => `atlas-${id}`;
+
+const igById: Record<string, any> = Object.fromEntries(
+  ((figuresData as any).infographics as any[]).map((i) => [i.id, i])
+);
+const fieldNotes = [
+  { id: "fn-hour", numeral: "I", title: "The Hour", illustration: "clock", subject: "carbon" as const,
+    blurb: "An hour of driving outweighs an hour of AI chat hundreds to thousands of times over." },
+  { id: "fn-year", numeral: "II", title: "The Year", illustration: "calendar", subject: "electricity" as const,
+    blurb: "Over a year, AI is still the shortest bar beside homes, Bitcoin, and EV charging." },
+  { id: "fn-water", numeral: "III", title: "The Water", illustration: "droplet", subject: "water" as const,
+    blurb: "Direct cooling, or counting the power plants — the boundary changes the answer." },
+  { id: "fn-trajectory", numeral: "IV", title: "The Trajectory", illustration: "trend", subject: "electricity" as const,
+    blurb: "Flat through 2018, then bent upward as AI scaled toward 2030." },
+  { id: "fn-equivalents", numeral: "V", title: "In Equivalents", illustration: "house", subject: "electricity" as const,
+    blurb: "What a terawatt-hour buys, translated into U.S. household-years." },
+  { id: "fn-training", numeral: "VI", title: "Training vs. Inference", illustration: "chip", subject: "carbon" as const,
+    blurb: "One training run, once; a year of inference, a thousand times heavier." },
+];
 ---
 
 <Layout title={title} description={description} wide>
@@ -146,15 +166,11 @@ const popupId = (id: string) => `atlas-${id}`;
       <p class="atlas-sub">Short lessons on how to read the comparisons — the year, the water, the trajectory, the translations.</p>
     </header>
 
-    <div class="fn-stack">
-      <OrganicFrame subject="electricity"><InfographicAnnualTwh /></OrganicFrame>
-      <OrganicFrame subject="water"><InfographicWaterBracket /></OrganicFrame>
-      <OrganicFrame subject="electricity"><InfographicDcTrajectory /></OrganicFrame>
-      <OrganicFrame subject="electricity"><InfographicAiShareTrajectory /></OrganicFrame>
-      <OrganicFrame subject="electricity"><InfographicWattScalePrimer /></OrganicFrame>
-      <OrganicFrame subject="electricity"><InfographicHouseholdEquivalents /></OrganicFrame>
-      <OrganicFrame subject="carbon"><InfographicTrainingVsInference /></OrganicFrame>
-      <OrganicFrame subject="electricity"><InfographicRangeVsPoint /></OrganicFrame>
+    <div class="fn-grid">
+      {fieldNotes.map((fn) => (
+        <FieldNote numeral={fn.numeral} title={fn.title} blurb={fn.blurb}
+          illustration={fn.illustration} subject={fn.subject} popupId={fn.id} />
+      ))}
     </div>
   </section>
 
@@ -183,6 +199,49 @@ const popupId = (id: string) => `atlas-${id}`;
       </OrnatePopupContent>
     );
   })}
+
+  {/* ===== field-note popups (full charts) ===== */}
+  <OrnatePopupContent popupId="fn-hour" sources={(figuresData as any).hourly_impact.sources} methodsAnchor="hourly-hero">
+    <p class="popup-kicker">Field note I · The Hour</p>
+    <h2 id="popup-title-fn-hour">An hour of driving vs. an hour of AI</h2>
+    <p>{(figuresData as any).hourly_impact.summary}</p>
+    <div class="popup-wide"><HourlyImpactHero /></div>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="fn-year" sources={igById["annual-twh"].sources} methodsAnchor="annual-twh">
+    <p class="popup-kicker">Field note II · The Year</p>
+    <h2 id="popup-title-fn-year">Annual electricity, in context</h2>
+    <p>{igById["annual-twh"].summary}</p>
+    <div class="popup-wide"><InfographicAnnualTwh /></div>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="fn-water" sources={igById["water-bracket"].sources} methodsAnchor="water-bracket">
+    <p class="popup-kicker">Field note III · The Water</p>
+    <h2 id="popup-title-fn-water">Where you draw the boundary</h2>
+    <p>{igById["water-bracket"].summary}</p>
+    <div class="popup-wide"><InfographicWaterBracket /></div>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="fn-trajectory" sources={igById["dc-trajectory"].sources} methodsAnchor="dc-trajectory">
+    <p class="popup-kicker">Field note IV · The Trajectory</p>
+    <h2 id="popup-title-fn-trajectory">Data centers, 2017 to 2030</h2>
+    <p>{igById["dc-trajectory"].summary}</p>
+    <div class="popup-wide"><InfographicDcTrajectory /><InfographicAiShareTrajectory /></div>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="fn-equivalents" sources={igById["household-equivalents"].sources} methodsAnchor="household-equivalents">
+    <p class="popup-kicker">Field note V · In Equivalents</p>
+    <h2 id="popup-title-fn-equivalents">Terawatt-hours, in household-years</h2>
+    <p>{igById["household-equivalents"].summary}</p>
+    <div class="popup-wide"><InfographicWattScalePrimer /><InfographicHouseholdEquivalents /></div>
+  </OrnatePopupContent>
+
+  <OrnatePopupContent popupId="fn-training" sources={igById["training-vs-inference"].sources} methodsAnchor="training-vs-inference">
+    <p class="popup-kicker">Field note VI · Training vs. Inference</p>
+    <h2 id="popup-title-fn-training">Where the carbon actually goes</h2>
+    <p>{igById["training-vs-inference"].summary}</p>
+    <div class="popup-wide"><InfographicTrainingVsInference /></div>
+  </OrnatePopupContent>
 </Layout>
 
 <style>
@@ -255,7 +314,15 @@ const popupId = (id: string) => `atlas-${id}`;
 
   .fieldnotes { margin: var(--space-9) 0 0; }
   .fn-frieze { max-width: 34rem; margin: 0 auto var(--space-6); }
-  .fn-stack { display: grid; gap: var(--space-5); max-width: 40rem; margin: 0 auto; }
+  .fn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    max-width: 46rem;
+    margin: 0 auto;
+  }
+  @media (min-width: 720px) { .fn-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-5); } }
+  .fn-grid > :global(*) { width: 100%; }
 
   .methods-cta { text-align: center; margin: var(--space-9) auto 0; max-width: 32rem; }
   .methods-cta-line {
