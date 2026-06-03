@@ -1,14 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ChapterRail from "../components/ChapterRail.astro";
-import SectionDivider from "../components/SectionDivider.astro";
-import ChapterTitle from "../components/ChapterTitle.astro";
-import OrganicFrame from "../components/OrganicFrame.astro";
-import ChapterPlate from "../components/ChapterPlate.astro";
-import Interlude from "../components/Interlude.astro";
+import Masthead from "../components/Masthead.astro";
+import RangeKey from "../components/RangeKey.astro";
+import FeaturedComparisonPlate from "../components/FeaturedComparisonPlate.astro";
+import ComparisonPlate from "../components/ComparisonPlate.astro";
+import AtlasFilters from "../components/AtlasFilters.astro";
 import OrnatePopupContent from "../components/OrnatePopupContent.astro";
-import HourlyImpactHero from "../components/HourlyImpactHero.astro";
-import InfographicRangeVsPoint from "../components/InfographicRangeVsPoint.astro";
+import RangeBar from "../components/RangeBar.astro";
+import SourceLine from "../components/SourceLine.astro";
+import BotanicalFrieze from "../components/BotanicalFrieze.astro";
+
 import InfographicAnnualTwh from "../components/InfographicAnnualTwh.astro";
 import InfographicWaterBracket from "../components/InfographicWaterBracket.astro";
 import InfographicDcTrajectory from "../components/InfographicDcTrajectory.astro";
@@ -16,430 +17,278 @@ import InfographicAiShareTrajectory from "../components/InfographicAiShareTrajec
 import InfographicHouseholdEquivalents from "../components/InfographicHouseholdEquivalents.astro";
 import InfographicWattScalePrimer from "../components/InfographicWattScalePrimer.astro";
 import InfographicTrainingVsInference from "../components/InfographicTrainingVsInference.astro";
+import InfographicRangeVsPoint from "../components/InfographicRangeVsPoint.astro";
+import OrganicFrame from "../components/OrganicFrame.astro";
+
 import figuresData from "../data/figures.json";
+import { atlasOrder, byId } from "../lib/atlasMeta";
 
-// Map popup id -> { sources, methodsAnchor } so each OrnatePopupContent
-// can render its auto-built clickable source list at the bottom. The
-// popup id values match data.methods_popup_id in figures.json.
-const popupLookup: Record<string, { sources: any[]; methodsAnchor: string }> = {};
-for (const ig of (figuresData as any).infographics) {
-  if (ig.methods_popup_id) {
-    popupLookup[ig.methods_popup_id] = {
-      sources: ig.sources,
-      methodsAnchor: ig.anchor,
-    };
-  }
-}
-if ((figuresData as any).hourly_impact?.methods_popup_id) {
-  popupLookup[(figuresData as any).hourly_impact.methods_popup_id] = {
-    sources: (figuresData as any).hourly_impact.sources,
-    methodsAnchor: "hourly-hero",
-  };
-}
-
-const title = "AI Environmental Impact Comparisons";
+const title = "Compared to What? — AI and Water, Electricity, & CO₂";
 const description =
-  "Numbers, ranges, and sources for what AI's environmental impact actually is — and what it isn't — measured against other ways we use water and electricity.";
+  "An interactive atlas comparing AI and data centers with familiar uses of water and electricity — homes, roads, golf courses, cattle, aviation, Bitcoin, streaming, cement, and the grid. Every figure sourced, every boundary stated.";
+
+const comparisons = (figuresData as any).comparisons as any[];
+const cmpById: Record<string, any> = Object.fromEntries(comparisons.map((c) => [c.id, c]));
+const hourlyRaw = (figuresData as any).hourly_impact;
+
+// synthetic "hourly" comparison so the home page can carry it as plate 15
+const hourly = {
+  id: "hourly",
+  anchor: "hourly-hero",
+  title: "CO₂ per hour: driving vs. AI, gaming & streaming",
+  unit_caption: "Grams CO₂ per hour",
+  figures: hourlyRaw.figures,
+  summary: hourlyRaw.summary,
+  sources: hourlyRaw.sources,
+  last_verified: hourlyRaw.last_verified,
+};
+function record(id: string) { return id === "hourly" ? hourly : cmpById[id]; }
+
+function spreadOf(figs: any[]): number {
+  const vals: number[] = [];
+  for (const f of figs) {
+    for (const v of [f.value, f.value_low, f.value_high]) {
+      if (typeof v === "number" && v > 0) vals.push(v);
+    }
+  }
+  if (vals.length < 2) return 1;
+  return Math.max(...vals) / Math.min(...vals);
+}
+
+const gridEntries = atlasOrder.filter((e) => !e.featured);
+const featured = byId["water-dc-vs-golf"];
+const featuredRec = record(featured.id);
+const popupId = (id: string) => `atlas-${id}`;
 ---
 
 <Layout title={title} description={description} wide>
-  <h1 class="sr-only">{title}</h1>
+  <Masthead />
 
-  <ChapterRail />
-
-  <section id="the-hour" class="chapter">
-    <SectionDivider motif="carbon" />
-    <ChapterTitle
-      number={1}
-      title="The Hour"
-      headline="An hour of driving vs. an hour of AI chat — hundreds to thousands of times apart."
-    />
-    <p class="chapter-intro">
-      An hour of driving emits 14–18 kg of CO₂. An hour of AI chat sits
-      between 5 grams and 50. The chart stacks every common hour-long
-      activity on one axis so the gap reads at a glance.
+  <section class="hero-thesis">
+    <p>
+      AI's environmental footprint is real, growing, and often described without
+      enough scale. This atlas sets AI and data centers beside familiar systems —
+      homes, roads, golf courses, cattle, aviation, Bitcoin, streaming, gaming,
+      cement, steel, and the electric grid itself.
     </p>
-    <ChapterPlate
-      subject="carbon"
-      kicker="ONE HOUR OF DRIVING, IN CARBON"
-      value="14–18"
-      unit="kg / hr"
-      caption="CO₂ from ordinary driving"
-      italic="Hundreds of times an hour of gaming. Thousands of times an hour of chat."
-      popupId="hour-driving"
-    >
-      <HourlyImpactHero />
-    </ChapterPlate>
+    <p class="hero-thesis-q">
+      The question is not only “How large is AI's footprint?” but
+      <em>compared to what?</em>
+    </p>
   </section>
 
-  <section id="the-year" class="chapter">
-    <SectionDivider motif="wheat" />
-    <ChapterTitle
-      number={2}
-      title="The Year"
-      headline="Over a year, AI is still the shortest bar on the chart."
-    />
-    <p class="chapter-intro">
-      A bar chart of 2024 annual electricity, in terawatt-hours: AI workloads
-      inside data centers, the full data-center stack, Bitcoin mining, EV
-      charging, global gaming, and U.S. residential as the reference. AI is
-      the shortest bar. U.S. residential is thirty times longer.
+  <RangeKey />
+
+  <FeaturedComparisonPlate
+    popupId={popupId(featured.id)}
+    title="Water: Data Centers vs. Golf Courses"
+    boundaryNote="Direct cooling alone makes data centers look tiny. Count the water used to generate their electricity and they rise beside U.S. golf — the boundary is most of the argument."
+    figures={featuredRec.figures}
+    statValue="500–700"
+    statUnit="billion gallons / yr"
+    statCaption="Global data centers, counting power plants"
+  />
+
+  <section class="atlas" aria-labelledby="atlas-heading">
+    <header class="atlas-head">
+      <p class="atlas-eyebrow eyebrow">The atlas</p>
+      <h2 id="atlas-heading" class="atlas-title">The Atlas of Comparisons</h2>
+      <p class="atlas-sub">
+        Open a plate to see the numbers, assumptions, boundaries, uncertainty,
+        and sources behind each comparison.
+      </p>
+    </header>
+
+    <AtlasFilters />
+
+    <div class="atlas-grid">
+      {gridEntries.map((e) => {
+        const c = record(e.id);
+        return (
+          <div
+            class="plate-cell"
+            data-order={e.plate}
+            data-metric={e.metric}
+            data-scope={e.scope}
+            data-boundary={e.boundarySensitive ? "true" : "false"}
+            data-confidence={e.confidence}
+            data-spread={spreadOf(c.figures).toFixed(2)}
+            data-title={c.title}
+          >
+            <ComparisonPlate
+              plate={e.plate}
+              title={c.title}
+              metric={e.metric}
+              scope={e.scope}
+              confidence={e.confidence}
+              boundarySensitive={e.boundarySensitive}
+              illustration={e.illustration}
+              takeaway={e.takeaway}
+              figures={c.figures}
+              popupId={popupId(e.id)}
+            />
+          </div>
+        );
+      })}
+    </div>
+    <p id="atlas-empty" class="atlas-empty" style="display:none">No plates match that filter.</p>
+
+    <p class="atlas-allcta">
+      <a href="/comparisons">View all comparisons →</a>
     </p>
-    <ChapterPlate
-      subject="electricity"
-      kicker="AI'S 2024 ELECTRICITY"
-      value="30–80"
-      unit="TWh"
-      caption="AI in data centers, 2024"
-      italic="Even at the top of its range, the shortest bar on the chart."
-      popupId="year-ai"
-    >
-      <InfographicAnnualTwh />
-    </ChapterPlate>
   </section>
 
-  <section id="the-water" class="chapter">
-    <SectionDivider motif="water" />
-    <ChapterTitle
-      number={3}
-      title="The Water"
-      headline="Direct cooling, or counting the power plants — the answer changes."
-    />
-    <p class="chapter-intro">
-      A bracketed bar chart of annual water use, in billions of U.S. gallons:
-      U.S. and global golf courses, plus AI data centers shown two ways —
-      cooling-tower water alone, then with the upstream power-plant water
-      added in. The bracket shows how big the gap is.
-    </p>
-    <ChapterPlate
-      subject="water"
-      kicker="AI DATA CENTERS vs. GOLF, IN WATER"
-      value="500–700"
-      unit="Bgal / yr"
-      caption="Global DC water, counting power"
-      italic="Direct cooling alone is an order of magnitude smaller. Counting the power plants brings AI near U.S. golf."
-      popupId="water-counting"
-    >
-      <InfographicWaterBracket />
-    </ChapterPlate>
+  <section class="fieldnotes" aria-labelledby="fieldnotes-heading">
+    <BotanicalFrieze variant="small" class="fn-frieze" />
+    <header class="atlas-head">
+      <p class="atlas-eyebrow eyebrow">Supporting material</p>
+      <h2 id="fieldnotes-heading" class="atlas-title">Field Notes on Scale</h2>
+      <p class="atlas-sub">Short lessons on how to read the comparisons — the year, the water, the trajectory, the translations.</p>
+    </header>
+
+    <div class="fn-stack">
+      <OrganicFrame subject="electricity"><InfographicAnnualTwh /></OrganicFrame>
+      <OrganicFrame subject="water"><InfographicWaterBracket /></OrganicFrame>
+      <OrganicFrame subject="electricity"><InfographicDcTrajectory /></OrganicFrame>
+      <OrganicFrame subject="electricity"><InfographicAiShareTrajectory /></OrganicFrame>
+      <OrganicFrame subject="electricity"><InfographicWattScalePrimer /></OrganicFrame>
+      <OrganicFrame subject="electricity"><InfographicHouseholdEquivalents /></OrganicFrame>
+      <OrganicFrame subject="carbon"><InfographicTrainingVsInference /></OrganicFrame>
+      <OrganicFrame subject="electricity"><InfographicRangeVsPoint /></OrganicFrame>
+    </div>
   </section>
 
-  <section id="the-trajectory" class="chapter">
-    <SectionDivider motif="vine" />
-    <ChapterTitle
-      number={4}
-      title="The Trajectory"
-      headline="Data-center electricity from 2017 to 2030 — flat through 2018, then bent upward as AI scaled."
-    />
-    <p class="chapter-intro">
-      Two paired line charts from 2017 to 2030, both in terawatt-hours. The
-      first traces total global data-center electricity. The second is AI's
-      share inside that line. Both bend upward after 2022; the IEA's 2030
-      ranges open into wide fans.
+  <section class="methods-cta">
+    <p class="methods-cta-line">
+      Read the ledger: every figure has a derivation, a source trail, an
+      uncertainty note, and a last-verified date.
     </p>
-    <ChapterPlate
-      subject="electricity"
-      kicker="DATA CENTERS BY 2030"
-      value="830–1,350"
-      unit="TWh by 2030"
-      caption="Data centers, IEA range"
-      italic="Flat through 2018, then bent. Heading for double to triple by 2030."
-      popupId="trajectory-dc"
-    >
-      <InfographicDcTrajectory />
-    </ChapterPlate>
-    <Interlude
-      leftSubject="electricity"
-      leftValue="485"
-      leftUnit="TWh"
-      leftCaption="Data centers, 2025"
-      italic="The line bent because data centers got bigger. They got bigger because of AI."
-      rightSubject="electricity"
-      rightValue="300"
-      rightUnit="TWh"
-      rightCaption="AI by 2030, central case"
-    />
-    <ChapterPlate
-      subject="electricity"
-      kicker="AI BY 2030"
-      value="200–400"
-      unit="TWh by 2030"
-      caption="AI's slice, IEA range"
-      italic="From 65 TWh in 2024 to 200–400 TWh by 2030 — three to six times higher."
-      popupId="trajectory-ai"
-    >
-      <InfographicAiShareTrajectory />
-    </ChapterPlate>
+    <p class="methods-cta-link"><a href="/methods">Read the methodology →</a></p>
   </section>
 
-  <section id="in-equivalents" class="chapter">
-    <SectionDivider motif="wheat" />
-    <ChapterTitle
-      number={5}
-      title="In Equivalents"
-      headline="Translated into homes: 39 million in 2024, past 70 million by 2030."
-    />
-    <p class="chapter-intro">
-      A primer first — what a terawatt-hour buys, walked from a single
-      microwave-hour up to a thousand TWh. Then global data-center
-      electricity recast as the number of U.S. households it would power for
-      a year.
-    </p>
-    <ChapterPlate
-      subject="electricity"
-      kicker="WHAT A TWh MEANS"
-      value="85,000"
-      unit="homes"
-      caption="One TWh, for a year"
-      italic="AI in 2024 used 30–80 TWh. U.S. residential: 1,550 TWh — the top rung."
-      popupId="equiv-watt"
-    >
-      <InfographicWattScalePrimer />
-    </ChapterPlate>
-    <Interlude
-      leftSubject="electricity"
-      leftValue="1"
-      leftUnit="kWh"
-      leftCaption="A microwave for an hour"
-      italic="Same axis, two ends: a microwave for an hour at the bottom, every data center on Earth by 2030 at the top."
-      rightSubject="electricity"
-      rightValue="70–113M"
-      rightUnit="homes"
-      rightCaption="Global DC, 2030 projections"
-    />
-    <ChapterPlate
-      subject="electricity"
-      kicker="ELECTRICITY, IN HOMES"
-      value="39M"
-      unit="U.S. homes"
-      caption="Global data centers, 2024"
-      italic="AI's slice inside that bar: 2.5 to 7 million households."
-      popupId="equiv-hh"
-    >
-      <InfographicHouseholdEquivalents />
-    </ChapterPlate>
-  </section>
-
-  <section id="training-vs-inference" class="chapter">
-    <SectionDivider motif="carbon" />
-    <ChapterTitle
-      number={6}
-      title="Training vs. Inference"
-      headline="Five dots for training, one bar for inference — and the bar is bigger."
-    />
-    <p class="chapter-intro">
-      Five labeled dots, one per published training event (BERT, GPT-3,
-      BLOOM, Llama 2, Llama 3), and one bar for a year of all AI inference
-      combined. Same log scale, in tonnes of CO₂. The bar runs about a
-      thousand times the heaviest training dot.
-    </p>
-    <ChapterPlate
-      subject="carbon"
-      kicker="TRAINING vs. INFERENCE"
-      value="8.4–27.2"
-      unit="Mt CO₂"
-      caption="Annual AI inference, 2024"
-      italic="One model's training run, once. A year of every AI prompt the world sent — a thousand times heavier."
-      popupId="training-inference"
-    >
-      <InfographicTrainingVsInference />
-    </ChapterPlate>
-  </section>
-
-  <section class="postscript" aria-label="How to read this site">
-    <SectionDivider motif="wheat" />
-    <p class="postscript-kicker">HOW TO READ THIS SITE</p>
-    <p class="postscript-line">
-      Every figure on this site is a range, not a single number. The primer
-      below shows how a range gets drawn — what 'low' and 'high' mean, and
-      why we leave the middle empty.
-    </p>
-    <OrganicFrame sideLeft={true}>
-      <InfographicRangeVsPoint />
-    </OrganicFrame>
-  </section>
-
-  <!-- ============================================================
-       Popup content templates
-       ============================================================ -->
-
-  <OrnatePopupContent popupId="hour-driving" sources={popupLookup["hour-driving"]?.sources} methodsAnchor={popupLookup["hour-driving"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-hour-driving">Driving an hour, in carbon</h2>
-    <p>
-      A U.S. light-duty vehicle emits about 14–18 kilograms of CO₂ over an
-      hour of ordinary driving. The range comes from EPA fleet fuel-economy
-      averages (25–35 mpg) at typical highway speeds of 55–70 mph.
-    </p>
-    <p>
-      An hour of AI chat sits at about 0.005–0.05 kg, depending on model size
-      and grid mix. The driving bar is, on the low end, three orders of
-      magnitude larger.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="year-ai" sources={popupLookup["year-ai"]?.sources} methodsAnchor={popupLookup["year-ai"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-year-ai">AI's electricity, 2024</h2>
-    <p>
-      The IEA's Energy and AI report puts AI at the lower end of this range.
-      The upper end accommodates LBNL and Goldman Sachs estimates that place
-      AI's 2024 footprint somewhat higher.
-    </p>
-    <p>
-      The chart's six bars share one axis. AI is the shortest. The data-center
-      stack that contains it is the second-shortest. U.S. residential is the
-      reference bar — about 1,550 TWh.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="water-counting" sources={popupLookup["water-counting"]?.sources} methodsAnchor={popupLookup["water-counting"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-water-counting">Counting the power plants</h2>
-    <p>
-      Direct cooling-tower water for global data centers runs about 45–90
-      billion gallons a year. Including water consumed at the power plants
-      that feed those data centers raises the total to 500–700 billion.
-    </p>
-    <p>
-      The bracket on the chart shows both lines. Where you draw the boundary
-      changes whether AI sits well below U.S. golf or roughly alongside it.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="trajectory-dc" sources={popupLookup["trajectory-dc"]?.sources} methodsAnchor={popupLookup["trajectory-dc"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-trajectory-dc">Data centers, IEA range</h2>
-    <p>
-      The IEA's Energy and AI report sets the 2030 data-center band at
-      830–1,350 TWh. The line is flat through 2018 around 200 TWh, hits 485
-      in 2025, and opens into the fan after 2026.
-    </p>
-    <p>
-      The fan widens because the central case depends on chip efficiency,
-      cooling improvements, and inference demand — all of which span wide
-      ranges.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="trajectory-ai" sources={popupLookup["trajectory-ai"]?.sources} methodsAnchor={popupLookup["trajectory-ai"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-trajectory-ai">AI inside the line</h2>
-    <p>
-      AI's share of data-center electricity was about 65 TWh in 2024. The
-      IEA's 2030 range runs from 200 TWh on the low end to 400 TWh on the
-      high — three to six times the 2024 figure.
-    </p>
-    <p>
-      The 2025 projection sits near 100 TWh. From there the fan opens fast
-      and stays open through 2030.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="equiv-watt" sources={popupLookup["equiv-watt"]?.sources} methodsAnchor={popupLookup["equiv-watt"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-equiv-watt">One terawatt-hour, translated</h2>
-    <p>
-      One terawatt-hour powers about 85,000 average U.S. homes for a year.
-      The figure comes from EIA's residential energy survey — roughly 11,700
-      kWh per home per year.
-    </p>
-    <p>
-      The chart's ladder runs from a microwave for an hour to a thousand
-      terawatt-hours. AI in 2024 sits at thirty to eighty of these. U.S.
-      residential at 1,550.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="equiv-hh" sources={popupLookup["equiv-hh"]?.sources} methodsAnchor={popupLookup["equiv-hh"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-equiv-hh">Global data centers, in households</h2>
-    <p>
-      Global data centers used about 460 TWh in 2024 — equivalent to 39
-      million U.S. homes for a year. AI's slice inside that bar runs from
-      2.5 to 7 million households.
-    </p>
-    <p>
-      By 2030 the data-center band reaches 70 to 113 million households on
-      the same axis. The conversion uses the same per-home figure as the
-      primer: 11,700 kWh per home per year.
-    </p>
-  </OrnatePopupContent>
-
-  <OrnatePopupContent popupId="training-inference" sources={popupLookup["training-inference"]?.sources} methodsAnchor={popupLookup["training-inference"]?.methodsAnchor}>
-    <p class="popup-kicker">Methodology</p>
-    <h2 id="popup-title-training-inference">A year of inference, in carbon</h2>
-    <p>
-      Annual inference for AI in 2024 totals 8.4–27.2 million tonnes of CO₂.
-      The range depends on grid mix, chip efficiency, and how much of the
-      total query mix runs on frontier vs. smaller models.
-    </p>
-    <p>
-      The five training-event dots — GPT-3 through Gemini Ultra — span four
-      orders of magnitude beneath the bar. Most of AI's carbon shows up
-      after the model ships.
-    </p>
-  </OrnatePopupContent>
+  {/* ===== detail popups, one per atlas plate ===== */}
+  {atlasOrder.map((e) => {
+    const c = record(e.id);
+    return (
+      <OrnatePopupContent popupId={popupId(e.id)}>
+        <p class="popup-kicker">Comparison</p>
+        <h2 id={`popup-title-atlas-${e.id}`}>{c.title}</h2>
+        <p>{c.summary}</p>
+        {e.boundarySensitive && (
+          <p class="popup-boundary"><strong>Boundary note:</strong> the answer depends on where you draw the line — whether only direct use is counted, or the upstream water and power are included too.</p>
+        )}
+        {c.unit_caption && <p class="popup-unit">{c.unit_caption}</p>}
+        <RangeBar figures={c.figures} />
+        <SourceLine sources={c.sources} lastVerified={c.last_verified} methodsAnchor={c.anchor} />
+      </OrnatePopupContent>
+    );
+  })}
 </Layout>
 
 <style>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  .hero-thesis {
+    max-width: 36rem;
+    margin: 0 auto var(--space-5);
+    text-align: center;
   }
-
-  .chapter {
-    margin: 0 0 var(--space-8);
-  }
-
-  .chapter-intro {
+  .hero-thesis p {
     font-family: var(--font-serif);
-    font-size: 1.05rem;
-    line-height: 1.55;
+    font-size: 1.1rem;
+    line-height: 1.6;
     color: var(--ink);
-    text-align: center;
-    max-width: 32rem;
-    margin: 0 auto var(--space-6);
-  }
-  @media (min-width: 720px) {
-    .chapter-intro {
-      font-size: 1.15rem;
-      max-width: 36rem;
-    }
-  }
-
-  .postscript {
-    margin: var(--space-9) 0 var(--space-6);
-  }
-  .postscript-kicker {
-    font-family: var(--font-serif);
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: var(--ink-soft);
-    text-align: center;
     margin: 0 0 var(--space-3);
   }
-  .postscript-line {
+  .hero-thesis-q { font-size: 1.18rem !important; }
+  .hero-thesis-q em { font-style: italic; color: var(--accent); }
+
+  .atlas-head { text-align: center; margin: 0 0 var(--space-5); }
+  .atlas-eyebrow { margin: 0 0 var(--space-2); }
+  .atlas-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    line-height: 1.05;
+    color: var(--ink);
+    margin: 0 0 var(--space-3);
+  }
+  .atlas-sub {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: 1.05rem;
-    line-height: 1.55;
-    color: var(--ink);
-    text-align: center;
+    font-size: 1.02rem;
+    color: var(--ink-soft);
     max-width: 32rem;
-    margin: 0 auto var(--space-5);
+    margin: 0 auto;
+    line-height: 1.5;
   }
-  @media (min-width: 720px) {
-    .postscript-line {
-      font-size: 1.15rem;
-    }
+  .atlas { margin: var(--space-8) 0 0; }
+  .atlas-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  @media (min-width: 560px) {
+    .atlas-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 900px) {
+    .atlas-grid { grid-template-columns: 1fr 1fr 1fr; gap: var(--space-5); }
+  }
+  .plate-cell { display: flex; }
+  .plate-cell > :global(*) { width: 100%; }
+  .atlas-empty {
+    text-align: center;
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: var(--space-6) 0;
+  }
+  .atlas-allcta { text-align: center; margin: var(--space-7) 0 0; }
+  .atlas-allcta a {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+  .atlas-allcta a:hover { color: var(--ink); }
+
+  .fieldnotes { margin: var(--space-9) 0 0; }
+  .fn-frieze { max-width: 34rem; margin: 0 auto var(--space-6); }
+  .fn-stack { display: grid; gap: var(--space-5); max-width: 40rem; margin: 0 auto; }
+
+  .methods-cta { text-align: center; margin: var(--space-9) auto 0; max-width: 32rem; }
+  .methods-cta-line {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.08rem;
+    color: var(--ink);
+    line-height: 1.55;
+    margin: 0 0 var(--space-3);
+  }
+  .methods-cta-link a {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+  :global(.popup-boundary) {
+    font-size: 0.95rem !important;
+    background: rgba(154, 79, 48, 0.07);
+    border-left: 2px solid var(--accent);
+    padding: var(--space-2) var(--space-3);
+    margin: var(--space-3) 0 !important;
+  }
+  :global(.popup-unit) {
+    font-family: var(--font-serif);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    margin: var(--space-3) 0 var(--space-1) !important;
   }
 </style>

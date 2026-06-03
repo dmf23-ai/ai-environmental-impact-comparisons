@@ -1,0 +1,154 @@
+---
+// AtlasFilters — engraved pill filters + a quiet sort control for the atlas
+// grid. Single active filter at a time (ALL resets). Operates on the sibling
+// .atlas-grid's .plate-cell children via data-* attributes; no framework.
+const filters = [
+  { key: "all", label: "All" },
+  { key: "metric:water", label: "Water" },
+  { key: "metric:electricity", label: "Electricity" },
+  { key: "metric:co2", label: "CO₂ / CO₂e" },
+  { key: "scope:us", label: "U.S." },
+  { key: "scope:global", label: "Global" },
+  { key: "flag:boundary", label: "Boundary-sensitive" },
+  { key: "flag:uncertain", label: "Higher uncertainty" },
+];
+---
+<div class="atlas-controls">
+  <div class="atlas-pills" role="group" aria-label="Filter comparisons">
+    {filters.map((f, i) => (
+      <button type="button" class:list={["atlas-pill", i === 0 && "is-active"]} data-filter={f.key} aria-pressed={i === 0 ? "true" : "false"}>
+        {f.label}
+      </button>
+    ))}
+  </div>
+  <label class="atlas-sort">
+    <span class="smallcaps">Sort</span>
+    <select id="atlas-sort-select">
+      <option value="order">Featured order</option>
+      <option value="spread">Largest difference</option>
+      <option value="boundary">Most boundary-sensitive</option>
+      <option value="uncertain">Highest uncertainty</option>
+      <option value="alpha">Alphabetical</option>
+    </select>
+  </label>
+</div>
+
+<script is:inline>
+  (function () {
+    function init() {
+      var pills = Array.prototype.slice.call(document.querySelectorAll(".atlas-pill"));
+      var grid = document.querySelector(".atlas-grid");
+      var sortSel = document.getElementById("atlas-sort-select");
+      if (!grid) return;
+      var cells = Array.prototype.slice.call(grid.querySelectorAll(".plate-cell"));
+
+      function matches(cell, key) {
+        if (key === "all") return true;
+        var parts = key.split(":");
+        var kind = parts[0], val = parts[1];
+        if (kind === "metric") return cell.getAttribute("data-metric") === val ||
+          (val === "co2" && cell.getAttribute("data-metric") === "co2e");
+        if (kind === "scope") {
+          var s = cell.getAttribute("data-scope");
+          return s === val || s === "mixed";
+        }
+        if (kind === "flag") {
+          if (val === "boundary") return cell.getAttribute("data-boundary") === "true";
+          if (val === "uncertain") return cell.getAttribute("data-confidence") === "lower";
+        }
+        return true;
+      }
+
+      function applyFilter(key) {
+        var shown = 0;
+        cells.forEach(function (c) {
+          var ok = matches(c, key);
+          c.style.display = ok ? "" : "none";
+          if (ok) shown++;
+        });
+        var empty = document.getElementById("atlas-empty");
+        if (empty) empty.style.display = shown === 0 ? "" : "none";
+      }
+
+      pills.forEach(function (p) {
+        p.addEventListener("click", function () {
+          pills.forEach(function (q) { q.classList.remove("is-active"); q.setAttribute("aria-pressed", "false"); });
+          p.classList.add("is-active"); p.setAttribute("aria-pressed", "true");
+          applyFilter(p.getAttribute("data-filter"));
+        });
+      });
+
+      function num(c, attr) { return parseFloat(c.getAttribute(attr) || "0"); }
+      function applySort(mode) {
+        var arr = cells.slice();
+        arr.sort(function (a, b) {
+          if (mode === "order") return num(a, "data-order") - num(b, "data-order");
+          if (mode === "spread") return num(b, "data-spread") - num(a, "data-spread");
+          if (mode === "boundary")
+            return (b.getAttribute("data-boundary") === "true") - (a.getAttribute("data-boundary") === "true")
+              || num(a, "data-order") - num(b, "data-order");
+          if (mode === "uncertain") {
+            var rank = { lower: 0, medium: 1, higher: 2 };
+            return rank[a.getAttribute("data-confidence")] - rank[b.getAttribute("data-confidence")]
+              || num(a, "data-order") - num(b, "data-order");
+          }
+          if (mode === "alpha")
+            return (a.getAttribute("data-title") || "").localeCompare(b.getAttribute("data-title") || "");
+          return 0;
+        });
+        arr.forEach(function (c) { grid.appendChild(c); });
+      }
+      if (sortSel) sortSel.addEventListener("change", function () { applySort(sortSel.value); });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+</script>
+
+<style>
+  .atlas-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-5);
+  }
+  .atlas-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .atlas-pill {
+    font-family: var(--font-serif);
+    font-variant-caps: small-caps;
+    letter-spacing: 0.06em;
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 0.25em 0.85em;
+    cursor: pointer;
+    transition: all 140ms ease;
+  }
+  .atlas-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .atlas-pill.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper);
+  }
+  .atlas-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .atlas-sort .smallcaps { letter-spacing: 0.1em; }
+  .atlas-sort select {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    padding: 0.25em 0.5em;
+  }
+</style>

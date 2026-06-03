@@ -1,75 +1,155 @@
 ---
-// ComparisonPlate — ornate herbarium plate for /comparisons. Front shows the
-// title and unit caption inside an OrganicFrame with a SubjectMarker; the
-// whole plate is an OrnatePopupTrigger that opens the full detail popup.
+// ComparisonPlate — an engraved specimen card for the atlas. Plate number,
+// illustration, metric/scope chips, title, one-line takeaway, a mini engraved
+// chart, and a confidence note. The whole plate is an OrnatePopupTrigger that
+// blooms open the full detail (chart + sources + method) on click/Enter.
 import OrganicFrame from "./OrganicFrame.astro";
-import SubjectMarker from "./SubjectMarker.astro";
 import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+import PlateIllustration from "./PlateIllustration.astro";
+import RangeBar from "./RangeBar.astro";
+import {
+  metricLabel, scopeLabel, confidenceLabel, subjectForMetric,
+  type Metric, type Scope, type Confidence,
+} from "../lib/atlasMeta";
 
+interface Figure { label: string; value?: number; value_low?: number; value_high?: number; confidence?: string; }
 interface Props {
-  id: string;
+  plate: number;
   title: string;
-  unitCaption?: string;
-  subject: "water" | "electricity" | "carbon";
+  metric: Metric;
+  scope: Scope;
+  confidence: Confidence;
+  boundarySensitive?: boolean;
+  illustration: string;
+  takeaway: string;
+  figures: Figure[];
   popupId: string;
 }
-const { title, unitCaption, subject, popupId } = Astro.props;
+const { plate, title, metric, scope, confidence, boundarySensitive = false,
+  illustration, takeaway, figures, popupId } = Astro.props;
+const subject = subjectForMetric(metric);
+const num = String(plate).padStart(2, "0");
 ---
 
 <OrnatePopupTrigger popupId={popupId} as="card" label={`Open detail for ${title}`}>
-  <OrganicFrame subject={subject} sideLeft>
-    <div class="plate-front">
-      <p class="plate-title">{title}</p>
-      {unitCaption && <p class="plate-unit">{unitCaption}</p>}
-      <span class="plate-affordance">Open detail →</span>
-    </div>
+  <OrganicFrame subject={subject}>
+    <article class="plate" data-subject={subject}>
+      <header class="plate-top">
+        <span class="plate-num">{num}</span>
+        <span class="plate-illo-wrap" style={`color: var(--subject-${subject})`}>
+          <PlateIllustration name={illustration} size={38} />
+        </span>
+        <span class="plate-chips">
+          <span class="plate-chip">{metricLabel[metric]}</span>
+          <span class="plate-dot">·</span>
+          <span class="plate-chip">{scopeLabel[scope]}</span>
+          {boundarySensitive && (
+            <svg class="plate-seal" viewBox="0 0 18 18" aria-label="Boundary-sensitive">
+              <circle cx="9" cy="9" r="7.5" fill="none" stroke="var(--accent)" stroke-width="1.3"/>
+              <path d="M9 4.5 v9 M4.5 9 h9" stroke="var(--accent)" stroke-width="1.3"/>
+            </svg>
+          )}
+        </span>
+      </header>
+
+      <h3 class="plate-title">{title}</h3>
+      <p class="plate-take">{takeaway}</p>
+
+      <div class="plate-mini">
+        <RangeBar figures={figures} />
+      </div>
+
+      <footer class="plate-foot">
+        <span class="plate-conf">{confidenceLabel[confidence]}</span>
+        <span class="plate-open">Open detail →</span>
+      </footer>
+    </article>
   </OrganicFrame>
 </OrnatePopupTrigger>
 
 <style>
-  /* OrganicFrame ships with vertical margins for in-prose use; inside a
-     grid cell those margins push the plate off-center. Override to 0. */
-  :global(.ornate-popup-trigger-card > .organic-frame) {
-    margin: 0;
-  }
-  .plate-front {
+  :global(.ornate-popup-trigger-card > .organic-frame) { margin: 0; height: 100%; }
+  .plate {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-3);
-    min-height: 9rem;
-    justify-content: center;
+    height: 100%;
+    text-align: left;
+    gap: var(--space-2);
   }
+  .plate-top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .plate-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--accent);
+    min-width: 1.8rem;
+  }
+  .plate-illo-wrap { display: inline-flex; }
+  .plate-chips {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    font-family: var(--font-serif);
+    font-variant-caps: small-caps;
+    letter-spacing: 0.06em;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+  .plate-dot { color: var(--accent); }
+  .plate-seal { width: 15px; height: 15px; margin-left: 0.2em; }
   .plate-title {
     font-family: var(--font-serif);
-    font-size: 1.15rem;
-    line-height: 1.3;
+    font-weight: 700;
+    font-size: 1.08rem;
+    line-height: 1.25;
     color: var(--ink);
-    margin: 0;
-    max-width: 20rem;
+    margin: var(--space-2) 0 0;
   }
-  .plate-unit {
+  .plate-take {
     font-family: var(--font-serif);
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.45;
     color: var(--ink-soft);
     margin: 0;
   }
-  .plate-affordance {
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--accent);
-    margin-top: var(--space-2);
+  .plate-mini {
+    margin-top: auto;
+    padding-top: var(--space-2);
   }
-
-  @media (min-width: 720px) {
-    .plate-title {
-      font-size: 1.25rem;
-    }
+  /* compact the shared RangeBar inside a dense card */
+  .plate-mini :global(.range-bars) { gap: 0.55rem; margin: 0.4rem 0 0; }
+  .plate-mini :global(.bar-header) { font-size: 0.74rem; }
+  .plate-mini :global(.bar-track) { height: 11px; }
+  .plate-mini :global(.axis) { font-size: 0.66rem; }
+  .plate-foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--hairline);
+  }
+  .plate-conf {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .plate-open {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
   }
 </style>

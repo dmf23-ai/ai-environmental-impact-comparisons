@@ -5,101 +5,100 @@ import OrnatePopupContent from "../components/OrnatePopupContent.astro";
 import RangeBar from "../components/RangeBar.astro";
 import SourceLine from "../components/SourceLine.astro";
 import figuresData from "../data/figures.json";
+import { atlasOrder, byId } from "../lib/atlasMeta";
 
-const title = "Comparisons — AI Environmental Impact";
+const title = "Comparisons — Compared to What?";
 const description =
-  "Side-by-side comparisons of AI's environmental footprint with other large uses of water and electricity.";
+  "The full archive of AI environmental comparisons: water, electricity, and CO₂ set beside familiar systems. Every plate sourced, bounded, and dated.";
 
-function subjectFor(id: string): "water" | "electricity" | "carbon" {
-  if (id.startsWith("water")) return "water";
-  if (id.startsWith("co2")) return "carbon";
-  return "electricity";
-}
-
-const comparisons = (figuresData as any).comparisons as Array<any>;
+const comparisons = (figuresData as any).comparisons as any[];
+const cmpById: Record<string, any> = Object.fromEntries(comparisons.map((c) => [c.id, c]));
+const hourlyRaw = (figuresData as any).hourly_impact;
+const hourly = {
+  id: "hourly", anchor: "hourly-hero",
+  title: "CO₂ per hour: driving vs. AI, gaming & streaming",
+  unit_caption: "Grams CO₂ per hour",
+  figures: hourlyRaw.figures, summary: hourlyRaw.summary,
+  sources: hourlyRaw.sources, last_verified: hourlyRaw.last_verified,
+};
+function record(id: string) { return id === "hourly" ? hourly : cmpById[id]; }
+const popupId = (id: string) => `atlas-${id}`;
 ---
 
-<Layout title={title} description={description} wide={true}>
+<Layout title={title} description={description} wide>
   <p class="back"><a href="/">← Home</a></p>
-  <h1 class="page-title">Comparisons</h1>
-  <p class="page-kicker">Click a plate to open detail</p>
+  <header class="cmp-head">
+    <p class="eyebrow">The full archive</p>
+    <h1 class="cmp-title">The Atlas of Comparisons</h1>
+    <p class="cmp-sub">Every comparison on the site. Open a plate for its chart, sources, and method.</p>
+  </header>
 
-  <div class="comparison-grid">
-    {comparisons.map((c) => (
-      <ComparisonPlate
-        id={c.id}
-        title={c.title}
-        unitCaption={c.unit_caption}
-        subject={subjectFor(c.id)}
-        popupId={`cmp-${c.anchor}`}
-      />
-    ))}
+  <div class="atlas-grid">
+    {atlasOrder.map((e) => {
+      const c = record(e.id);
+      return (
+        <div class="plate-cell">
+          <ComparisonPlate
+            plate={e.plate}
+            title={c.title}
+            metric={e.metric}
+            scope={e.scope}
+            confidence={e.confidence}
+            boundarySensitive={e.boundarySensitive}
+            illustration={e.illustration}
+            takeaway={e.takeaway}
+            figures={c.figures}
+            popupId={popupId(e.id)}
+          />
+        </div>
+      );
+    })}
   </div>
 
-  {/* Popup content templates — one per comparison, full detail inside. */}
-  {comparisons.map((c) => (
-    <OrnatePopupContent popupId={`cmp-${c.anchor}`}>
-      <p class="popup-kicker">Comparison</p>
-      <h2 id={`popup-title-cmp-${c.anchor}`}>{c.title}</h2>
-      <p>{c.summary}</p>
-      {c.unit_caption && <p class="popup-unit">{c.unit_caption}</p>}
-      <RangeBar figures={c.figures} />
-      <SourceLine
-        sources={c.sources}
-        lastVerified={c.last_verified}
-        methodsAnchor={c.anchor}
-      />
-    </OrnatePopupContent>
-  ))}
+  {atlasOrder.map((e) => {
+    const c = record(e.id);
+    return (
+      <OrnatePopupContent popupId={popupId(e.id)}>
+        <p class="popup-kicker">Comparison</p>
+        <h2 id={`popup-title-atlas-${e.id}`}>{c.title}</h2>
+        <p>{c.summary}</p>
+        {c.unit_caption && <p class="popup-unit">{c.unit_caption}</p>}
+        <RangeBar figures={c.figures} />
+        <SourceLine sources={c.sources} lastVerified={c.last_verified} methodsAnchor={c.anchor} />
+      </OrnatePopupContent>
+    );
+  })}
 </Layout>
 
 <style>
-  .back {
-    margin: 0 0 var(--space-3);
-    font-size: 0.9rem;
-  }
-  .back a {
-    color: var(--ink-soft);
-    text-decoration: none;
-  }
-  .back a:hover {
-    color: var(--accent);
-  }
-  .page-title {
-    text-align: center;
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 2.2rem;
-    line-height: 1.1;
-    margin: 0 0 var(--space-2);
+  .cmp-head { text-align: center; margin: var(--space-4) 0 var(--space-7); }
+  .cmp-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.05;
+    margin: var(--space-2) 0 var(--space-3);
     color: var(--ink);
   }
-  .page-kicker {
-    text-align: center;
+  .cmp-sub {
     font-family: var(--font-serif);
     font-style: italic;
     color: var(--ink-soft);
-    font-size: 0.95rem;
-    margin: 0 0 var(--space-7);
-  }
-  .comparison-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
+    font-size: 1.02rem;
     margin: 0 auto;
+    max-width: 30rem;
   }
-  @media (min-width: 720px) {
-    .comparison-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
-    }
-  }
-  .popup-unit {
+  .atlas-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+  @media (min-width: 560px) { .atlas-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 900px) { .atlas-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .plate-cell { display: flex; }
+  .plate-cell > :global(*) { width: 100%; }
+  :global(.popup-unit) {
     font-family: var(--font-serif);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--ink-soft);
-    margin: var(--space-3) 0 var(--space-2);
+    margin: var(--space-3) 0 var(--space-1) !important;
   }
 </style>

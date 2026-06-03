@@ -1,0 +1,199 @@
+---
+// FeaturedComparisonPlate — the homepage's visual anchor. A large ornate panel
+// for the water/golf boundary comparison: a "Featured" ribbon, a left
+// ink-and-wash landscape vignette, a central bespoke bar chart (rust golf vs
+// teal data centers, with the direct-cooling framing set lighter), and a right
+// ornamental stat cartouche. The whole panel opens the full detail popup.
+import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+import NumericCartouche from "./NumericCartouche.astro";
+
+interface Figure { label: string; value?: number; value_low?: number; value_high?: number; }
+interface Props {
+  popupId: string;
+  title: string;
+  boundaryNote: string;
+  figures: Figure[];
+  statValue: string;
+  statUnit: string;
+  statCaption: string;
+}
+const { popupId, title, boundaryNote, figures, statValue, statUnit, statCaption } = Astro.props;
+
+function niceCeiling(n: number): number {
+  if (n <= 10) return Math.ceil(n);
+  const mag = Math.pow(10, Math.floor(Math.log10(n)));
+  const m = n / mag;
+  const r = m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10;
+  return r * mag;
+}
+const fmt = (n: number) => n.toLocaleString("en-US");
+const axisMax = niceCeiling(Math.max(...figures.map((f) => f.value_high ?? f.value ?? 0)));
+
+const rows = figures.map((f) => {
+  const isGolf = /golf/i.test(f.label);
+  const isCoolingOnly = /cooling only|direct cooling/i.test(f.label);
+  const low = f.value ?? f.value_low ?? 0;
+  const high = f.value ?? f.value_high ?? 0;
+  const isPoint = low === high;
+  return {
+    label: f.label,
+    valueText: isPoint ? fmt(low) : `${fmt(low)}–${fmt(high)}`,
+    leftPct: (low / axisMax) * 100,
+    widthPct: Math.max(((high - low) / axisMax) * 100, 0),
+    pointPct: (high / axisMax) * 100,
+    isPoint,
+    group: isGolf ? "golf" : "dc",
+    faded: isCoolingOnly,
+  };
+});
+---
+
+<section class="featured">
+  <span class="featured-ribbon smallcaps">Featured comparison</span>
+
+  <div class="featured-grid">
+    <!-- left: ink-and-wash landscape vignette -->
+    <div class="featured-vignette" aria-hidden="true">
+      <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+        <rect x="0" y="0" width="200" height="200" fill="var(--paper-light)"/>
+        <path d="M0 78 q50 -16 100 -4 t100 -2 V0 H0 Z" fill="var(--subject-water)" opacity="0.10"/>
+        <path d="M0 120 q40 -22 80 -14 q60 6 120 -10 V200 H0 Z" fill="var(--sage)" opacity="0.30"/>
+        <path d="M0 138 q60 -10 120 2 q40 8 80 0 V200 H0 Z" fill="var(--sage)" opacity="0.45"/>
+        <ellipse cx="118" cy="150" rx="58" ry="18" fill="var(--subject-water)" opacity="0.55"/>
+        <ellipse cx="118" cy="150" rx="58" ry="18" fill="none" stroke="var(--subject-water)" stroke-opacity="0.7"/>
+        <path d="M96 146 q12 -3 24 0 M104 153 q10 -2 18 0" stroke="#fff" stroke-opacity="0.5" fill="none" stroke-width="1.2"/>
+        <line x1="56" y1="92" x2="56" y2="132" stroke="var(--ink-soft)" stroke-width="1.6"/>
+        <path d="M56 92 l13 4 -13 4 z" fill="var(--accent)"/>
+        <circle cx="56" cy="133" r="1.6" fill="var(--ink-soft)"/>
+        <path d="M150 118 q4 -14 8 0 q-4 4 -8 0" fill="var(--accent)" opacity="0.8"/>
+        <path d="M158 124 q3 -11 6 0 q-3 3 -6 0" fill="var(--accent)" opacity="0.7"/>
+      </svg>
+    </div>
+
+    <!-- center: title + boundary note + bespoke chart -->
+    <div class="featured-main">
+      <h2 class="featured-title">{title}</h2>
+      <p class="featured-note">{boundaryNote}</p>
+
+      <div class="featured-chart" role="img" aria-label={`${title}. Bar chart in billions of gallons per year.`}>
+        {rows.map((r) => (
+          <div class:list={["fc-row", `fc-${r.group}`, r.faded && "fc-faded"]}>
+            <div class="fc-head">
+              <span class="fc-label">{r.label}</span>
+              <span class="fc-value">{r.valueText}</span>
+            </div>
+            <div class="fc-track">
+              {r.isPoint ? (
+                <div class="fc-fill" style={`width:${r.pointPct}%`} />
+              ) : (
+                <div class="fc-band" style={`left:${r.leftPct}%;width:${r.widthPct}%`} />
+              )}
+            </div>
+          </div>
+        ))}
+        <div class="fc-axis"><span>0</span><span>{fmt(axisMax)} billion gallons / yr</span></div>
+      </div>
+    </div>
+
+    <!-- right: ornamental stat cartouche + CTA -->
+    <div class="featured-aside">
+      <NumericCartouche value={statValue} unit={statUnit} caption={statCaption} subject="water" ornate={true} />
+      <OrnatePopupTrigger popupId={popupId} as="bare" label={`Open detail for ${title}`}>
+        <span class="featured-cta">Open detail →</span>
+      </OrnatePopupTrigger>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured {
+    position: relative;
+    border: 1px solid var(--ink-soft);
+    outline: 1px solid var(--hairline);
+    outline-offset: -7px;
+    border-radius: 0 24px 0 24px;
+    background: rgba(247, 240, 222, 0.7);
+    padding: var(--space-7) var(--space-6) var(--space-6);
+    margin: var(--space-6) 0 var(--space-8);
+  }
+  .featured-ribbon {
+    position: absolute;
+    top: -0.8rem;
+    left: var(--space-6);
+    background: var(--accent);
+    color: var(--paper);
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    padding: 0.25em 1em;
+    border-radius: 2px;
+  }
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+    align-items: center;
+  }
+  .featured-vignette {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    aspect-ratio: 3 / 2;
+  }
+  .featured-vignette svg { width: 100%; height: 100%; display: block; }
+  .featured-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 var(--space-2);
+  }
+  .featured-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.02rem;
+    color: var(--ink-soft);
+    margin: 0 0 var(--space-4);
+    line-height: 1.45;
+  }
+  .featured-chart { display: grid; gap: 0.7rem; }
+  .fc-row { display: grid; gap: 0.3rem; }
+  .fc-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; font-size: 0.86rem; }
+  .fc-label { color: var(--ink); }
+  .fc-value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 500; white-space: nowrap; }
+  .fc-track { position: relative; height: 15px; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden; }
+  .fc-fill, .fc-band { position: absolute; top: 0; height: 100%; border-radius: 3px; }
+  .fc-fill { left: 0; }
+  .fc-golf .fc-fill, .fc-golf .fc-band { background: var(--accent); }
+  .fc-dc .fc-fill, .fc-dc .fc-band { background: var(--subject-water); }
+  .fc-faded .fc-fill, .fc-faded .fc-band { opacity: 0.5; }
+  .fc-band {
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.22) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.22) 75%, transparent 75%, transparent);
+    background-size: 8px 8px;
+  }
+  .fc-axis { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; margin-top: 0.3rem; padding-top: 0.3rem; border-top: 1px solid var(--rule); }
+  .featured-aside { text-align: center; }
+  .featured-cta {
+    display: inline-block;
+    margin-top: var(--space-3);
+    background: var(--subject-water);
+    color: var(--paper);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.6em 1.3em;
+    border-radius: 3px;
+  }
+  .ornate-popup-trigger:hover .featured-cta { filter: brightness(1.08); }
+
+  @media (min-width: 860px) {
+    .featured-grid {
+      grid-template-columns: 0.85fr 1.6fr 0.9fr;
+      gap: var(--space-6);
+      align-items: center;
+    }
+    .featured-vignette { aspect-ratio: 4 / 5; }
+  }
+</style>
