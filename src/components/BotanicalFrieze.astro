@@ -1,0 +1,108 @@
+---
+// BotanicalFrieze — symmetric Art Nouveau ornament authored as inline SVG so
+// it stays crisp at any width and recolors with the theme tokens. One spray is
+// drawn once (origin at the centre base, growing right + up) and mirrored to
+// the left; a wheat sheaf stands at the centre.
+//
+// variant:
+//   "hero"   — full poppies + wheat + vines, tall. Flanks the masthead title.
+//   "small"  — a slim vine rule with a small centre motif. Section / nav use.
+//   "footer" — same as hero but quieter (lower opacity) for the lower margin.
+interface Props {
+  variant?: "hero" | "small" | "footer";
+  class?: string;
+}
+const { variant = "hero", class: klass = "" } = Astro.props;
+const tall = variant === "small" ? 56 : 132;
+const opacity = variant === "footer" ? 0.72 : 1;
+const showFlowers = variant !== "small";
+---
+
+<svg
+  class:list={["frieze", `frieze-${variant}`, klass]}
+  viewBox={`0 0 1200 ${tall}`}
+  preserveAspectRatio="xMidYMax meet"
+  role="presentation"
+  aria-hidden="true"
+  style={`opacity:${opacity}`}
+>
+  <defs>
+    <!-- One spray: centre base at (0,0), grows toward +x and -y. -->
+    <g id="cw-spray">
+      <!-- main undulating stem -->
+      <path
+        d="M0,0 C 70,-4 110,-18 165,-22 C 235,-27 300,-16 360,-34 C 430,-55 470,-58 540,-44"
+        fill="none" stroke="var(--ink-soft)" stroke-width="2.2" stroke-linecap="round"
+      />
+      <!-- secondary curl -->
+      <path
+        d="M165,-22 C 150,-46 168,-66 196,-72 C 178,-58 184,-40 205,-34"
+        fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-linecap="round"
+      />
+      <!-- leaf pairs (sage) -->
+      <path d="M95,-10 C 112,-26 138,-28 150,-18 C 132,-12 110,-8 95,-10 Z" fill="var(--sage)" opacity="0.9"/>
+      <path d="M250,-22 C 270,-40 300,-42 314,-30 C 292,-22 268,-18 250,-22 Z" fill="var(--sage)" opacity="0.82"/>
+      <path d="M380,-38 C 398,-56 428,-58 442,-46 C 420,-38 396,-34 380,-38 Z" fill="var(--sage)" opacity="0.9"/>
+      <!-- seed pods -->
+      <ellipse cx="206" cy="-74" rx="5" ry="10" fill="var(--wheat)" transform="rotate(-18 206 -74)"/>
+      <circle cx="120" cy="-30" r="3.2" fill="var(--wheat)"/>
+      {showFlowers && (
+        <g transform="translate(540,-44)">
+          <!-- poppy: ring of petals + dark seed centre -->
+          <g fill="var(--terracotta)">
+            <ellipse cx="0" cy="-16" rx="11" ry="15"/>
+            <ellipse cx="15" cy="-4" rx="15" ry="11"/>
+            <ellipse cx="-15" cy="-4" rx="15" ry="11"/>
+            <ellipse cx="9" cy="11" rx="12" ry="12" opacity="0.92"/>
+            <ellipse cx="-9" cy="11" rx="12" ry="12" opacity="0.92"/>
+          </g>
+          <circle cx="0" cy="-2" r="6.5" fill="#2a1c14"/>
+          <circle cx="0" cy="-2" r="6.5" fill="none" stroke="var(--wheat)" stroke-width="1" opacity="0.7"/>
+        </g>
+      )}
+    </g>
+
+    <!-- Central wheat sheaf, base at (0,0). -->
+    <g id="cw-wheat">
+      <g fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-linecap="round">
+        <path d="M0,0 C -2,-26 -2,-50 0,-78"/>
+        <path d="M0,0 C -16,-22 -22,-46 -20,-72"/>
+        <path d="M0,0 C 16,-22 22,-46 20,-72"/>
+      </g>
+      <g fill="var(--wheat)">
+        <g transform="translate(0,-78)">
+          <ellipse cx="0" cy="0" rx="4" ry="9"/>
+          <ellipse cx="-5" cy="6" rx="3.4" ry="8" transform="rotate(20)"/>
+          <ellipse cx="5" cy="6" rx="3.4" ry="8" transform="rotate(-20)"/>
+        </g>
+        <g transform="translate(-20,-72)">
+          <ellipse cx="0" cy="0" rx="3.6" ry="8" transform="rotate(14)"/>
+          <ellipse cx="-4" cy="6" rx="3" ry="7" transform="rotate(30)"/>
+        </g>
+        <g transform="translate(20,-72)">
+          <ellipse cx="0" cy="0" rx="3.6" ry="8" transform="rotate(-14)"/>
+          <ellipse cx="4" cy="6" rx="3" ry="7" transform="rotate(-30)"/>
+        </g>
+      </g>
+    </g>
+  </defs>
+
+  <!-- thin engraved baseline -->
+  <line x1="40" y1={tall - 6} x2="1160" y2={tall - 6} stroke="var(--hairline)" stroke-width="1"/>
+
+  <!-- right + mirrored-left sprays, anchored to centre base -->
+  <use href="#cw-spray" transform={`translate(600,${tall - 6})`}/>
+  <use href="#cw-spray" transform={`translate(600,${tall - 6}) scale(-1,1)`}/>
+  <use href="#cw-wheat" transform={`translate(600,${tall - 6})`}/>
+</svg>
+
+<style>
+  .frieze {
+    display: block;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+  }
+  .frieze-small { max-width: 38rem; margin: 0 auto; }
+</style>

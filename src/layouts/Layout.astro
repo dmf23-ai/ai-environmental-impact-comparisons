@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import OrnatePopup from "../components/OrnatePopup.astro";
+import TopNav from "../components/TopNav.astro";
+import BotanicalFrieze from "../components/BotanicalFrieze.astro";
 
 interface Props {
   title: string;
@@ -82,16 +84,8 @@ const siteName = "AI Environmental Impact Comparisons";
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-mast">
-      <a href="/" class="wordmark"
-        >AI Environmental Impact <span class="dot">·</span> Comparisons</a
-      >
-      <img
-        class="masthead-strip"
-        src="/ornaments/masthead-strip.png"
-        alt=""
-        aria-hidden="true"
-        fetchpriority="high"
-      />
+      <TopNav />
+      <BotanicalFrieze variant="small" class="site-mast-frieze" />
     </header>
     <main id="main" class={wide ? "wide" : ""}>
       <slot />
@@ -110,6 +104,13 @@ const siteName = "AI Environmental Impact Comparisons";
           <a href="/methods">Read the methodology</a>
         </p>
       </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/about">About</a>
+        <a href="/comparisons">Comparisons</a>
+        <a href="/methods">Methods</a>
+        <a href="/methods#sources">Sources</a>
+        <a href="https://github.com/dmf23-ai/ai-environmental-impact-comparisons" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
       <div class="footer-bottom">
         <img
           class="footer-roundel footer-roundel-left"

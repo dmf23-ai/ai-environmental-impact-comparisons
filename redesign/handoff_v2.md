@@ -1,0 +1,35 @@
+# v2 Redesign — "Compared to What?" — Resume Doc
+
+**Branch:** `v2-compared-to-what` (off `main`; main is the preserved pre-redesign state).
+**Plan (source of truth):** `redesign/compared_to_what_redesign_plan.md`
+**Reference mockup:** `redesign/homepage reference image.png` (Mockup 1, the interactive atlas).
+**Mode:** autonomous completion; usage self-throttle; this doc is the cross-session entry point for the redesign (the big root `handoff.md` covers pre-redesign history).
+
+## Confirmed decisions (David, 2026-06-02)
+- Branch name `v2-compared-to-what`.
+- Illustrations: author as SVG + reuse existing PNG ornaments; fully autonomous (no image-gen handoffs) as long as it matches the plan/mockup.
+- Visual QA: local build + screenshots (branch is NOT deployed; production untouched).
+- Include all optional items: 15th plate (hourly CO2), /about page, atlas sort controls.
+- Palette: EXTEND the existing "Mucha's Notebook" tokens, don't replace (keeps verified AA contrast). Added display face Cormorant Garamond for the masthead/headlines only; Cardo stays for body.
+- Two-tier nav: slim TopNav on every page (Layout) + big homepage-only Masthead hero.
+
+## Sandbox build workaround (IMPORTANT)
+The Windows mount blocks `unlink`/`rmdir`, breaking vite dep-reopt and git locks. Build with:
+`npx astro build --config astro.config.sandbox.mjs` (gitignored; redirects cache/out/vite to native `/tmp/astro-sb`). A trailing `EPERM ... unlink '.astro/...'` with `rc=1` is HARMLESS — it fires AFTER all routes generate. Success signal = the per-page "/x/index.html" lines + "generating static routes". `_astro/` bundle + fonts do NOT fully emit in the sandbox (EPERM truncates the tail) — that's fine, they emit on David's real Windows build. Helper: `bash sbbuild.sh`. Sandbox is ephemeral per bash call; first build of a session is a cold ~5–40s re-opt (occasionally exceeds the 45s bash limit — just retry).
+
+## DONE — Phase 1 (design tokens + shared frame)
+- `src/styles/global.css`: +Cormorant @imports (top); +Botanical Ledger token layer at end (--paper-light, --wheat, --teal/-sage/-terracotta aliases, --hairline, --font-display); +.smallcaps/.eyebrow/.hairline/.display utilities; +.site-mast-frieze & .footer-nav styles.
+- `src/components/TopNav.astro` — NEW. About·Comparisons | wordmark | Methods·Sources + GitHub icon, small-caps, diamond separators, active-page state, mobile-collapses center wordmark.
+- `src/components/BotanicalFrieze.astro` — NEW. Symmetric inline-SVG frieze (mirrored vine spray + central wheat sheaf + poppies). variants: hero/small/footer.
+- `src/components/Masthead.astro` — NEW. Homepage hero: big Cormorant "Compared to What?" + small-caps subtitle w/ true CO<sub>2</sub> + dek + flanking poppy clusters (shared #cw-poppy-cluster symbol) + hero frieze. NOT yet wired into a page (that's Phase 2).
+- `src/layouts/Layout.astro` — TopNav + small frieze replace the old wordmark/masthead-strip; footer gains a small-caps nav link row.
+- `src/pages/about.astro` — NEW. Mission / what you'll find / why ranges / editorial standard / corrections. Concrete prose (anti-AI-speak rubric).
+- Dependency added: `@fontsource/cormorant-garamond` (package.json + lockfile). **David must `npm install`.**
+- Build: passes (all routes generate; about page + TopNav + frieze confirmed in emitted HTML).
+
+## NEXT — Phase 2 (homepage restructure, atlas-first)
+Replace chapter-first `index.astro` with: Masthead → hero thesis → RangeKey strip → FeaturedComparisonPlate (water/golf boundary) → "Atlas of Comparisons" heading → filters → dense ComparisonPlate grid (all 14 + 15th hourly) → (Phase 4 Field Notes) → methodology CTA. New components needed: RangeKey, FeaturedComparisonPlate, atlas grid wrapper, enhanced ComparisonPlate (plate number, metric/scope labels, mini RangeBar, illustration icon). Reuse OrnatePopup detail system. Keep `figures.json` as read-only source of truth — no data/source/last_verified changes. Demote ChapterRail/ChapterTitle/ChapterPlate/Interlude (move chapters to Field Notes in Phase 4).
+
+## Known gaps / notes
+- Usage page (claude.ai/settings/usage) didn't render its % via Claude in Chrome this run (client modal redirect). Retry next session.
+- Old `.wordmark`/`.masthead-strip` CSS in global.css is now unused (harmless; can prune in Phase 6).

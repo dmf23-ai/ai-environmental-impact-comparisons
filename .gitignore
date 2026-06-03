@@ -52,3 +52,7 @@ astro.config.popups.mjs
 astro.config.pr.mjs
 astro.config.pr2.mjs
 astro.config.r*.mjs
+
+# sandbox-only build (Cowork)
+astro.config.sandbox.mjs
+sbbuild.sh

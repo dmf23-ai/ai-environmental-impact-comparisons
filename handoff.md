@@ -1,3 +1,7 @@
+> **v2 REDESIGN IN PROGRESS (since 2026-06-02).** The "Compared to What?" atlas redesign runs on branch `v2-compared-to-what`. Its live resume state, decisions, and phase status live in **`redesign/handoff_v2.md`** — read that first when resuming the redesign. `main` is the preserved pre-redesign state. This file below is pre-redesign history.
+
+---
+
 > **AUTONOMOUS RUN 4 — PAUSED CLOSE-OUT (2026-06-02 05:37 UTC).** Scheduled task `ai-impact-autonomous-4` fired on time. Pre-flight all green: no halt file, config parseable, github.com reachable, PAT auth ok, local HEAD = remote at `ee0c674`, self-test ALL GREEN, no open pending questions (Q-01 and Q-02 both resolved last run — skip-link shipped as `ee491fb`, OrnatePopupTrigger queue item retired). STEP 0.4 usage check via Claude in Chrome: **100% used, resets in 3 hr 22 min** (Mon 4:00 AM local). 24h commit count from work-log is 5 of 8 cap — under cap, not the halt trigger this run.
 >
 > **Two close-out triggers fire:** paused-queue (autonomous-mode work is genuinely empty; only David-gated items remain — custom domain, anything new David adds) and usage threshold (100% >= 80%). Per protocol priority and the prior run's precedent, **paused wins** — rescheduling for 3h 27m from now (reset + 5min buffer) would produce a no-op session, so halt without next-run schedule is the correct stop signal. When David has new direction, manually rescheduling `ai-impact-autonomous-5` picks up identically from STEP 0.

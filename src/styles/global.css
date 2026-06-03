@@ -8,6 +8,9 @@
 @import "@fontsource/cardo/400.css";
 @import "@fontsource/cardo/400-italic.css";
 @import "@fontsource/cardo/700.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/500-italic.css";
 
 /* ============================================================
    Design tokens — Mucha's Notebook palette.
@@ -678,4 +681,85 @@ button:focus-visible,
   .ornate-popup-frame {
     transform: scale(1);
   }
+}
+
+
+/* ============================================================
+   Botanical Ledger — v2 "Compared to What?" atlas layer
+   Additive on top of the Mucha's Notebook base above. Existing
+   tokens (--ink, --paper, --accent, --subject-*) are unchanged so
+   verified AA contrast is preserved; this only adds what the atlas
+   redesign needs (display face, wheat tone, engraved hairline,
+   small-caps + plate-number utilities).
+   ============================================================ */
+:root {
+  --paper-light: #f7f0de;
+  --wheat: #c7a76a;
+  /* Semantic aliases so atlas components can read by hue name */
+  --teal: var(--subject-water);
+  --sage: var(--subject-electricity);
+  --terracotta: var(--accent);
+  --hairline: rgba(154, 137, 102, 0.5);
+  --font-display: "Cormorant Garamond", "Cardo", ui-serif, Georgia, serif;
+}
+
+/* Small-caps for nav, eyebrows, metric labels, plate numbers */
+.smallcaps {
+  font-variant-caps: small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* Letter-spaced uppercase eyebrow (Inter) */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+}
+
+/* Fine engraved rule */
+hr.hairline,
+.hairline {
+  height: 1px;
+  border: 0;
+  background: var(--hairline);
+  margin: 0;
+}
+
+/* Display headline face — used by the masthead and section headings */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
+/* Shared-frame: nav frieze + footer nav row (v2 atlas) */
+.site-mast { padding-bottom: var(--space-2); }
+.site-mast-frieze { max-width: 40rem; margin: var(--space-3) auto 0; }
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto var(--space-5);
+  font-family: var(--font-serif);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.92rem;
+}
+.footer-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.footer-nav a:hover { color: var(--accent); }
+.footer-nav a + a::before {
+  content: "\2666";
+  color: var(--accent);
+  font-size: 0.5em;
+  margin: 0 0.75em;
+  transform: translateY(-0.18em);
+  display: inline-block;
+  font-variant-caps: normal;
 }
