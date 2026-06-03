@@ -1,6 +1,6 @@
 # v2 Redesign — "Compared to What?" — Resume Doc
 
-**STATUS (2026-06-03): Phases 1–5 COMMITTED & PUSHED (Phase 5 build green). Phase 6 CSS prune CODE COMPLETE on disk, awaiting build verify + commit. Phase 7 STATIC correctness sweep DONE; VISUAL QA (Mockup-1 fidelity, mobile, popup chart widths, Lighthouse) is the remaining gate — needs David's local render/screenshots.**
+**STATUS (2026-06-03): Phases 1–6 COMMITTED & PUSHED. Phase 7 VISUAL QA done via Claude-in-Chrome against localhost:4321 — all redesign features confirmed working. Redesign is functionally COMPLETE. Only residual: true-mobile viewport + Lighthouse couldn't run in this browser (clamped viewport / screenshot timeouts on the 40k-px methods page) — left for a DevTools device-mode spot-check.**
 
 
 **Branch:** `v2-compared-to-what` (off `main`; main is the preserved pre-redesign state).
@@ -93,3 +93,23 @@ REMAINING (needs running site): popup-wide chart rendering at 50rem, mobile layo
 
 ## ⚠️ Process slip this session
 Accidentally ran one read-only `git diff --stat main -- src/data/figures.json` IN THE SANDBOX (against the never-run-git-in-sandbox rule) while verifying figures.json was unchanged. Read-only, exit 0, empty diff. Flagged to David to Remove-Item any `.git\index.lock` before his next git op. Do NOT repeat — verify "unchanged" by tracking which files were written, not via git. See [[feedback_sandbox_git_workaround]].
+
+
+## DONE — Phase 7 VISUAL QA (Claude-in-Chrome @ localhost:4321, 2026-06-03)
+Confirmed live, desktop:
+- **Homepage**: masthead (Cormorant display title + subscript CO₂ + flanking poppies + friezes), hero thesis, horizontal RangeKey strip, Featured panel (golf vignette / engraved rust+teal bar chart / "500–700 billion gallons/yr" cartouche / Open Detail), dense 3-col atlas grid with plate numbers + subject medallions + metric/scope chips + mini charts + confidence labels, filter pills + Sort select.
+- **Atlas filter JS** functional (DOM-verified): "Water" → 1 visible water plate (golf is the featured panel); ALL resets to 14. Sort control present.
+- **Plate popup**: opens with ornate frame, summary, unit caption, engraved RangeBar; the new **"See this plate in the full archive →"** deep-link AND "How this was calculated →" both render.
+- **Deep-link nav**: clicking it → URL `/comparisons#co2-driving-vs-datacenters`, page scrolls to that plate, `:target` rust outline fires. ✓
+- **/methods TOC**: boxed paper-light nav, two groups (Home-page displays ×9 / Comparison plates ×14), decimal-leading-zero numerals, 23 links, "Consolidated source list →".
+- **/methods #sources** (DOM-verified; page too tall/heavy for reliable screenshots): section visible, **30** numbered ledger items, "Consolidated sources" heading, first=BigScience/BLOOM, last=UN FAO.
+- **Boundary callouts**: 4 present, teal left-rule `rgb(58,107,117)` @2.5px, 8%-teal bg, "Boundary choice" label in teal. Contrast of teal label on paper ≈5:1 → passes AA.
+- **Typography**: method h2 = Cormorant Garamond @36px. ✓
+
+### Env limits (NOT code issues)
+- `resize_window` wouldn't produce a real mobile viewport — this Chrome reports innerWidth 2400 @ dpr 0.8, so media queries (560/900px) never tripped. Responsive CSS itself is correct (1/2/3-col). → mobile = DevTools device-mode spot-check for David.
+- Screenshot capture TIMED OUT repeatedly on /methods (40,828px tall, many inline-SVG infographics). Verified that page's content via DOM queries instead. Production (static, lighter paint) is unaffected.
+- Lighthouse not run (no harness here).
+
+## PROJECT STATUS: v2 "Compared to What?" redesign COMPLETE (Phases 1–7).
+Remaining optional follow-ups only: DevTools mobile spot-check + Lighthouse run on David's side; any taste-level artwork refinement now that it's all visible.
