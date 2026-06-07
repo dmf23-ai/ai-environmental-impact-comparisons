@@ -1,11 +1,13 @@
 ---
-// FeaturedComparisonPlate — the homepage's visual anchor. A large ornate panel
-// for the water/golf boundary comparison: a "Featured" ribbon, a left
-// ink-and-wash landscape vignette, a central bespoke bar chart (rust golf vs
-// teal data centers, with the direct-cooling framing set lighter), and a right
-// ornamental stat cartouche. The whole panel opens the full detail popup.
+// FeaturedComparisonPlate — the homepage's visual anchor. A wide ornate panel
+// for the water/golf boundary comparison in three columns: a generated golf-
+// water illustration on the left, a bespoke bar chart (rust golf vs teal data
+// centers) in the center, and a generated stat cartouche + CTA on the right.
+// A generated "FEATURED" ribbon sits at the top-left. The whole panel opens
+// the full detail popup.
 import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
 import NumericCartouche from "./NumericCartouche.astro";
+import { redesignAssets } from "../lib/redesignAssets";
 
 interface Figure { label: string; value?: number; value_low?: number; value_high?: number; }
 interface Props {
@@ -46,36 +48,30 @@ const rows = figures.map((f) => {
     faded: isCoolingOnly,
   };
 });
+
+const { golfWaterPanel, ribbon, statCartouche } = redesignAssets.featured;
 ---
 
 <section class="featured">
-  <span class="featured-ribbon smallcaps">Featured comparison</span>
+  <div class="featured-ribbon" aria-hidden="true">
+    <img class="featured-ribbon-img" src={ribbon} alt="" decoding="async" />
+    <span class="featured-ribbon-text smallcaps">Featured</span>
+  </div>
 
   <div class="featured-grid">
-    <!-- left: ink-and-wash landscape vignette -->
-    <div class="featured-vignette" aria-hidden="true">
-      <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
-        <rect x="0" y="0" width="200" height="200" fill="var(--paper-light)"/>
-        <path d="M0 78 q50 -16 100 -4 t100 -2 V0 H0 Z" fill="var(--subject-water)" opacity="0.10"/>
-        <path d="M0 120 q40 -22 80 -14 q60 6 120 -10 V200 H0 Z" fill="var(--sage)" opacity="0.30"/>
-        <path d="M0 138 q60 -10 120 2 q40 8 80 0 V200 H0 Z" fill="var(--sage)" opacity="0.45"/>
-        <ellipse cx="118" cy="150" rx="58" ry="18" fill="var(--subject-water)" opacity="0.55"/>
-        <ellipse cx="118" cy="150" rx="58" ry="18" fill="none" stroke="var(--subject-water)" stroke-opacity="0.7"/>
-        <path d="M96 146 q12 -3 24 0 M104 153 q10 -2 18 0" stroke="#fff" stroke-opacity="0.5" fill="none" stroke-width="1.2"/>
-        <line x1="56" y1="92" x2="56" y2="132" stroke="var(--ink-soft)" stroke-width="1.6"/>
-        <path d="M56 92 l13 4 -13 4 z" fill="var(--accent)"/>
-        <circle cx="56" cy="133" r="1.6" fill="var(--ink-soft)"/>
-        <path d="M150 118 q4 -14 8 0 q-4 4 -8 0" fill="var(--accent)" opacity="0.8"/>
-        <path d="M158 124 q3 -11 6 0 q-3 3 -6 0" fill="var(--accent)" opacity="0.7"/>
-      </svg>
+    <!-- left: generated golf-water illustration -->
+    <div class="featured-vignette">
+      <img src={golfWaterPanel} alt="" aria-hidden="true" decoding="async" />
     </div>
 
-    <!-- center: title + boundary note + bespoke chart -->
-    <div class="featured-main">
+    <!-- title + boundary note -->
+    <div class="featured-head">
       <h2 class="featured-title">{title}</h2>
       <p class="featured-note">{boundaryNote}</p>
+    </div>
 
-      <div class="featured-chart" role="img" aria-label={`${title}. Bar chart in billions of gallons per year.`}>
+    <!-- center: bespoke chart -->
+    <div class="featured-chart" role="img" aria-label={`${title}. Bar chart in billions of gallons per year.`}>
         {rows.map((r) => (
           <div class:list={["fc-row", `fc-${r.group}`, r.faded && "fc-faded"]}>
             <div class="fc-head">
@@ -89,15 +85,20 @@ const rows = figures.map((f) => {
                 <div class="fc-band" style={`left:${r.leftPct}%;width:${r.widthPct}%`} />
               )}
             </div>
+            {!r.isPoint && (
+              <div class="fc-brace-wrap" aria-hidden="true">
+                <span class="fc-brace" style={`left:${r.leftPct}%;width:${r.widthPct}%`} />
+                <span class="fc-brace-text" style={`left:${r.leftPct + r.widthPct / 2}%`}>range</span>
+              </div>
+            )}
           </div>
         ))}
-        <div class="fc-axis"><span>0</span><span>{fmt(axisMax)} billion gallons / yr</span></div>
-      </div>
+      <div class="fc-axis"><span>0</span><span>{fmt(axisMax)} billion gallons / yr</span></div>
     </div>
 
     <!-- right: ornamental stat cartouche + CTA -->
     <div class="featured-aside">
-      <NumericCartouche value={statValue} unit={statUnit} caption={statCaption} subject="water" ornate={true} />
+      <NumericCartouche value={statValue} unit={statUnit} caption={statCaption} subject="water" ornate={true} frameSrc={statCartouche} />
       <OrnatePopupTrigger popupId={popupId} as="bare" label={`Open detail for ${title}`}>
         <span class="featured-cta">Open detail →</span>
       </OrnatePopupTrigger>
@@ -108,44 +109,68 @@ const rows = figures.map((f) => {
 <style>
   .featured {
     position: relative;
-    border: 1px solid var(--ink-soft);
+    border: 1px solid var(--rule-strong);
     outline: 1px solid var(--hairline);
     outline-offset: -7px;
-    border-radius: 0 24px 0 24px;
-    background: rgba(247, 240, 222, 0.7);
+    border-radius: 18px;
+    background:
+      linear-gradient(rgba(251, 245, 232, 0.82), rgba(244, 234, 214, 0.9)),
+      radial-gradient(circle at 18% 8%, rgba(255, 255, 255, 0.4), transparent 40%);
     padding: var(--space-7) var(--space-6) var(--space-6);
-    margin: var(--space-6) 0 var(--space-8);
+    margin: var(--space-5) 0 var(--space-8);
   }
+
+  /* Generated ribbon with HTML text overlaid */
   .featured-ribbon {
     position: absolute;
-    top: -0.8rem;
-    left: var(--space-6);
-    background: var(--accent);
-    color: var(--paper);
-    font-family: var(--font-serif);
-    font-size: 0.8rem;
-    letter-spacing: 0.16em;
-    padding: 0.25em 1em;
-    border-radius: 2px;
+    top: -0.7rem;
+    left: 1.3rem;
+    width: clamp(118px, 13vw, 168px);
+    z-index: 4;
+    filter: drop-shadow(0 4px 7px rgba(50, 37, 20, 0.22));
   }
+  .featured-ribbon-img { width: 100%; height: auto; display: block; }
+  .featured-ribbon-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.2em;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(0.78rem, 1.3vw, 1rem);
+    letter-spacing: 0.18em;
+    color: var(--paper-light);
+    text-shadow: 0 1px 2px rgba(40, 24, 12, 0.5);
+  }
+
   .featured-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-5);
+    gap: var(--space-4);
+    grid-template-areas: "head" "illus" "chart" "stat";
     align-items: center;
   }
+  .featured-head { grid-area: head; }
+  .featured-vignette { grid-area: illus; }
+  .featured-chart { grid-area: chart; }
+  .featured-aside { grid-area: stat; }
   .featured-vignette {
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--hairline);
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.25);
     aspect-ratio: 3 / 2;
+    background: var(--paper-light);
   }
-  .featured-vignette svg { width: 100%; height: 100%; display: block; }
+  .featured-vignette img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
   .featured-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.6rem, 3.5vw, 2.3rem);
-    line-height: 1.1;
+    font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+    line-height: 1.08;
     color: var(--ink);
     margin: 0 0 var(--space-2);
   }
@@ -157,27 +182,71 @@ const rows = figures.map((f) => {
     margin: 0 0 var(--space-4);
     line-height: 1.45;
   }
-  .featured-chart { display: grid; gap: 0.7rem; }
+  .featured-chart {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.9rem 0.9rem 0.5rem;
+    border-radius: 8px;
+    background:
+      repeating-linear-gradient(0deg, rgba(120,96,56,0.045) 0, rgba(120,96,56,0.045) 1px, transparent 1px, transparent 6px),
+      rgba(251, 245, 232, 0.55);
+    box-shadow: inset 0 0 0 1px var(--hairline);
+  }
   .fc-row { display: grid; gap: 0.3rem; }
   .fc-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; font-size: 0.86rem; }
   .fc-label { color: var(--ink); }
   .fc-value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 500; white-space: nowrap; }
-  .fc-track { position: relative; height: 15px; background: rgba(0,0,0,0.05); border-radius: 3px; overflow: hidden; }
-  .fc-fill, .fc-band { position: absolute; top: 0; height: 100%; border-radius: 3px; }
+  .fc-track {
+    position: relative;
+    height: 20px;
+    background: rgba(90, 70, 40, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(90,70,40,0.12);
+    /* hairline quarter gridlines */
+    background-image: linear-gradient(to right,
+      transparent calc(25% - 0.5px), rgba(90,70,40,0.1) calc(25% - 0.5px), rgba(90,70,40,0.1) calc(25% + 0.5px), transparent calc(25% + 0.5px),
+      transparent calc(50% - 0.5px), rgba(90,70,40,0.1) calc(50% - 0.5px), rgba(90,70,40,0.1) calc(50% + 0.5px), transparent calc(50% + 0.5px),
+      transparent calc(75% - 0.5px), rgba(90,70,40,0.1) calc(75% - 0.5px), rgba(90,70,40,0.1) calc(75% + 0.5px), transparent calc(75% + 0.5px));
+  }
+  .fc-fill, .fc-band { position: absolute; top: 0; height: 100%; border-radius: 10px; }
   .fc-fill { left: 0; }
-  .fc-golf .fc-fill, .fc-golf .fc-band { background: var(--accent); }
-  .fc-dc .fc-fill, .fc-dc .fc-band { background: var(--subject-water); }
+  /* engraved point tick at the exact value */
+  .fc-fill::after { content: ""; position: absolute; top: -2px; bottom: -2px; right: 0; width: 2px; background: var(--ink); opacity: 0.55; }
+  .fc-golf .fc-fill, .fc-golf .fc-band { background: var(--rust); box-shadow: inset 0 0 0 1px rgba(60,30,15,0.28); }
+  .fc-dc .fc-fill, .fc-dc .fc-band { background: var(--teal); box-shadow: inset 0 0 0 1px rgba(20,50,52,0.32); }
   .fc-faded .fc-fill, .fc-faded .fc-band { opacity: 0.5; }
   .fc-band {
     background-image: linear-gradient(135deg, rgba(255,255,255,0.22) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.22) 75%, transparent 75%, transparent);
     background-size: 8px 8px;
   }
-  .fc-axis { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; margin-top: 0.3rem; padding-top: 0.3rem; border-top: 1px solid var(--rule); }
+  /* visible boundary brace under a ranged bar */
+  .fc-brace-wrap { position: relative; height: 1.35rem; margin-top: 1px; }
+  .fc-brace {
+    position: absolute;
+    top: 1px;
+    height: 5px;
+    border: 1px solid var(--ink-soft);
+    border-bottom: none;
+    box-sizing: border-box;
+  }
+  .fc-brace-text {
+    position: absolute;
+    top: 7px;
+    transform: translateX(-50%);
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .fc-axis { display: flex; justify-content: space-between; font-size: 0.72rem; font-variant-caps: small-caps; letter-spacing: 0.06em; color: var(--ink-soft); font-variant-numeric: tabular-nums; margin-top: 0.3rem; padding-top: 0.3rem; border-top: 1px solid var(--rule); }
   .featured-aside { text-align: center; }
   .featured-cta {
     display: inline-block;
     margin-top: var(--space-3);
-    background: var(--subject-water);
+    background: var(--teal);
     color: var(--paper);
     font-family: var(--font-sans);
     font-size: 0.78rem;
@@ -190,10 +259,16 @@ const rows = figures.map((f) => {
 
   @media (min-width: 860px) {
     .featured-grid {
-      grid-template-columns: 0.85fr 1.6fr 0.9fr;
-      gap: var(--space-6);
-      align-items: center;
+      grid-template-columns: 0.82fr 1.7fr 0.86fr;
+      grid-template-areas:
+        "illus head  stat"
+        "illus chart stat";
+      column-gap: var(--space-6);
+      row-gap: var(--space-3);
+      align-items: start;
     }
-    .featured-vignette { aspect-ratio: 4 / 5; }
+    .featured-head { align-self: end; }
+    .featured-vignette { aspect-ratio: auto; align-self: stretch; }
+    .featured-aside { align-self: center; }
   }
 </style>

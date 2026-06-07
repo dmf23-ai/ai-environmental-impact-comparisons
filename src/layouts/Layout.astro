@@ -3,11 +3,16 @@ import "../styles/global.css";
 import OrnatePopup from "../components/OrnatePopup.astro";
 import TopNav from "../components/TopNav.astro";
 import BotanicalFrieze from "../components/BotanicalFrieze.astro";
+import PageFrame from "../components/PageFrame.astro";
+import { redesignAssets } from "../lib/redesignAssets";
+import figuresData from "../data/figures.json";
 
 interface Props {
   title: string;
   description?: string;
   wide?: boolean;
+  /** Wide illustrated-atlas canvas (homepage, /comparisons). */
+  atlas?: boolean;
   /**
    * Per-page social-share image. Path relative to the deployed site
    * (e.g. "/og-card.png"). Defaults to the site-wide card. Pages that
@@ -16,7 +21,8 @@ interface Props {
    */
   ogImage?: string;
 }
-const { title, description, wide = false, ogImage = "/og-card.png" } = Astro.props;
+const { title, description, wide = false, atlas = false, ogImage = "/og-card.png" } = Astro.props;
+const mainClass = atlas ? "atlas" : wide ? "wide" : "reading";
 
 // Astro.site is set in astro.config.mjs. When deploying to a custom domain,
 // updating Astro.site there automatically threads through every absolute URL
@@ -25,6 +31,18 @@ const siteUrl = Astro.site ?? new URL("https://ai-environmental-impact-compariso
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const absoluteOgImage = new URL(ogImage, siteUrl).toString();
 const siteName = "AI Environmental Impact Comparisons";
+
+// Footer last-verified date — newest last_verified across the data, so it
+// never drifts from the figures themselves.
+const _dates: string[] = [];
+const _fd = figuresData as any;
+for (const c of _fd.comparisons ?? []) if (c.last_verified) _dates.push(c.last_verified);
+for (const i of _fd.infographics ?? []) if (i.last_verified) _dates.push(i.last_verified);
+if (_fd.hourly_impact?.last_verified) _dates.push(_fd.hourly_impact.last_verified);
+const _latest = _dates.sort().at(-1) ?? "2026-05-16";
+const footerVerified = new Date(_latest + "T00:00:00Z").toLocaleDateString("en-US", {
+  month: "long", day: "numeric", year: "numeric", timeZone: "UTC",
+});
 ---
 
 <!doctype html>
@@ -83,11 +101,12 @@ const siteName = "AI Environmental Impact Comparisons";
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
+    <PageFrame>
     <header class="site-mast">
       <TopNav />
       <BotanicalFrieze variant="small" class="site-mast-frieze" />
     </header>
-    <main id="main" class={wide ? "wide" : ""}>
+    <main id="main" class={mainClass}>
       <slot />
     </main>
     <footer class="site-footer">
@@ -114,7 +133,7 @@ const siteName = "AI Environmental Impact Comparisons";
       <div class="footer-bottom">
         <img
           class="footer-roundel footer-roundel-left"
-          src="/ornaments/footer-roundel-earth.png"
+          src={redesignAssets.footer.earth}
           alt=""
           aria-hidden="true"
           loading="lazy"
@@ -126,7 +145,7 @@ const siteName = "AI Environmental Impact Comparisons";
         </div>
         <img
           class="footer-roundel footer-roundel-right"
-          src="/ornaments/footer-roundel-landscape.png"
+          src={redesignAssets.footer.sustainableLandscape}
           alt=""
           aria-hidden="true"
           loading="lazy"
@@ -138,9 +157,10 @@ const siteName = "AI Environmental Impact Comparisons";
         <a
           href="https://github.com/dmf23-ai/ai-environmental-impact-comparisons"
           >code on GitHub</a
-        > · sources verified weekly
+        > · every figure last verified {footerVerified}
       </p>
     </footer>
+    </PageFrame>
     <OrnatePopup />
   </body>
 </html>

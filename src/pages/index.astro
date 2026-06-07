@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Masthead from "../components/Masthead.astro";
 import RangeKey from "../components/RangeKey.astro";
+import HowToReadAtlas from "../components/HowToReadAtlas.astro";
 import FeaturedComparisonPlate from "../components/FeaturedComparisonPlate.astro";
 import ComparisonPlate from "../components/ComparisonPlate.astro";
 import AtlasFilters from "../components/AtlasFilters.astro";
@@ -81,7 +82,7 @@ const fieldNotes = [
 ];
 ---
 
-<Layout title={title} description={description} wide>
+<Layout title={title} description={description} atlas>
   <Masthead />
 
   <section class="hero-thesis">
@@ -97,7 +98,7 @@ const fieldNotes = [
     </p>
   </section>
 
-  <RangeKey />
+  <HowToReadAtlas />
 
   <FeaturedComparisonPlate
     popupId={popupId(featured.id)}
@@ -120,6 +121,7 @@ const fieldNotes = [
     </header>
 
     <AtlasFilters />
+    <RangeKey />
 
     <div class="atlas-grid">
       {gridEntries.map((e) => {
@@ -284,13 +286,16 @@ const fieldNotes = [
   .atlas-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
   @media (min-width: 560px) {
-    .atlas-grid { grid-template-columns: 1fr 1fr; }
+    .atlas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  @media (min-width: 900px) {
-    .atlas-grid { grid-template-columns: 1fr 1fr 1fr; gap: var(--space-5); }
+  @media (min-width: 820px) {
+    .atlas-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1100px) {
+    .atlas-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.9rem; }
   }
   .plate-cell { display: flex; }
   .plate-cell > :global(*) { width: 100%; }
@@ -317,12 +322,12 @@ const fieldNotes = [
   .fn-frieze { max-width: 34rem; margin: 0 auto var(--space-6); }
   .fn-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: var(--space-4);
-    max-width: 46rem;
+    max-width: 60rem;
     margin: 0 auto;
   }
-  @media (min-width: 720px) { .fn-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-5); } }
+  @media (min-width: 760px) { .fn-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-5); } }
   .fn-grid > :global(*) { width: 100%; }
 
   .methods-cta { text-align: center; margin: var(--space-9) auto 0; max-width: 32rem; }

@@ -2125,6 +2125,56 @@ const toc = [
 </Layout>
 
 <style>
+  /* ---- v2 2nd-pass: decorative title cartouche ---- */
+  .back {
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  h1 {
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.08;
+    font-size: clamp(2.1rem, 6vw, 3.1rem);
+    max-width: 22ch;
+    margin: var(--space-5) auto var(--space-2);
+  }
+  .lede {
+    position: relative;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--ink-soft);
+    max-width: 50ch;
+    margin: var(--space-4) auto var(--space-7);
+    padding-top: var(--space-6);
+    line-height: 1.55;
+  }
+  /* aldus-leaf ornament flanked by hairlines, sitting above the lede */
+  .lede::before {
+    content: "\2767";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--accent);
+    font-size: 1.25rem;
+    background: transparent;
+  }
+  .lede::after {
+    content: "";
+    position: absolute;
+    top: 0.85em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(60%, 22rem);
+    height: 0;
+    border-top: 1px solid var(--rule);
+    z-index: -1;
+  }
   .method-section {
     border-top: 1px solid var(--rule);
     padding-top: var(--space-6);

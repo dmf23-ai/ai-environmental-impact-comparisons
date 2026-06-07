@@ -56,3 +56,7 @@ astro.config.r*.mjs
 # sandbox-only build (Cowork)
 astro.config.sandbox.mjs
 sbbuild.sh
+
+# Second-pass source PNGs: optimized .webp versions are committed instead;
+# raw PNGs cannot be unlinked from the Cowork mount, so exclude them from git.
+public/assets/redesign-2nd-pass/*.png

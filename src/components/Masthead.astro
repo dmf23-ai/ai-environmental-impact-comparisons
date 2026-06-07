@@ -1,80 +1,58 @@
 ---
-// Masthead — homepage-only hero. The dominant visual element of the site:
-// a large expressive Cormorant display title, a letter-spaced subtitle with a
-// true subscript on CO2, a short dek, and flanking poppy clusters + engraved
-// rules in the reference's Art Nouveau grammar.
-import BotanicalFrieze from "./BotanicalFrieze.astro";
+// Masthead — homepage-only hero, the dominant visual element of the site:
+// a very large Cormorant display title with a true CO2 subscript, a short
+// dek, and flanking poppy clusters from the generated second-pass assets.
+// The poppy art carries the botanicals here, so the hero frieze is dropped
+// to keep the title plate uncluttered (the "How to read this atlas" strip
+// follows in the page).
+import { redesignAssets } from "../lib/redesignAssets";
 interface Props { dek?: string; }
 const {
   dek = "An interactive atlas of AI's environmental impact in scale, context, and comparison.",
 } = Astro.props;
+const { poppiesLeft, poppiesRight } = redesignAssets.masthead;
 ---
 
 <header class="masthead">
   <hr class="hairline masthead-rule" />
 
-  <!-- shared poppy-cluster shape, referenced by both flanks -->
-  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
-    <defs>
-      <g id="cw-poppy-cluster" transform="translate(60,150)">
-        <path d="M0,0 C -6,-40 -10,-80 -4,-120" fill="none" stroke="var(--ink-soft)" stroke-width="2"/>
-        <path d="M-4,-60 C -28,-66 -40,-86 -36,-104 C -22,-92 -10,-84 -2,-78 Z" fill="var(--sage)" opacity="0.85"/>
-        <path d="M0,-92 C 22,-100 34,-120 30,-138 C 16,-126 4,-112 0,-104 Z" fill="var(--sage)" opacity="0.8"/>
-        <g transform="translate(-4,-122)">
-          <g fill="var(--terracotta)">
-            <ellipse cx="0" cy="-16" rx="12" ry="17"/>
-            <ellipse cx="16" cy="-3" rx="17" ry="12"/>
-            <ellipse cx="-16" cy="-3" rx="17" ry="12"/>
-            <ellipse cx="10" cy="13" rx="13" ry="13" opacity="0.92"/>
-            <ellipse cx="-10" cy="13" rx="13" ry="13" opacity="0.92"/>
-          </g>
-          <circle cx="0" cy="-1" r="7" fill="#2a1c14"/>
-        </g>
-      </g>
-    </defs>
-  </svg>
-
   <div class="masthead-title-row">
-    <svg class="masthead-poppy masthead-poppy-left" viewBox="0 0 120 160" aria-hidden="true">
-      <use href="#cw-poppy-cluster" />
-    </svg>
+    <img class="masthead-poppy masthead-poppy-left" src={poppiesLeft}
+      alt="" aria-hidden="true" decoding="async" width="620" height="480" />
 
     <h1 class="masthead-title">
       <span class="site-title-main">Compared to What?</span>
       <span class="site-title-sub">AI and Water, Electricity, &amp; CO<sub>2</sub></span>
     </h1>
 
-    <svg class="masthead-poppy masthead-poppy-right" viewBox="0 0 120 160" aria-hidden="true">
-      <use href="#cw-poppy-cluster" />
-    </svg>
+    <img class="masthead-poppy masthead-poppy-right" src={poppiesRight}
+      alt="" aria-hidden="true" decoding="async" width="620" height="480" />
   </div>
 
   <p class="masthead-dek">{dek}</p>
-
-  <BotanicalFrieze variant="hero" class="masthead-frieze" />
 </header>
 
 <style>
   .masthead {
     text-align: center;
-    margin: var(--space-6) 0 var(--space-7);
+    margin: var(--space-5) 0 var(--space-6);
   }
-  .masthead-rule { max-width: 13rem; margin: 0 auto var(--space-5); }
+  .masthead-rule { max-width: 13rem; margin: 0 auto var(--space-4); }
 
   .masthead-title-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-5);
+    gap: clamp(0.5rem, 2vw, 2rem);
   }
   .masthead-title { margin: 0; }
   .site-title-main {
     display: block;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(2.9rem, 8.5vw, 6.6rem);
-    line-height: 0.92;
-    letter-spacing: 0.01em;
+    font-size: clamp(3.2rem, 8.4vw, 7.2rem);
+    line-height: 0.86;
+    letter-spacing: 0.005em;
     color: var(--ink);
   }
   .site-title-sub {
@@ -82,10 +60,10 @@ const {
     font-family: var(--font-serif);
     font-variant-caps: small-caps;
     text-transform: lowercase;
-    font-size: clamp(1rem, 2.8vw, 2rem);
-    letter-spacing: 0.14em;
+    font-size: clamp(1.05rem, 2.9vw, 2.15rem);
+    letter-spacing: 0.13em;
     color: var(--ink-soft);
-    margin-top: clamp(0.4rem, 1.2vw, 0.9rem);
+    margin-top: clamp(0.5rem, 1.4vw, 1.1rem);
   }
   .site-title-sub sub {
     font-size: 0.62em;
@@ -94,26 +72,27 @@ const {
   }
 
   .masthead-poppy {
-    width: clamp(60px, 8vw, 104px);
+    width: clamp(96px, 15vw, 218px);
     height: auto;
     flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: clamp(-0.5rem, -1vw, -1.5rem);
   }
-  .masthead-poppy-right { transform: scaleX(-1); }
 
   .masthead-dek {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: clamp(1.02rem, 2.2vw, 1.28rem);
+    font-size: clamp(1.04rem, 2.1vw, 1.3rem);
     line-height: 1.5;
     color: var(--ink-soft);
-    max-width: 33rem;
-    margin: var(--space-4) auto var(--space-5);
+    max-width: 34rem;
+    margin: var(--space-4) auto var(--space-4);
   }
-  .masthead-frieze { max-width: 56rem; margin: 0 auto; }
 
-  /* Hide flanking poppies on narrow screens; the frieze carries the botanicals */
+  /* Hide flanking poppies on narrow screens to protect the title */
   @media (max-width: 760px) {
     .masthead-poppy { display: none; }
     .masthead-title-row { gap: 0; }
+    .site-title-main { font-size: clamp(2.9rem, 13vw, 4.2rem); }
   }
 </style>

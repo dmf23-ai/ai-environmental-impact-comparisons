@@ -1,9 +1,8 @@
 ---
 // TopNav — persistent primary navigation for every page (lives in Layout).
-// Balanced groups flank a small-caps center wordmark, as in Mockup 1:
-//   ABOUT · COMPARISONS    COMPARED TO WHAT?    METHODS · SOURCES  [GitHub]
-// The big expressive "Compared to What?" masthead is a homepage-only hero
-// (see Masthead.astro); this wordmark is the quiet persistent brand mark.
+// Balanced small-caps groups flank a center wordmark with engraved rules
+// extending toward it, as in Mockup 1:
+//   ABOUT · COMPARISONS  —  COMPARED TO WHAT?  —  METHODS · SOURCES  [GitHub]
 const repo = "https://github.com/dmf23-ai/ai-environmental-impact-comparisons";
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -16,9 +15,13 @@ const isActive = (href: string) =>
     <li><a href="/comparisons" aria-current={isActive("/comparisons") ? "page" : undefined}>Comparisons</a></li>
   </ul>
 
-  <a href="/" class="topnav-wordmark" aria-label="Compared to What? — home">
-    Compared to What?
-  </a>
+  <div class="topnav-center">
+    <span class="topnav-rule" aria-hidden="true"></span>
+    <a href="/" class="topnav-wordmark" aria-label="Compared to What? — home">
+      Compared to What?
+    </a>
+    <span class="topnav-rule" aria-hidden="true"></span>
+  </div>
 
   <ul class="topnav-group topnav-right">
     <li><a href="/methods" aria-current={isActive("/methods") ? "page" : undefined}>Methods</a></li>
@@ -39,7 +42,7 @@ const isActive = (href: string) =>
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: var(--space-4);
-    max-width: 64rem;
+    max-width: 66rem;
     margin: 0 auto;
     padding: 0 var(--space-4);
   }
@@ -86,11 +89,27 @@ const isActive = (href: string) =>
     color: var(--ink-soft);
   }
   .topnav-gh:hover { color: var(--accent); }
+
+  /* Center wordmark with engraved rules extending toward it */
+  .topnav-center {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    justify-content: center;
+  }
+  .topnav-rule {
+    display: block;
+    width: clamp(1.4rem, 4vw, 3.2rem);
+    height: 1px;
+    background: linear-gradient(to var(--_dir, right), transparent, var(--rule-strong));
+    flex-shrink: 0;
+  }
+  .topnav-center .topnav-rule:last-child { --_dir: left; }
   .topnav-wordmark {
     font-family: var(--font-serif);
     font-variant-caps: small-caps;
     letter-spacing: 0.14em;
-    font-size: 0.92rem;
+    font-size: 0.94rem;
     color: var(--ink);
     text-decoration: none;
     white-space: nowrap;
@@ -98,15 +117,14 @@ const isActive = (href: string) =>
   }
   .topnav-wordmark:hover { color: var(--accent); }
 
-  /* Mobile: drop the center wordmark (the big masthead carries it on home,
-     and interior pages still have the groups), keep the two groups balanced. */
+  /* Mobile: drop the center wordmark + rules, keep the two groups balanced */
   @media (max-width: 640px) {
     .topnav {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-2);
       padding: 0 var(--space-3);
     }
-    .topnav-wordmark { display: none; }
+    .topnav-center { display: none; }
     .topnav-group { font-size: 0.78rem; letter-spacing: 0.08em; }
     .topnav-group li + li::before { margin: 0 0.5em; }
   }
