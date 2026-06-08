@@ -225,3 +225,26 @@ Verified rendered (screenshot + DOM geometry):
 
 These two fixes are ALSO uncommitted. David's commit block in the prior section now covers the
 whole session (re-run `git add -A`).
+
+---
+
+## Session 2 — Mobile/responsive check (2026-06-07, post-commit)
+
+Could NOT capture pixel-level mobile rendering: Claude-in-Chrome's window is bound to David's
+physical 1920px display (outerWidth floors at 1920; `resize_window` to 390/414 reports success
+but the content viewport stays ~2400 CSS px @ dpr 0.8). So mobile was verified by inspecting the
+**served** stylesheet instead:
+- All breakpoints parse live (no CSS error dropped them): 520, 560, 640, 720, 760, 860, 1100…
+- Served mobile rule bodies match source (no Vite staleness): featured-grid 3-col only ≥860
+  (stacks below via base `"head"/"illus"/"chart"/"stat"`); `.fn-open` `display:none` ≤560;
+  `.atlas-grid` 1→2(≥560)→3(≥900) col; `.ornate-popup-frame` near-full-bleed (`100vw-16px`,
+  `max-height:92vh`) ≤720.
+
+**Remaining mobile follow-up (David, optional):** a real device-toolbar spot-check in Chrome
+DevTools (Cmd/Ctrl-Shift-M) at ~390px to eyeball the stacked featured panel + 1-col grids.
+Low risk — the CSS is correct and live.
+
+## State at end of Session 2
+Tasks 6–10 + desktop visual QA + 2 QA fixes are **committed & pushed** on `v2-compared-to-what`.
+The branch is feature-complete. Only open item is the eventual **merge `v2-compared-to-what`
+→ `main`** (deploy decision — David's call; `main`/Vercel still serve the pre-redesign site).
