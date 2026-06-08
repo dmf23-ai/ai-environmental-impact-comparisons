@@ -4,7 +4,7 @@
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = ({ site }) => {
-  const base = site?.toString().replace(/\/$/, "") ?? "https://ai-environmental-impact-comparisons.vercel.app";
+  const base = site?.toString().replace(/\/$/, "") ?? "https://aienvironmentalcomparisons.net";
   const body = `User-agent: *
 Allow: /
 Disallow: /dev/

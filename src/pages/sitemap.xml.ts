@@ -17,7 +17,7 @@ const pages: Page[] = [
 ];
 
 export const GET: APIRoute = ({ site }) => {
-  const base = site?.toString().replace(/\/$/, "") ?? "https://ai-environmental-impact-comparisons.vercel.app";
+  const base = site?.toString().replace(/\/$/, "") ?? "https://aienvironmentalcomparisons.net";
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages
     .map(

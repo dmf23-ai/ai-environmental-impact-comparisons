@@ -27,7 +27,7 @@ const mainClass = atlas ? "atlas" : wide ? "wide" : "reading";
 // Astro.site is set in astro.config.mjs. When deploying to a custom domain,
 // updating Astro.site there automatically threads through every absolute URL
 // on the page — no Layout.astro change needed.
-const siteUrl = Astro.site ?? new URL("https://ai-environmental-impact-comparisons.vercel.app");
+const siteUrl = Astro.site ?? new URL("https://aienvironmentalcomparisons.net");
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const absoluteOgImage = new URL(ogImage, siteUrl).toString();
 const siteName = "AI Environmental Impact Comparisons";
@@ -156,11 +156,4 @@ const footerVerified = new Date(_latest + "T00:00:00Z").toLocaleDateString("en-U
         Open source ·
         <a
           href="https://github.com/dmf23-ai/ai-environmental-impact-comparisons"
-          >code on GitHub</a
-        > · every figure last verified {footerVerified}
-      </p>
-    </footer>
-    </PageFrame>
-    <OrnatePopup />
-  </body>
-</html>
+        
