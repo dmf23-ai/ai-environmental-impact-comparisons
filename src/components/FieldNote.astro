@@ -1,0 +1,130 @@
+---
+// FieldNote — a horizontal "ledger entry" medallion card for one of the six
+// supporting lessons ("Field Notes on Scale"). A circular engraved medallion
+// (generated illustration) sits at the left, the numeral/title/blurb in the
+// middle, and an "Open" CTA at the right. The whole card is an
+// OrnatePopupTrigger that blooms open the lesson's full chart(s) + sources.
+import OrnatePopupTrigger from "./OrnatePopupTrigger.astro";
+import PlateIllustration from "./PlateIllustration.astro";
+import { fieldNoteMedallions } from "../lib/redesignAssets";
+interface Props {
+  numeral: string;
+  title: string;
+  blurb: string;
+  illustration: string;
+  subject: "water" | "electricity" | "carbon";
+  popupId: string;
+}
+const { numeral, title, blurb, illustration, subject, popupId } = Astro.props;
+const medallion = fieldNoteMedallions[popupId];
+---
+<OrnatePopupTrigger popupId={popupId} as="card" label={`Open field note: ${title}`}>
+  <div class="fieldnote" style={`--fn-subject: var(--subject-${subject})`}>
+    <span class="fn-medallion">
+      <span class="fn-ring" aria-hidden="true"></span>
+      {medallion ? (
+        <img class="fn-medallion-img" src={medallion} alt="" aria-hidden="true"
+             loading="lazy" decoding="async" width="80" height="80" />
+      ) : (
+        <PlateIllustration name={illustration} size={40} />
+      )}
+    </span>
+    <div class="fn-body">
+      <p class="fn-numeral smallcaps">{numeral}</p>
+      <h3 class="fn-title">{title}</h3>
+      <p class="fn-blurb">{blurb}</p>
+    </div>
+    <span class="fn-open" aria-hidden="true">Open<span class="fn-arrow"> →</span></span>
+  </div>
+</OrnatePopupTrigger>
+<style>
+  .fieldnote {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: left;
+    padding: var(--space-4) var(--space-4);
+    border: 1px solid var(--hairline);
+    border-radius: 0 14px 0 14px;
+    background: var(--paper-light);
+    height: 100%;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+  .ornate-popup-trigger-card:hover .fieldnote,
+  .ornate-popup-trigger-card:focus-visible .fieldnote {
+    border-color: var(--fn-subject);
+    box-shadow: 0 6px 18px rgba(33, 29, 27, 0.1);
+  }
+  .fn-medallion {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--fn-subject, var(--ink-soft));
+    overflow: hidden;
+    color: var(--fn-subject);
+  }
+  .fn-ring {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1px solid var(--hairline);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .fn-medallion-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .fn-body { min-width: 0; }
+  .fn-numeral {
+    font-family: var(--font-serif);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin: 0 0 0.1rem;
+  }
+  .fn-title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 1.04rem;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.18;
+  }
+  .fn-blurb {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.88rem;
+    line-height: 1.38;
+    color: var(--ink-soft);
+    margin: 0.2rem 0 0;
+  }
+  .fn-open {
+    flex: none;
+    align-self: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-sans);
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-left: var(--space-2);
+    border-left: 1px solid var(--hairline);
+  }
+  .fn-arrow { letter-spacing: 0; }
+  @media (max-width: 560px) {
+    .fieldnote { gap: var(--space-3); padding: var(--space-3); }
+    .fn-medallion { width: 60px; height: 60px; }
+    .fn-open { display: none; }
+  }
+</style>

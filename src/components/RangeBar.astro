@@ -9,8 +9,10 @@ interface Figure {
 interface Props {
   figures: Figure[];
   max?: number;
+  /** Optional subject tint; defaults to the warm rust accent. */
+  subject?: "water" | "electricity" | "carbon";
 }
-const { figures } = Astro.props;
+const { figures, subject } = Astro.props;
 
 // Compute the chart's right-edge value: the largest high (or value) across all
 // figures, rounded up to a clean number for a tidy axis.
@@ -33,6 +35,7 @@ const rawMax = Math.max(
 const maxVal = Astro.props.max ?? niceCeiling(rawMax);
 
 const fmt = (n: number) => n.toLocaleString("en-US");
+const barColor = subject ? `var(--subject-${subject})` : "var(--accent)";
 
 function formatRange(f: Figure): { label: string; low: number; high: number } {
   if (f.value !== undefined) {
@@ -44,7 +47,7 @@ function formatRange(f: Figure): { label: string; low: number; high: number } {
 }
 ---
 
-<div class="range-bars" role="img" aria-label="Comparison bars">
+<div class="range-bars" role="img" aria-label="Comparison bars" style={`--bar-color: ${barColor}`}>
   {
     figures.map((f) => {
       const r = formatRange(f);
@@ -83,6 +86,19 @@ function formatRange(f: Figure): { label: string; low: number; high: number } {
     display: grid;
     gap: 1.1rem;
     margin: 1.5rem 0 0.5rem;
+    /* faint laid-paper texture behind the plotting area */
+    padding: 0.9rem 0.85rem 0.4rem;
+    border-radius: 8px;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(120, 96, 56, 0.04) 0,
+        rgba(120, 96, 56, 0.04) 1px,
+        transparent 1px,
+        transparent 6px
+      ),
+      var(--paper-light);
+    box-shadow: inset 0 0 0 1px var(--hairline);
   }
   .bar-row {
     display: grid;
@@ -106,31 +122,56 @@ function formatRange(f: Figure): { label: string; low: number; high: number } {
   }
   .bar-track {
     position: relative;
-    height: 16px;
+    height: 20px;
     background: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
+    /* capsule ends + hairline quarter gridlines */
+    border-radius: 10px;
     overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(90, 70, 40, 0.12);
+    background-image: linear-gradient(
+      to right,
+      transparent calc(25% - 0.5px), rgba(90, 70, 40, 0.1) calc(25% - 0.5px),
+      rgba(90, 70, 40, 0.1) calc(25% + 0.5px), transparent calc(25% + 0.5px),
+      transparent calc(50% - 0.5px), rgba(90, 70, 40, 0.1) calc(50% - 0.5px),
+      rgba(90, 70, 40, 0.1) calc(50% + 0.5px), transparent calc(50% + 0.5px),
+      transparent calc(75% - 0.5px), rgba(90, 70, 40, 0.1) calc(75% - 0.5px),
+      rgba(90, 70, 40, 0.1) calc(75% + 0.5px), transparent calc(75% + 0.5px)
+    );
   }
   .bar-fill {
+    position: relative;
     height: 100%;
-    background: var(--accent);
-    border-radius: 3px;
+    background: var(--bar-color);
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(40, 28, 16, 0.3);
+  }
+  /* engraved point tick at the exact value (right edge of fill) */
+  .bar-fill::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    right: 0;
+    width: 2px;
+    background: var(--ink);
+    opacity: 0.55;
   }
   .bar-band {
     position: absolute;
     top: 0;
     height: 100%;
-    background: var(--accent);
-    opacity: 0.85;
-    border-radius: 3px;
-    /* a soft stripe to suggest "range, not point" */
+    background: var(--bar-color);
+    opacity: 0.9;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(40, 28, 16, 0.3);
+    /* hatched capsule to read as "range, not point" */
     background-image: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.18) 25%,
+      rgba(255, 255, 255, 0.22) 25%,
       transparent 25%,
       transparent 50%,
-      rgba(255, 255, 255, 0.18) 50%,
-      rgba(255, 255, 255, 0.18) 75%,
+      rgba(255, 255, 255, 0.22) 50%,
+      rgba(255, 255, 255, 0.22) 75%,
       transparent 75%,
       transparent
     );
@@ -139,7 +180,8 @@ function formatRange(f: Figure): { label: string; low: number; high: number } {
   .axis {
     display: flex;
     justify-content: space-between;
-    font-size: 0.78rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
     color: var(--ink-soft);
     font-variant-numeric: tabular-nums;
     margin-top: 0.4rem;

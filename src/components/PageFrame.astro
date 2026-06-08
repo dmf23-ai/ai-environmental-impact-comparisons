@@ -1,0 +1,16 @@
+---
+// PageFrame — the ornate "atlas plate" that wraps an entire page's nav,
+// content, and footer in one bordered frame with corner flourishes, as in
+// the Mockup 1 reference. Used by Layout so every page is framed uniformly.
+// The corner art is purely decorative (aria-hidden, empty alt).
+import { redesignAssets } from "../lib/redesignAssets";
+const corners = redesignAssets.frame.corners;
+---
+
+<div class="page-frame">
+  <img class="page-frame__corner page-frame__corner--tl" src={corners} alt="" aria-hidden="true" decoding="async" />
+  <img class="page-frame__corner page-frame__corner--tr" src={corners} alt="" aria-hidden="true" decoding="async" />
+  <img class="page-frame__corner page-frame__corner--bl" src={corners} alt="" aria-hidden="true" decoding="async" />
+  <img class="page-frame__corner page-frame__corner--br" src={corners} alt="" aria-hidden="true" decoding="async" />
+  <slot />
+</div>

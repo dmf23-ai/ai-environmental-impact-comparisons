@@ -1,0 +1,125 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BotanicalFrieze from "../components/BotanicalFrieze.astro";
+
+const title = "About — Compared to What?";
+const description =
+  "Why this atlas of AI's environmental impact exists, and the editorial rules it holds itself to: every figure sourced, every boundary stated, every plate dated.";
+const repo = "https://github.com/dmf23-ai/ai-environmental-impact-comparisons";
+---
+
+<Layout title={title} description={description}>
+  <article class="about">
+    <header class="about-head">
+      <p class="about-eyebrow eyebrow">About the atlas</p>
+      <h1 class="about-title">Compared to what?</h1>
+      <p class="about-dek">Why this atlas exists, and the rules it holds itself to.</p>
+      <BotanicalFrieze variant="small" class="about-frieze" />
+    </header>
+
+    <section class="about-section">
+      <h2 class="about-h">The question</h2>
+      <p>
+        AI's water and electricity use is real, and it is growing. Most coverage
+        hands you a single number — so many gallons, so many terawatt-hours —
+        with nothing to set it beside. A number with nothing beside it can be
+        made to sound like almost anything.
+      </p>
+      <p>
+        This atlas puts AI, and the data centers it runs in, next to things
+        people already have a feel for: homes, cars, golf courses, cattle,
+        aviation, Bitcoin, streaming, gaming, cement, steel, and the electric
+        grid itself. The point isn't to argue that AI is large, or that it is
+        small. It is to supply the scale, and let you draw the line.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2 class="about-h">What you'll find</h2>
+      <p>
+        The homepage is an atlas of comparison plates. Each plate states its
+        figures, draws the comparison as an engraved chart, names the boundary
+        it uses, and carries a confidence note, its sources, and the date it was
+        last checked. Open a plate and the full working is one click away on the
+        <a href="/methods">methods page</a>, where every figure has a derivation,
+        an assumption list, and a citation.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2 class="about-h">Why the numbers are ranges</h2>
+      <p>
+        Most figures here are ranges rather than single points. Partly the
+        sources disagree on the point. More often the answer depends on where
+        you draw the boundary. Count only the water that runs through a data
+        center's cooling loop and the figure is one thing; add the water used to
+        generate the electricity that data center runs on and it is an order of
+        magnitude larger. Neither framing is a trick — they are answers to
+        different questions. A range is not a hedge. It is usually the honest
+        shape of the answer.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2 class="about-h">The editorial standard</h2>
+      <p>
+        Every figure is sourced. Every boundary is stated. Every plate carries
+        the date it was last checked against its sources, and those sources are
+        re-verified on a schedule — when one changes, the figure is reviewed
+        rather than quietly left to drift. Where a number rests on thin data, the
+        plate says so plainly instead of borrowing false precision.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2 class="about-h">Corrections</h2>
+      <p>
+        If a figure looks wrong, or a source has moved or been updated, the
+        fastest way to fix it is to open an issue on
+        <a href={repo} target="_blank" rel="noopener noreferrer">GitHub</a>.
+        The whole site — data, sources, and code — is open. Corrections are
+        welcome, and credited.
+      </p>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .about { max-width: 36rem; margin: 0 auto; }
+  .about-head { text-align: center; margin: var(--space-5) 0 var(--space-8); }
+  .about-eyebrow { margin: 0 0 var(--space-3); }
+  .about-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    margin: 0 0 var(--space-3);
+    color: var(--ink);
+  }
+  .about-dek {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    margin: 0 auto var(--space-5);
+    max-width: 26rem;
+  }
+  .about-frieze { max-width: 26rem; margin: 0 auto; }
+  .about-section { margin: 0 0 var(--space-7); }
+  .about-h {
+    font-family: var(--font-serif);
+    font-variant-caps: small-caps;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin: 0 0 var(--space-3);
+  }
+  .about-section p {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+// Masthead — homepage-only hero, the dominant visual element of the site:
+// a very large Cormorant display title with a true CO2 subscript, a short
+// dek, and flanking poppy clusters from the generated second-pass assets.
+// The poppy art carries the botanicals here, so the hero frieze is dropped
+// to keep the title plate uncluttered (the "How to read this atlas" strip
+// follows in the page).
+import { redesignAssets } from "../lib/redesignAssets";
+interface Props { dek?: string; }
+const {
+  dek = "An interactive atlas of AI's environmental impact in scale, context, and comparison.",
+} = Astro.props;
+const { poppiesLeft, poppiesRight } = redesignAssets.masthead;
+---
+
+<header class="masthead">
+  <hr class="hairline masthead-rule" />
+
+  <div class="masthead-title-row">
+    <img class="masthead-poppy masthead-poppy-left" src={poppiesLeft}
+      alt="" aria-hidden="true" decoding="async" width="620" height="480" />
+
+    <h1 class="masthead-title">
+      <span class="site-title-main">Compared to What?</span>
+      <span class="site-title-sub">AI and Water, Electricity, &amp; CO<sub>2</sub></span>
+    </h1>
+
+    <img class="masthead-poppy masthead-poppy-right" src={poppiesRight}
+      alt="" aria-hidden="true" decoding="async" width="620" height="480" />
+  </div>
+
+  <p class="masthead-dek">{dek}</p>
+</header>
+
+<style>
+  .masthead {
+    text-align: center;
+    margin: var(--space-5) 0 var(--space-6);
+  }
+  .masthead-rule { max-width: 13rem; margin: 0 auto var(--space-4); }
+
+  .masthead-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.5rem, 2vw, 2rem);
+  }
+  .masthead-title { margin: 0; }
+  .site-title-main {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(3.2rem, 8.4vw, 7.2rem);
+    line-height: 0.86;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+  }
+  .site-title-sub {
+    display: block;
+    font-family: var(--font-serif);
+    font-variant-caps: small-caps;
+    text-transform: lowercase;
+    font-size: clamp(1.05rem, 2.9vw, 2.15rem);
+    letter-spacing: 0.13em;
+    color: var(--ink-soft);
+    margin-top: clamp(0.5rem, 1.4vw, 1.1rem);
+  }
+  .site-title-sub sub {
+    font-size: 0.62em;
+    vertical-align: sub;
+    letter-spacing: 0;
+  }
+
+  .masthead-poppy {
+    width: clamp(96px, 15vw, 218px);
+    height: auto;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: clamp(-0.5rem, -1vw, -1.5rem);
+  }
+
+  .masthead-dek {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.04rem, 2.1vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 34rem;
+    margin: var(--space-4) auto var(--space-4);
+  }
+
+  /* Hide flanking poppies on narrow screens to protect the title */
+  @media (max-width: 760px) {
+    .masthead-poppy { display: none; }
+    .masthead-title-row { gap: 0; }
+    .site-title-main { font-size: clamp(2.9rem, 13vw, 4.2rem); }
+  }
+</style>

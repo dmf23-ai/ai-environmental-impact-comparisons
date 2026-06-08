@@ -22,8 +22,10 @@ interface Props {
   caption?: string;
   subject: "water" | "electricity" | "carbon";
   ornate?: boolean;
+  /** Cartouche frame art for the ornate variant. Defaults to the synthetic frame. */
+  frameSrc?: string;
 }
-const { value, unit, caption, subject, ornate = false } = Astro.props;
+const { value, unit, caption, subject, ornate = false, frameSrc = "/ornaments/cartouche-frame.png" } = Astro.props;
 
 const subjectColors: Record<string, string> = {
   water: "var(--subject-water)",
@@ -38,7 +40,7 @@ const color = subjectColors[subject];
     {ornate && (
       <img
         class="cartouche-frame-bg"
-        src="/ornaments/cartouche-frame.png"
+        src={frameSrc}
         alt=""
         aria-hidden="true"
       />

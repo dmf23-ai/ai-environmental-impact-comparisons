@@ -52,3 +52,22 @@ astro.config.popups.mjs
 astro.config.pr.mjs
 astro.config.pr2.mjs
 astro.config.r*.mjs
+
+# sandbox-only build (Cowork)
+astro.config.sandbox.mjs
+sbbuild.sh
+
+# Second-pass source PNGs: optimized .webp versions are committed instead;
+# raw PNGs cannot be unlinked from the Cowork mount, so exclude them from git.
+public/assets/redesign-2nd-pass/*.png
+
+# --- repo hygiene (pre-merge) ---
+# Raw source design assets (site serves optimized .webp under public/)
+redesign 2nd pass/Assets for Redesign 2nd Pass/
+redesign/*.png
+# Experimental Astro config variants (real config is astro.config.mjs)
+astro.config.orn.mjs
+astro.config.skip.mjs
+astro.config.skip2.mjs
+# Scratch temp files
+.claude/tmp/

@@ -8,6 +8,9 @@
 @import "@fontsource/cardo/400.css";
 @import "@fontsource/cardo/400-italic.css";
 @import "@fontsource/cardo/700.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/500-italic.css";
 
 /* ============================================================
    Design tokens — Mucha's Notebook palette.
@@ -98,55 +101,15 @@ main.wide {
 }
 
 /* ============================================================
-   Site masthead — centered wordmark above a botanical strip.
-   The strip (Phase 2e.3) replaces the prior bottom rule and runs the full
-   page width below the wordmark.
+   Site masthead band — wraps the TopNav + small frieze (see Layout.astro).
+   The old centered .wordmark / .masthead-strip were retired in the v2 atlas
+   redesign; TopNav now carries the brand mark (.topnav-wordmark).
    ============================================================ */
 .site-mast {
   background: var(--paper);
   padding: var(--space-5) var(--space-5) 0;
   text-align: center;
 }
-.wordmark {
-  font-family: var(--font-serif);
-  font-size: 0.82rem;
-  font-style: normal;
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink);
-  text-decoration: none;
-  line-height: 1.5;
-}
-.wordmark:hover {
-  color: var(--accent);
-}
-.wordmark .dot {
-  color: var(--accent);
-  margin: 0 0.45em;
-  font-style: normal;
-}
-.masthead-strip {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  margin: var(--space-3) auto 0;
-  pointer-events: none;
-  user-select: none;
-}
-@media (min-width: 720px) {
-  .wordmark {
-    font-size: 1.05rem;
-    letter-spacing: 0.22em;
-  }
-  .masthead-strip {
-    width: auto;
-    max-height: 80px;
-    margin-top: var(--space-4);
-  }
-}
-
 /* ============================================================
    Site footer — three-line italic close, CTA block, decorative
    roundels flanking a tagline rule, small credit line.
@@ -439,8 +402,8 @@ dialog.ornate-popup.is-open::backdrop {
   border: 1px solid var(--ink-soft);
   border-radius: 0 24px 0 24px;
   box-shadow: 0 12px 36px rgba(33, 29, 27, 0.22);
-  width: min(36rem, calc(100vw - 24px));
-  max-height: min(80vh, 720px);
+  width: min(920px, calc(100vw - 48px));
+  max-height: min(86vh, 820px);
   display: flex;
   flex-direction: column;
   padding: var(--space-6) var(--space-6);
@@ -467,7 +430,8 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
   user-select: none;
   z-index: 0;
   display: block;
-  opacity: 0.85;
+  opacity: 0.7;
+  max-width: 88px;
 }
 .ornate-popup-side-left {
   left: 0.4rem;
@@ -478,15 +442,20 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
 
 .ornate-popup-close {
   position: absolute;
-  top: 0.65rem;
-  right: 0.65rem;
-  width: 28px;
-  height: 28px;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--ink-soft);
+  /* engraved double-ring: inner hairline + soft inset shadow */
+  box-shadow:
+    inset 0 0 0 1px var(--paper),
+    inset 0 0 0 2px var(--rule, rgba(33, 29, 27, 0.18)),
+    0 1px 2px rgba(33, 29, 27, 0.16);
   background: var(--paper);
   color: var(--ink);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   line-height: 1;
   padding: 0;
   cursor: pointer;
@@ -494,10 +463,12 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
+  transition: background 140ms ease, color 140ms ease;
 }
 .ornate-popup-close:hover {
   background: var(--paper-soft);
+  color: var(--accent);
 }
 .ornate-popup-close:focus-visible {
   background: var(--paper-soft);
@@ -509,7 +480,7 @@ dialog.ornate-popup.is-open .ornate-popup-frame {
   position: relative;
   z-index: 1;
   overflow-y: auto;
-  padding: 0 16% 0 16%;
+  padding: 0 clamp(1.5rem, 7%, 6rem);
   font-family: var(--font-serif);
   color: var(--ink);
   line-height: 1.6;
@@ -678,4 +649,170 @@ button:focus-visible,
   .ornate-popup-frame {
     transform: scale(1);
   }
+}
+
+
+/* ============================================================
+   Botanical Ledger — v2 "Compared to What?" atlas layer
+   Additive on top of the Mucha's Notebook base above. Existing
+   tokens (--ink, --paper, --accent, --subject-*) are unchanged so
+   verified AA contrast is preserved; this only adds what the atlas
+   redesign needs (display face, wheat tone, engraved hairline,
+   small-caps + plate-number utilities).
+   ============================================================ */
+:root {
+  --paper-light: #f7f0de;
+  --wheat: #c7a76a;
+  /* Semantic aliases so atlas components can read by hue name */
+  --teal: var(--subject-water);
+  --sage: var(--subject-electricity);
+  --terracotta: var(--accent);
+  --hairline: rgba(154, 137, 102, 0.5);
+  --font-display: "Cormorant Garamond", "Cardo", ui-serif, Georgia, serif;
+}
+
+/* Small-caps for nav, eyebrows, metric labels, plate numbers */
+.smallcaps {
+  font-variant-caps: small-caps;
+  letter-spacing: 0.08em;
+}
+
+/* Letter-spaced uppercase eyebrow (Inter) */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+}
+
+/* Fine engraved rule */
+hr.hairline,
+.hairline {
+  height: 1px;
+  border: 0;
+  background: var(--hairline);
+  margin: 0;
+}
+
+/* Display headline face — used by the masthead and section headings */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
+/* Shared-frame: nav frieze + footer nav row (v2 atlas) */
+.site-mast { padding-bottom: var(--space-2); }
+.site-mast-frieze { max-width: 40rem; margin: var(--space-3) auto 0; }
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto var(--space-5);
+  font-family: var(--font-serif);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.92rem;
+}
+.footer-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.footer-nav a:hover { color: var(--accent); }
+.footer-nav a + a::before {
+  content: "\2666";
+  color: var(--accent);
+  font-size: 0.5em;
+  margin: 0 0.75em;
+  transform: translateY(-0.18em);
+  display: inline-block;
+  font-variant-caps: normal;
+}
+
+/* Field-note popups carry full-width charts — widen the frame when present */
+.ornate-popup-frame:has(.popup-wide) {
+  width: min(50rem, calc(100vw - 24px));
+  max-height: min(86vh, 760px);
+}
+.popup-wide { margin-top: var(--space-3); }
+.popup-wide > * + * { margin-top: var(--space-5); }
+
+/* ============================================================
+   Atlas page frame — second-pass redesign (Mockup 1 convergence)
+   Wraps each page's nav + content + footer in one ornate "plate"
+   with corner flourishes, sitting on a slightly deeper paper.
+   Additive: existing palette/tokens unchanged (AA preserved).
+   ============================================================ */
+:root {
+  --max-width-reading: var(--max-width);      /* 42rem */
+  --max-width-atlas: 76rem;                     /* ~1216px */
+  --page-gutter: clamp(1rem, 3vw, 2.5rem);
+  --rust: var(--accent);
+  --rust-soft: #c8794f;
+  --teal-soft: #6f9a9d;
+  --rule-strong: rgba(91, 74, 44, 0.86);
+  --paper-deep: #e8dcc0;       /* surround behind the framed plate */
+  --frame-border: rgba(112, 96, 62, 0.78);
+}
+
+/* Deeper paper surround so the lighter framed plate lifts off it */
+body { background: var(--paper-deep); }
+
+.page-frame {
+  position: relative;
+  width: min(var(--max-width-atlas), calc(100vw - 1.4rem));
+  margin: clamp(0.5rem, 1.6vw, 1.25rem) auto;
+  padding: clamp(0.6rem, 1.6vw, 1.5rem) clamp(0.5rem, 1.4vw, 1.3rem);
+  border: 1px solid var(--frame-border);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.42), transparent 46%),
+    linear-gradient(#f8f1e0, #f1e7cf);
+  box-shadow:
+    0 16px 46px rgba(50, 37, 20, 0.14),
+    inset 0 0 60px rgba(120, 86, 42, 0.06);
+}
+/* inner engraved hairline border */
+.page-frame::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(154, 137, 102, 0.4);
+  border-radius: 11px;
+  pointer-events: none;
+  z-index: 0;
+}
+.page-frame__corner {
+  position: absolute;
+  width: clamp(60px, 9vw, 116px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+}
+.page-frame__corner--tl { top: -3px; left: -3px; }
+.page-frame__corner--tr { top: -3px; right: -3px; transform: scaleX(-1); }
+.page-frame__corner--bl { bottom: -3px; left: -3px; transform: scaleY(-1); }
+.page-frame__corner--br { bottom: -3px; right: -3px; transform: scale(-1); }
+
+/* page sections sit above the frame gradient; their own paper fills are
+   dropped so the plate background shows through continuously */
+.page-frame > .site-mast,
+.page-frame > main,
+.page-frame > .site-footer { position: relative; z-index: 1; background: transparent; }
+
+/* width modes inside the frame */
+main.atlas { max-width: var(--max-width-atlas); }
+main.reading { max-width: var(--max-width-reading); }
+
+@media (max-width: 640px) {
+  .page-frame {
+    margin: clamp(0.4rem, 1.2vw, 0.75rem) auto;
+    border-radius: 12px;
+    padding: 0.6rem 0.4rem;
+  }
+  .page-frame__corner { width: 48px; }
 }
